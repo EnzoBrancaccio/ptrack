@@ -11,9 +11,9 @@ class Tracked(object):
     classdocs
     '''
 
-
-    def __init__(self, params):
+    def __init__(self, value):
         '''
-        Constructor
+         Constructor
         '''
-        
+        self.value = value
+        self.location["."] = Location()
