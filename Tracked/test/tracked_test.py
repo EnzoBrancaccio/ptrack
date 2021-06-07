@@ -22,7 +22,7 @@ class Test(unittest.TestCase):
         pass
     
     def testTrackedIntCreation(self):
-        test1 = Tracked(5)
+        test1 = Tracked(5).value
         
         self.assertEqual(test1, 5, "Tracking")
 

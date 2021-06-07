@@ -16,4 +16,4 @@ class Tracked(object):
          Constructor
         '''
         self.value = value
-        self.location["."] = Location()
+        self.location = {".": Location()}

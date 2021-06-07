@@ -18,6 +18,12 @@ class LocationMap(object):
         '''
         self.locationMap = dict()
     
-       
-
+    def addLocations(self):
+        pass
+    
+    def removeLocations(self):
+        pass
+    
+    def locationSlice(self):
+        pass
     

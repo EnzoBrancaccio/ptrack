@@ -9,7 +9,7 @@ class Location(object):
     '''
 
 
-    def __init__(self, sourceNode, locationId):
+    def __init__(self, sourceNode = "", locationId = 0):
         '''
         Constructor
         '''
