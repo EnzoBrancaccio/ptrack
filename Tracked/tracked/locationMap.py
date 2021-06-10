@@ -5,6 +5,8 @@ Created on 01.06.2021
 '''
 
 # LocationMap helper class
+# C++ LocationMap = std::unordered_map<std::string, Location>;
+# Here: LocationMap is dictionary {"string": location}
 
 from .location import Location
  
@@ -16,7 +18,8 @@ def addLocations(lmA, lmB, prefix):
             if(key == "."):
                 lmA[prefix] = value
             else:
-                lmA[prefix + "/" + key] = value
+                newKey = prefix + "/" + key
+                lmA[newKey] = value
     return lmA
     
 def removeLocations(lmA, prefix):
