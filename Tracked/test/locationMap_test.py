@@ -68,10 +68,10 @@ class Test(unittest.TestCase):
         locationTest = Location("nodeTest", 1)
         
         locationMap1 = dict([("nonono", locationTest)])
-        locationMap2 = dict([("yesyes", locationTest)])
+        locationMap2 = dict([("yes", locationTest)])
         locationMap3 = dict([("yesno", locationTest)])
         
-        expected1 = dict([("nonono", locationTest)])
+        expected1 = dict()
         expected2 = dict([(".", locationTest)])
         expected3 = dict([("no", locationTest)])
         
