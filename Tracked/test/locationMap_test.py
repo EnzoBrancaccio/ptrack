@@ -67,9 +67,9 @@ class Test(unittest.TestCase):
     def testSliceLocations(self):
         locationTest = Location("nodeTest", 1)
         
-        locationMap1 = dict([("nonono", locationTest)])
+        locationMap1 = dict([("no/no/no", locationTest)])
         locationMap2 = dict([("yes", locationTest)])
-        locationMap3 = dict([("yesno", locationTest)])
+        locationMap3 = dict([("yes/no", locationTest)])
         
         expected1 = dict()
         expected2 = dict([(".", locationTest)])

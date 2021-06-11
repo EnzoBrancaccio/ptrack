@@ -82,9 +82,9 @@ for key, value in caseR2.items():
 
 locationTest = Location("nodeTest", 1)
         
-locationMapS1 = dict([("nonono", locationTest)])
+locationMapS1 = dict([("no/no/no", locationTest)])
 locationMapS2 = dict([("yes", locationTest)])
-locationMapS3 = dict([("yesno", locationTest)])
+locationMapS3 = dict([("yes/no", locationTest)])
         
 expectedS1 = dict()
 expectedS2 = dict([(".", locationTest)])
