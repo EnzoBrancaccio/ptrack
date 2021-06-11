@@ -93,7 +93,8 @@ expectedS3 = dict([("no", locationTest)])
 caseS1 = lm.locationSlice(locationMapS1, "yes")
 caseS2 = lm.locationSlice(locationMapS2, "yes")       
 caseS3 = lm.locationSlice(locationMapS3, "yes")
-        
+
+'''        
 print("Test case1")
 for key, value in locationMapS1.items():
     print(key)
@@ -117,3 +118,4 @@ for key, value in expectedS3.items():
     print(key)   
 for key, value in caseS3.items():
     print(key)
+'''

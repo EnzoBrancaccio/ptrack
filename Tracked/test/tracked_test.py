@@ -22,11 +22,13 @@ class Test(unittest.TestCase):
         pass
     
     def testTrackedIntCreation(self):
-        test1 = Tracked(5).value
+        self.trackedTest1 = Tracked(5)
         
-        self.assertEqual(test1, 5, "Tracking")
-
-
+        self.value = self.trackedTest1.value
+        self.locationMap = self.trackedTest1.locationMap
+        
+        self.assertEqual(self.value, 5, "Value")
+        self.assertFalse(self.locationMap["."].isValid(), "emptyLocation")
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

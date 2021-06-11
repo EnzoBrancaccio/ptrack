@@ -11,9 +11,18 @@ class Tracked(object):
     classdocs
     '''
 
-    def __init__(self, value):
+    def __init__(self, value, locationMap = None, location = None):
         '''
          Constructor
         '''
         self.value = value
-        self.location = {".": Location()}
+        
+        if locationMap is None:
+            self.locationMap = dict([(".", Location())])
+        else:
+            self.locationMap = locationMap
+            
+        if location is None:
+            self.location = Location()
+        else:
+            self.location = location

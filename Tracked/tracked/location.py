@@ -23,7 +23,7 @@ class Location(object):
         sameId = (self.locationId == other.locationId)
         return (sameSource and sameId)
     
-    def isValid(self, sourceNode):
-        isSourceNode = not (sourceNode == "")
+    def isValid(self):
+        isSourceNode = not (self.sourceNode == "")
         return isSourceNode
         
