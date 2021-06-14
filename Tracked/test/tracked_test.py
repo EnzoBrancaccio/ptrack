@@ -6,6 +6,7 @@ Created on 06.06.2021
 import unittest
 
 from tracked.tracked import Tracked
+from rosslt_msgs.msg import Int32Tracked
 
 class Test(unittest.TestCase):
 
