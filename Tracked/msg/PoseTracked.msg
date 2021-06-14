@@ -1,2 +1,0 @@
-rosslt_msgs/LocationHeader location
-geometry_msgs/Pose data

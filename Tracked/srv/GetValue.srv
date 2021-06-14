@@ -1,4 +1,0 @@
-int32 location_id
----
-bool valid_id
-string current_value

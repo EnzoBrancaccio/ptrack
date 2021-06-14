@@ -1,2 +1,0 @@
-rosslt_msgs/LocationHeader location
-visualization_msgs/Marker data
