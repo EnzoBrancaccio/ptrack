@@ -3,27 +3,48 @@ Created on 01.06.2021
 
 @author: Enzo Brancaccio
 '''
+
+from rosslt_msgs.msg import Location as rosLocationMsg
+
 class Location(object):
     '''
     Persevering a message's location data.
     '''
 
 
-    def __init__(self, sourceNode = "", locationId = 0):
+    def __init__(self, source_node = "", location_id = 0):
         '''
         Constructor
         '''
-        self.sourceNode = sourceNode
-        self.locationId = locationId
+        self.source_node = source_node
+        self.location_id = location_id
         self.expression = ""
+    
+    # constructor for rosslt location message as argument    
+    @classmethod
+    def withRossltMsg(cls, rossltMsg = None):
+        newLocation = cls.__new__(cls)
+        super(Location, newLocation).__init__()
+        if not (rossltMsg is None):
+            cls.source_node = rossltMsg.source_node
+            cls.location_id = rossltMsg.location_id
+        return newLocation
+            
       
     # overloading boolean operator  
     def __eq__(self, other):
-        sameSource = (self.sourceNode == other.sourceNode)
-        sameId = (self.locationId == other.locationId)
+        sameSource = (self.source_node == other.source_node)
+        sameId = (self.location_id == other.location_id)
         return (sameSource and sameId)
     
     def isValid(self):
-        isSourceNode = not (self.sourceNode == "")
+        isSourceNode = not (self.source_node == "")
         return isSourceNode
-        
+    
+    # operator rosslt_msgs::msg::Location () const;
+    # not sure it's possible in Python (typing)
+    def makeRossltLocationMsg(self):
+        locationMsg = rosLocationMsg()
+        locationMsg.source_node = self.source_node
+        locationMsg.location_id = self.location_id
+        return locationMsg

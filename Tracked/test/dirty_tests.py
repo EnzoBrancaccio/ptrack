@@ -6,6 +6,7 @@ Created on 10.06.2021
 
 import tracked.locationMap as lm
 from tracked.location import Location
+from rosslt_msgs.msg import Location as rosLocationMsg
 
 locationTest = Location("nodeTest", 1)
         
@@ -118,4 +119,27 @@ for key, value in expectedS3.items():
     print(key)   
 for key, value in caseS3.items():
     print(key)
+'''
+
+testLocation1 = Location()
+        
+testLocation2 = Location("mynode", 42)
+        
+testMsg = rosLocationMsg()
+testMsg = testLocation2.makeRossltLocationMsg()
+        
+testLocation3 = Location.withRossltMsg(testMsg)
+
+'''
+print("testLocation1")
+print(testLocation1.source_node)
+print(testLocation1.location_id)
+
+print("testLocation2")
+print(testLocation2.source_node)
+print(testLocation2.location_id)
+
+print("testLocation3")
+print(testLocation3.source_node)
+print(testLocation3.location_id)
 '''
