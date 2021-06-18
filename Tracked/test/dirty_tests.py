@@ -7,6 +7,8 @@ Created on 10.06.2021
 import tracked.locationMap as lm
 from tracked.location import Location
 from rosslt_msgs.msg import Location as rosLocationMsg
+from tracked.tracked2 import Tracked2
+from tracked.location2 import Location2
 
 locationTest = Location("nodeTest", 1)
         
@@ -143,3 +145,35 @@ print("testLocation3")
 print(testLocation3.source_node)
 print(testLocation3.location_id)
 '''
+
+trackedLocationG = Location2("mynode", 42)
+        
+trackedDoubleG = Tracked2(2.0, trackedLocationG)
+        
+trackedDoubleLocationG = trackedDoubleG.location_map["."]
+trackedDoubleLocationIdG = trackedDoubleLocationG.location_id
+        
+newTrackedDoubleG = trackedDoubleG
+        
+newTrackedDoubleLocationG = newTrackedDoubleG.location_map["."]
+newTrackedDoubleLocationIdG = newTrackedDoubleLocationG.location_id
+
+print("trackedDoubleG")
+print(trackedDoubleG.value)
+print(trackedDoubleG.location.source_node)
+print(trackedDoubleG.location.location_id)
+print(trackedDoubleG.location_map)
+print(trackedDoubleLocationG)
+print(trackedDoubleLocationG.source_node)
+print(trackedDoubleLocationG.location_id)
+print(trackedDoubleLocationIdG)
+
+print("trackedLocationG")
+print(trackedLocationG.source_node)
+print(trackedLocationG.location_id)
+print(trackedDoubleLocationG.source_node)
+print(trackedDoubleLocationG.location_id)
+print(trackedDoubleLocationIdG)
+print(newTrackedDoubleLocationG.source_node)
+print(newTrackedDoubleLocationG.location_id)
+print(newTrackedDoubleLocationIdG)
