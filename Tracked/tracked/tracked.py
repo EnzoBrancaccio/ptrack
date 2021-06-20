@@ -6,6 +6,7 @@ Created on 01.06.2021
 
 from .location import Location
 from rosslt_msgs.msg import LocationHeader
+import copy
 
 class Tracked(object):
     '''
@@ -45,18 +46,29 @@ class Tracked(object):
     
     # overloading + operator 
     def __add__(self, other):
-        if(isinstance(self, Tracked)):
-            self.copy = self.a
-            self.copy.value = self.a.value + other.a.value
-            self.expr = self.copy.location_map["."].expression
-            self.copy.location_map["."].expression = self.expr + str(other.a.value) + ";+;"
-            return self.copy
-        elif(isinstance(other, Tracked)):
-            self.copy = other.a
-            self.copy.value = self.a.value + other.a
-            self.expr = self.copy.location_map["."].expression
-            self.copy.location_map["."].expression = str(self.a.value) + self.expr + ";swap;+;"
-            return self.copy
+        isSelfTracked = isinstance(self, Tracked)
+        isOtherTracked = isinstance(other, Tracked)
+        if(isSelfTracked and (not isOtherTracked)):
+            copiedVar = copy.deepcopy(self)
+            copiedVar.value = self.value + other
+            expr = copiedVar.location_map["."].expression
+            copiedVar.location_map["."].expression = expr + str(other) + ";+;"
+            return copiedVar
+        elif((not isSelfTracked) and isOtherTracked):
+            copiedVar = copy.deepcopy(other)
+            copiedVar.value = self + other.value
+            expr = copiedVar.location_map["."].expression
+            copiedVar.location_map["."].expression = str(self) + expr + ";swap;+;"
+            return copiedVar
+        elif(isSelfTracked and isOtherTracked):
+            copiedVar = copy.deepcopy(self)
+            copiedVar.value = self.value + other.value
+            expr = copiedVar.location_map["."].expression
+            copiedVar.location_map["."].expression = expr + str(other.value) + ";+;"
+            return copiedVar
         else:
-            self.b = self.a.value + other.a.value
-            return self.b
+            newValue = self + other
+            return newValue
+        
+    # for problems with left hand type
+    __radd__ = __add__
