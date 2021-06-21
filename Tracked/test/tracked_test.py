@@ -141,40 +141,29 @@ class Test(unittest.TestCase):
         
         self.assertEqual(self.a_adp.value, 5.0, "hold value")
         
-        self.b_adp = self.a_adp.value + 2.0
+        self.b_adp = self.a_adp + 2.0
         
         self.assertEqual(self.b_adp.value, 7.0, "hold new value")
         self.assertEqual(self.a_adp.value, 5.0, "still hold value")
         
-        self.c_adp = 3.0 + self.a_adp.value
+        self.c_adp = 3.0 + self.a_adp
         
         self.assertEqual(self.c_adp.value, 8.0, "hold new value")
-        self.assertEqual(self.c_adp.location_map["."].expression, "3.000000;swap;+;")
+        self.assertEqual(self.c_adp.location_map["."].expression, "3.0;swap;+;")
         
-        self.d_adp = self.b_adp.value + self.c_adp.value
+        self.d_adp = self.b_adp + self.c_adp
         
         self.assertEqual(self.d_adp.value, 15.0, "hold new value")
-
-        # missing expression tests
+        self.assertEqual(self.d_adp.location_map["."].expression, "2.0;+;8.0;+;")
         
-        self.aG_adp = Tracked2(5.0)
+    def testArithmeticString(self):
+        self.astring = Tracked("Hallo")
         
-        self.assertEqual(self.aG_adp.value, 5.0, "hold value")
+        self.assertEqual(self.astring.value, "Hallo", "String comparison")
         
-        self.bG_adp = Tracked(self.aG_adp.value + 2.0)
+        self.bstring = "Oh, " + self.astring + " Welt";
         
-        self.assertEqual(self.bG_adp.value, 7.0, "hold new value")
-        self.assertEqual(self.aG_adp.value, 5.0, "still hold value")
-        
-        self.cG_adp = Tracked(3.0 + self.aG_adp.value)
-        
-        self.assertEqual(self.cG_adp.value, 8.0, "hold new value")
-        
-        self.dG_adp = Tracked(self.bG_adp.value + self.cG_adp.value)
-        
-        self.assertEqual(self.dG_adp.value, 15.0, "hold new value")
-
-        # missing expression tests
+        self.assertEqual(self.bstring.value, "Oh, Hallo Welt", "Hello World")
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

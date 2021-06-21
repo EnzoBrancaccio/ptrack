@@ -69,7 +69,7 @@ class Tracked(object):
         isSelfTracked = isinstance(self, Tracked)
         if(isSelfTracked):
             copiedVar = copy.deepcopy(self)
-            copiedVar.value = self.value + other
+            copiedVar.value = other + self.value # str concatenation
             expr = copiedVar.location_map["."].expression
             copiedVar.location_map["."].expression = expr + str(other) + ";swap;+;"
             return copiedVar
