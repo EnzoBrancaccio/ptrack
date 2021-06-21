@@ -46,7 +46,7 @@ class Location2(object):
     # operator rosslt_msgs::msg::Location () const;
     # not sure it's possible in Python (typing)
     def makeRossltLocationMsg(self):
-        locationMsg = rosLocationMsg()
+        locationMsg = rosLocationMsg() 
         locationMsg.source_node = self.source_node
         locationMsg.location_id = self.location_id
         return locationMsg

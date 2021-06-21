@@ -200,20 +200,18 @@ print(d_adp.location_map["."].expression)
 
 a2_adp = Tracked(5.0)
 b2_adp = a2_adp + 2.0
-c2_adp = 3.0 + a2_adp 
-d2_adp = b2_adp + c2_adp
-e2_adp = a2_adp + b2_adp
+c2_adp = 3.0 + a2_adp
+d2_adp = a2_adp + b2_adp
 
 print("values2")
 print(a2_adp.value)
 print(b2_adp.value)
 print(c2_adp.value)
 print(d2_adp.value)
-print(e2_adp.value)
+
 
 print("expressions2")
 print(a2_adp.location_map["."].expression)
 print(b2_adp.location_map["."].expression)
 print(c2_adp.location_map["."].expression)
 print(d2_adp.location_map["."].expression)
-print(e2_adp.location_map["."].expression)

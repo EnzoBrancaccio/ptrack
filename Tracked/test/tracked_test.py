@@ -141,17 +141,17 @@ class Test(unittest.TestCase):
         
         self.assertEqual(self.a_adp.value, 5.0, "hold value")
         
-        self.b_adp = Tracked(self.a_adp.value + 2.0)
+        self.b_adp = self.a_adp.value + 2.0
         
         self.assertEqual(self.b_adp.value, 7.0, "hold new value")
         self.assertEqual(self.a_adp.value, 5.0, "still hold value")
         
-        self.c_adp = Tracked(3.0 + self.a_adp.value)
+        self.c_adp = 3.0 + self.a_adp.value
         
         self.assertEqual(self.c_adp.value, 8.0, "hold new value")
         self.assertEqual(self.c_adp.location_map["."].expression, "3.000000;swap;+;")
         
-        self.d_adp = Tracked(self.b_adp.value + self.c_adp.value)
+        self.d_adp = self.b_adp.value + self.c_adp.value
         
         self.assertEqual(self.d_adp.value, 15.0, "hold new value")
 

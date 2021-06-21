@@ -54,12 +54,6 @@ class Tracked(object):
             expr = copiedVar.location_map["."].expression
             copiedVar.location_map["."].expression = expr + str(other) + ";+;"
             return copiedVar
-        elif((not isSelfTracked) and isOtherTracked):
-            copiedVar = copy.deepcopy(other)
-            copiedVar.value = self + other.value
-            expr = copiedVar.location_map["."].expression
-            copiedVar.location_map["."].expression = str(self) + expr + ";swap;+;"
-            return copiedVar
         elif(isSelfTracked and isOtherTracked):
             copiedVar = copy.deepcopy(self)
             copiedVar.value = self.value + other.value
@@ -70,5 +64,12 @@ class Tracked(object):
             newValue = self + other
             return newValue
         
-    # for problems with left hand type
-    __radd__ = __add__
+    # if left hand type is not Tracked   
+    def __radd__(self, other):
+        isSelfTracked = isinstance(self, Tracked)
+        if(isSelfTracked):
+            copiedVar = copy.deepcopy(self)
+            copiedVar.value = self.value + other
+            expr = copiedVar.location_map["."].expression
+            copiedVar.location_map["."].expression = expr + str(other) + ";swap;+;"
+            return copiedVar
