@@ -7,6 +7,7 @@ Created on 01.06.2021
 from .location import Location
 from rosslt_msgs.msg import LocationHeader
 import copy
+from numbers import Number
 
 class Tracked(object):
     '''
@@ -72,4 +73,77 @@ class Tracked(object):
             copiedVar.value = other + self.value # str concatenation
             expr = copiedVar.location_map["."].expression
             copiedVar.location_map["."].expression = expr + str(other) + ";swap;+;"
+            return copiedVar
+        
+        # overloading - operator 
+    def __sub__(self, other):
+        isSelfTracked = isinstance(self, Tracked)
+        isOtherTracked = isinstance(other, Tracked)
+        if(isSelfTracked and (not isOtherTracked)):
+            copiedVar = copy.deepcopy(self)
+            copiedVar.value = self.value - other
+            expr = copiedVar.location_map["."].expression
+            copiedVar.location_map["."].expression = expr + str(other) + ";-;"
+            return copiedVar
+        elif(isSelfTracked and isOtherTracked):
+            copiedVar = copy.deepcopy(self)
+            copiedVar.value = self.value - other.value
+            expr = copiedVar.location_map["."].expression
+            copiedVar.location_map["."].expression = expr + str(other.value) + ";-;"
+            return copiedVar
+        else:
+            newValue = self - other
+            return newValue
+        
+    # if left hand type is not Tracked   
+    def __rsub__(self, other):
+        isSelfTracked = isinstance(self, Tracked)
+        if(isSelfTracked):
+            copiedVar = copy.deepcopy(self)
+            copiedVar.value = other - self.value
+            expr = copiedVar.location_map["."].expression
+            copiedVar.location_map["."].expression = expr + str(other) + ";swap;-;"
+            return copiedVar
+        
+    def __mul__(self, other):
+        isSelfTracked = isinstance(self, Tracked)
+        isOtherTracked = isinstance(other, Tracked)
+        isOtherNull = other.value == 0
+        isOtherNumber = isinstance(other.value, Number)
+        if(isSelfTracked and isOtherTracked):
+            copiedVar = copy.deepcopy(self)
+            copiedVar.value = self.value * other.value
+            if(self.location_map["."].isValid()):
+                if(isOtherNull and isOtherNumber):
+                    copiedVar.location = other.location
+                    expr = copiedVar.location_map["."].expression
+                    copiedVar.location_map["."].expression = expr + str(self) + ";swap;*;"
+                    return copiedVar
+                copiedVar.location = self.location
+                expr = copiedVar.location_map["."].expression
+                copiedVar.location_map["."].expression = expr + str(other) + ";*;"
+                return copiedVar
+        elif(isSelfTracked):
+            copiedVar = copy.deepcopy(self)
+            copiedVar.value = self.value * other.value
+            expr = copiedVar.location_map["."].expression
+            copiedVar.location_map["."].expression = expr + str(other) + ";*;"
+            if(isOtherNull and isOtherNumber):
+                copiedVar.location = Location()
+            return copiedVar
+        else:
+            newValue = self * other
+            return newValue
+        
+    def __rmul__(self, other):
+        isSelfTracked = isinstance(self, Tracked)
+        if(isSelfTracked):
+            copiedVar = copy.deepcopy(self)
+            copiedVar.value = other * self.value
+            expr = copiedVar.location_map["."].expression
+            copiedVar.location_map["."].expression = expr + str(other) + ";swap;*;"
+            isOtherNull = other.value == 0
+            isOtherNumber = isinstance(other.value, Number)
+            if(isOtherNumber and isOtherNull):
+                copiedVar.location = Location()
             return copiedVar

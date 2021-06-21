@@ -164,6 +164,23 @@ class Test(unittest.TestCase):
         self.bstring = "Oh, " + self.astring + " Welt";
         
         self.assertEqual(self.bstring.value, "Oh, Hallo Welt", "Hello World")
+        
+    def testArithmeticMinus(self):
+        self.aminus = Tracked(4)
+        
+        self.assertEqual(self.aminus.value, 4, "initial value")
+        
+        self.bminus = self.aminus - 3
+        
+        self.assertEqual(self.bminus.value, 1, "1st sub")
+        
+        self.cminus = 3 - self.aminus
+        
+        self.assertEqual(self.cminus.value, -1, "2nd sub")
+        self.assertEqual(self.cminus.location_map["."].expression, "3;swap;-;")
+        
+        self.dminus = self.cminus - self.bminus
+        self.assertEqual(self.dminus.location_map["."].expression, "3;swap;-;1;-;")
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
