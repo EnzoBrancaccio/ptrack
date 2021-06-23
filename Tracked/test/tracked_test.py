@@ -181,6 +181,24 @@ class Test(unittest.TestCase):
         
         self.dminus = self.cminus - self.bminus
         self.assertEqual(self.dminus.location_map["."].expression, "3;swap;-;1;-;")
+        
+    def testArithmeticIntMultiply(self):
+        self.a_iMul = Tracked(4, Location("foo", 27))
+        
+        self.assertEqual(self.a_iMul.value, 4, "int value")
+        
+        self.b_iMul = self.a_iMul * 3
+        
+        self.assertEqual(self.b_iMul.value, 12, "1st mul")
+        
+        self.c_iMul = 2 * self.b_iMul
+        
+        self.assertEqual(self.c_iMul.value, 24, "2nd mul")
+        
+        self.d_iMul = self.c_iMul * self.a_iMul
+        
+        self.assertEqual(self.d_iMul.value, 96, "3rd mul")
+        self.assertEqual(self.d_iMul.location_map["."].expression, "3;*;2;swap;*;4;*;")      
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

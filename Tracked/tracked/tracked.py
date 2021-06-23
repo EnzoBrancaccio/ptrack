@@ -108,12 +108,12 @@ class Tracked(object):
     def __mul__(self, other):
         isSelfTracked = isinstance(self, Tracked)
         isOtherTracked = isinstance(other, Tracked)
-        isOtherNull = other.value == 0
-        isOtherNumber = isinstance(other.value, Number)
         if(isSelfTracked and isOtherTracked):
             copiedVar = copy.deepcopy(self)
             copiedVar.value = self.value * other.value
             if(self.location_map["."].isValid()):
+                isOtherNull = other.value == 0
+                isOtherNumber = isinstance(other.value, Number)
                 if(isOtherNull and isOtherNumber):
                     copiedVar.location = other.location
                     expr = copiedVar.location_map["."].expression
@@ -121,13 +121,15 @@ class Tracked(object):
                     return copiedVar
                 copiedVar.location = self.location
                 expr = copiedVar.location_map["."].expression
-                copiedVar.location_map["."].expression = expr + str(other) + ";*;"
+                copiedVar.location_map["."].expression = expr + str(other.value) + ";*;"
                 return copiedVar
         elif(isSelfTracked):
             copiedVar = copy.deepcopy(self)
-            copiedVar.value = self.value * other.value
+            copiedVar.value = self.value * other
             expr = copiedVar.location_map["."].expression
             copiedVar.location_map["."].expression = expr + str(other) + ";*;"
+            isOtherNull = other == 0
+            isOtherNumber = isinstance(other, Number)
             if(isOtherNull and isOtherNumber):
                 copiedVar.location = Location()
             return copiedVar
@@ -142,8 +144,8 @@ class Tracked(object):
             copiedVar.value = other * self.value
             expr = copiedVar.location_map["."].expression
             copiedVar.location_map["."].expression = expr + str(other) + ";swap;*;"
-            isOtherNull = other.value == 0
-            isOtherNumber = isinstance(other.value, Number)
+            isOtherNull = other == 0
+            isOtherNumber = isinstance(other, Number)
             if(isOtherNumber and isOtherNull):
                 copiedVar.location = Location()
             return copiedVar
