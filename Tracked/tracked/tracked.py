@@ -75,7 +75,7 @@ class Tracked(object):
             copiedVar.location_map["."].expression = expr + str(other) + ";swap;+;"
             return copiedVar
         
-        # overloading - operator 
+    # overloading - operator 
     def __sub__(self, other):
         isSelfTracked = isinstance(self, Tracked)
         isOtherTracked = isinstance(other, Tracked)
@@ -104,7 +104,8 @@ class Tracked(object):
             expr = copiedVar.location_map["."].expression
             copiedVar.location_map["."].expression = expr + str(other) + ";swap;-;"
             return copiedVar
-        
+    
+    # overloading * operator    
     def __mul__(self, other):
         isSelfTracked = isinstance(self, Tracked)
         isOtherTracked = isinstance(other, Tracked)
@@ -137,6 +138,7 @@ class Tracked(object):
             newValue = self * other
             return newValue
         
+    # if left hand type is not Tracked   
     def __rmul__(self, other):
         isSelfTracked = isinstance(self, Tracked)
         if(isSelfTracked):
@@ -148,4 +150,34 @@ class Tracked(object):
             isOtherNumber = isinstance(other, Number)
             if(isOtherNumber and isOtherNull):
                 copiedVar.location_map["."] = Location()
+            return copiedVar
+        
+    # overloading / operator 
+    def __truediv__(self, other):
+        isSelfTracked = isinstance(self, Tracked)
+        isOtherTracked = isinstance(other, Tracked)
+        if(isSelfTracked and isOtherTracked):
+            copiedVar = copy.deepcopy(self)
+            copiedVar.value = self.value / other.value
+            expr = copiedVar.location_map["."].expression
+            copiedVar.location_map["."].expression = expr + str(other.value) + ";/;"
+            return copiedVar
+        elif(isSelfTracked and (not isOtherTracked)):
+            copiedVar = copy.deepcopy(self)
+            copiedVar.value = self.value / other
+            expr = copiedVar.location_map["."].expression
+            copiedVar.location_map["."].expression = expr + str(other) + ";/;"
+            return copiedVar
+        else:
+            newValue = self / other
+            return newValue
+        
+    # if left hand type is not Tracked   
+    def __rtruediv__(self, other):
+        isSelfTracked = isinstance(self, Tracked)
+        if(isSelfTracked):
+            copiedVar = copy.deepcopy(self)
+            copiedVar.value = other / self.value
+            expr = copiedVar.location_map["."].expression
+            copiedVar.location_map["."].expression = expr + str(other) + ";swap;/;"
             return copiedVar

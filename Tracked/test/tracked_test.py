@@ -231,7 +231,24 @@ class Test(unittest.TestCase):
         self.assertEqual(self.e_iMop.value, 0, "int value")
         self.assertTrue(self.e_iMop.location_map["."].isValid(), "tracked Location")
         self.assertEqual(self.e_iMop.location_map["."].source_node, "bar", "source node")
-              
+        
+    def testArithmeticIntDiv(self):
+        self.a_iDiv = Tracked(4)
+        
+        self.assertEqual(self.a_iDiv.value, 4, "int value")
+        
+        self.b_iDiv = self.a_iDiv / 2
+        
+        self.assertEqual(self.b_iDiv.value, 2, "1st div")
+        
+        self.c_iDiv = 19 / self.a_iDiv
+        
+        self.assertEqual(self.c_iDiv.value, 4.75, "2nd div")
+        
+        self.d_iDiv = self.c_iDiv / self.b_iDiv
+        
+        self.assertEqual(self.d_iDiv.value, 2.375, "3rd div")
+        self.assertEqual(self.d_iDiv.location_map["."].expression, "19;swap;/;2.0;/;", "expression")              
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
