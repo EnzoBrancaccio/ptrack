@@ -198,7 +198,40 @@ class Test(unittest.TestCase):
         self.d_iMul = self.c_iMul * self.a_iMul
         
         self.assertEqual(self.d_iMul.value, 96, "3rd mul")
-        self.assertEqual(self.d_iMul.location_map["."].expression, "3;*;2;swap;*;4;*;")      
+        self.assertEqual(self.d_iMul.location_map["."].expression, "3;*;2;swap;*;4;*;")
+        
+    def testArithmeticIntMultiplyOptimization(self):
+        self.a_iMop = Tracked(4, Location("foo", 24))
+        self.x_iMop = Tracked(0, Location("bar", 24))
+        
+        self.assertEqual(self.a_iMop.value, 4, "int value")
+        self.assertTrue(self.a_iMop.location_map["."].isValid(), "filled tracked Location")
+        
+        self.assertEqual(self.x_iMop.value, 0, "int value")
+        self.assertTrue(self.x_iMop.location_map["."].isValid(), "filled tracked Location")
+        
+        self.b_iMop = self.a_iMop * 0
+        
+        self.assertEqual(self.b_iMop.value, 0, "int value")
+        self.assertFalse(self.b_iMop.location_map["."].isValid(), "empty tracked Location")
+        
+        self.c_iMop = 0 * self.a_iMop
+        
+        self.assertEqual(self.c_iMop.value, 0, "int value")
+        self.assertFalse(self.c_iMop.location_map["."].isValid(), "empty tracked Location")
+        
+        self.d_iMop = self.x_iMop * self.a_iMop
+        
+        self.assertEqual(self.d_iMop.value, 0, "int value")
+        self.assertTrue(self.d_iMop.location_map["."].isValid(), "tracked Location")
+        self.assertEqual(self.d_iMop.location_map["."].source_node, "bar", "source node")
+        
+        self.e_iMop = self.a_iMop * self.x_iMop
+        
+        self.assertEqual(self.e_iMop.value, 0, "int value")
+        self.assertTrue(self.e_iMop.location_map["."].isValid(), "tracked Location")
+        self.assertEqual(self.e_iMop.location_map["."].source_node, "bar", "source node")
+              
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

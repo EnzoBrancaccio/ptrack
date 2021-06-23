@@ -115,11 +115,11 @@ class Tracked(object):
                 isOtherNull = other.value == 0
                 isOtherNumber = isinstance(other.value, Number)
                 if(isOtherNull and isOtherNumber):
-                    copiedVar.location = other.location
+                    copiedVar.location_map["."] = other.location
                     expr = copiedVar.location_map["."].expression
                     copiedVar.location_map["."].expression = expr + str(self) + ";swap;*;"
                     return copiedVar
-                copiedVar.location = self.location
+                copiedVar.location_map["."] = self.location
                 expr = copiedVar.location_map["."].expression
                 copiedVar.location_map["."].expression = expr + str(other.value) + ";*;"
                 return copiedVar
@@ -131,7 +131,7 @@ class Tracked(object):
             isOtherNull = other == 0
             isOtherNumber = isinstance(other, Number)
             if(isOtherNull and isOtherNumber):
-                copiedVar.location = Location()
+                copiedVar.location_map["."] = Location()
             return copiedVar
         else:
             newValue = self * other
@@ -147,5 +147,5 @@ class Tracked(object):
             isOtherNull = other == 0
             isOtherNumber = isinstance(other, Number)
             if(isOtherNumber and isOtherNull):
-                copiedVar.location = Location()
+                copiedVar.location_map["."] = Location()
             return copiedVar
