@@ -5,6 +5,7 @@ Created on 06.06.2021
 '''
 import unittest
 import math
+import tracked.trackingHelpers as th
 
 from tracked.tracked import Tracked
 from rosslt_msgs.msg import Int32Tracked
@@ -262,7 +263,14 @@ class Test(unittest.TestCase):
         self.c_Trig = Tracked.cos(self.a_Trig / 3.0)
         
         self.assertAlmostEqual(self.c_Trig.value, 0.5)
-        self.assertEqual(self.c_Trig.location_map["."].expression, "3.0;/;cos;", "expression of cos")     
+        self.assertEqual(self.c_Trig.location_map["."].expression, "3.0;/;cos;", "expression of cos")
+        
+    def testMakeTracked(self):
+        self.assertEqual(th.makeTracked(5).value, 5, "simple makeTracked")
+        self.assertEqual(th.makeTracked(th.makeTracked(5)).value, 5, "double makeTracked")
+        
+        self.assertTrue(th.makeTracked(False, Location("foo", 42)).location_map["."].isValid(), "location")
+        self.assertFalse(th.makeTracked("Hallo").location_map["."].isValid())  
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
