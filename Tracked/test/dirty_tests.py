@@ -4,6 +4,7 @@ Created on 10.06.2021
 @author: Enzo Brancaccio
 '''
 
+import math
 import tracked.locationMap as lm
 from tracked.location import Location
 from tracked.tracked import Tracked
@@ -226,4 +227,17 @@ bstring = "Oh, " + astring + " Welt";
 print("Strings")
 print(astring.value)
 print(bstring.value)
+'''
+
+a_Trig = Tracked(math.pi)    
+b_Trig = Tracked.sin(a_Trig / 6.0)         
+c_Trig = Tracked.cos(a_Trig / 3.0)
+
+'''
+print("sin/cos")
+print(a_Trig.value)
+print(b_Trig.value)
+print(type(b_Trig.value))
+print(b_Trig.location_map["."].expression)
+print(c_Trig.location_map["."].expression)
 '''

@@ -4,6 +4,7 @@ Created on 06.06.2021
 @author: Enzo Brancaccio
 '''
 import unittest
+import math
 
 from tracked.tracked import Tracked
 from rosslt_msgs.msg import Int32Tracked
@@ -248,7 +249,20 @@ class Test(unittest.TestCase):
         self.d_iDiv = self.c_iDiv / self.b_iDiv
         
         self.assertEqual(self.d_iDiv.value, 2.375, "3rd div")
-        self.assertEqual(self.d_iDiv.location_map["."].expression, "19;swap;/;2.0;/;", "expression")              
+        self.assertEqual(self.d_iDiv.location_map["."].expression, "19;swap;/;2.0;/;", "expression")
+        
+    def testTrigonometry(self):
+        self.a_Trig = Tracked(math.pi)
+        
+        self.b_Trig = Tracked.sin(self.a_Trig / 6.0)
+        
+        self.assertAlmostEqual(self.b_Trig.value, 0.5)
+        self.assertEqual(self.b_Trig.location_map["."].expression, "6.0;/;sin;", "expression of sin")    
+        
+        self.c_Trig = Tracked.cos(self.a_Trig / 3.0)
+        
+        self.assertAlmostEqual(self.c_Trig.value, 0.5)
+        self.assertEqual(self.c_Trig.location_map["."].expression, "3.0;/;cos;", "expression of cos")     
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

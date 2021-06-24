@@ -4,9 +4,11 @@ Created on 01.06.2021
 @author: Enzo Brancaccio
 '''
 
+import copy
+import math
+
 from .location import Location
 from rosslt_msgs.msg import LocationHeader
-import copy
 from numbers import Number
 
 class Tracked(object):
@@ -180,4 +182,24 @@ class Tracked(object):
             copiedVar.value = other / self.value
             expr = copiedVar.location_map["."].expression
             copiedVar.location_map["."].expression = expr + str(other) + ";swap;/;"
+            return copiedVar
+        
+    def sin(self):
+        isSelfTracked = isinstance(self, Tracked)
+        isValueNumber = isinstance(self.value, Number)
+        if(isSelfTracked and isValueNumber):
+            copiedVar = copy.deepcopy(self)
+            copiedVar.value = math.sin(self.value)
+            expr = copiedVar.location_map["."].expression
+            copiedVar.location_map["."].expression = expr + "sin;"
+            return copiedVar
+        
+    def cos(self):
+        isSelfTracked = isinstance(self, Tracked)
+        isValueNumber = isinstance(self.value, Number)
+        if(isSelfTracked and isValueNumber):
+            copiedVar = copy.deepcopy(self)
+            copiedVar.value = math.cos(self.value)
+            expr = copiedVar.location_map["."].expression
+            copiedVar.location_map["."].expression = expr + "cos;"
             return copiedVar
