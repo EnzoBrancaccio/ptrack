@@ -6,6 +6,8 @@ Created on 01.06.2021
 
 import copy
 import math
+import tracked.locationMap as lm
+import tracked.trackingHelpers as th
 
 from .location import Location
 from rosslt_msgs.msg import LocationHeader
@@ -203,3 +205,34 @@ class Tracked(object):
             expr = copiedVar.location_map["."].expression
             copiedVar.location_map["."].expression = expr + "cos;"
             return copiedVar
+        
+    # vector methods: Choosing its Python counterpart "list"
+    def size(self):
+        if(isinstance(self, Tracked)):
+            if(isinstance(self.value, list)):
+                return len(self.value)
+    
+    # everything in list is of / will be turned into type Tracked        
+    def push_back(self, inputArg):
+        if(isinstance(self, Tracked)):
+            if(isinstance(self.value, list)):
+                if(isinstance(inputArg, Tracked)):
+                    self.value.append(inputArg)
+                    self.location_map = lm.addLocations(self.location_map, inputArg.location_map, str(self.size() - 1))
+                else:
+                    self.value.append(th.makeTracked(inputArg))
+                    
+    def pop_back(self):
+        if(isinstance(self, Tracked)):
+            if(isinstance(self.value, list)):
+                del(self.value[-1])
+                self.location_map = lm.removeLocations(self.location_map, str(self.size()))
+                
+    def clear(self):
+        if(isinstance(self, Tracked)):
+            if(isinstance(self.value, list)):
+                self.value.clear()
+                self.location_map = lm.locationSlice(self.location_map, ".")
+                    
+                    
+        

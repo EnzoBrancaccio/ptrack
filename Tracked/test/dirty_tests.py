@@ -241,3 +241,13 @@ print(type(b_Trig.value))
 print(b_Trig.location_map["."].expression)
 print(c_Trig.location_map["."].expression)
 '''
+
+sizeTest = Tracked([1, 2, 3])
+a_vm = Tracked(list())
+vm_loc1 = Location("foo", 22)
+vm_loc2 = Location("bar", 23)
+
+print(isinstance(sizeTest.value, list))
+print(isinstance(a_vm.value, list))
+print(type(sizeTest.value))
+print(type(a_vm.value))

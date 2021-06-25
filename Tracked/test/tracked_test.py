@@ -270,7 +270,38 @@ class Test(unittest.TestCase):
         self.assertEqual(th.makeTracked(th.makeTracked(5)).value, 5, "double makeTracked")
         
         self.assertTrue(th.makeTracked(False, Location("foo", 42)).location_map["."].isValid(), "location")
-        self.assertFalse(th.makeTracked("Hallo").location_map["."].isValid())  
+        self.assertFalse(th.makeTracked("Hallo").location_map["."].isValid())
+        
+    def testVectorMethods(self):
+        self.sizeTest = Tracked([1, 2, 3])
+        self.a_vm = Tracked(list())
+        self.vm_loc1 = Location("foo", 22)
+        self.vm_loc2 = Location("bar", 23)
+        
+        self.assertEqual(self.sizeTest.size(), 3, "size check  test")
+        self.assertEqual(self.a_vm.size(), 0, "size check empty")
+        
+        self.a_vm.push_back(42)
+        self.a_vm.push_back(th.makeTracked(7, self.vm_loc1))
+        self.a_vm.push_back(-7)
+        self.a_vm.push_back(th.makeTracked(15, self.vm_loc2))
+        
+        self.assertEqual(self.a_vm.size(), 4, "size check filled")
+        
+        self.assertEqual(self.a_vm.value[0].value, 42)
+        self.assertEqual(self.a_vm.value[1].value, 7)
+        self.assertEqual(self.a_vm.value[2].value, -7)
+        self.assertEqual(self.a_vm.value[3].value, 15)
+        self.assertEqual(self.a_vm.value[-1].value, 15)
+        
+        self.assertFalse(self.a_vm.value[0].location_map["."].isValid(), "no location")
+        self.assertEqual(self.a_vm.value[1].location_map["."].location_id, 22, "1st location")
+        
+        self.a_vm.pop_back()
+        
+        self.assertEqual(self.a_vm.size(), 3, "size check popped")
+        self.assertEqual(self.a_vm.value[-1].value, -7)
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
