@@ -234,5 +234,19 @@ class Tracked(object):
                 self.value.clear()
                 self.location_map = lm.locationSlice(self.location_map, ".")
                     
-                    
+    def front(self):
+        if(isinstance(self, Tracked)):
+            if(isinstance(self.value, list)):
+                return self.value[0]
+            
+    def back(self):
+        if(isinstance(self, Tracked)):
+            if(isinstance(self.value, list)):
+                return self.value[-1]
+    
+    # overload [] for Tracked with value list  
+    def __getitem__(self, position):
+        if(isinstance(self, Tracked)):
+            if(isinstance(self.value, list)):
+                return self
         
