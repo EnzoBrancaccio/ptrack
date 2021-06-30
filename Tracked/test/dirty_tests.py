@@ -5,7 +5,10 @@ Created on 10.06.2021
 '''
 
 import math
+
 import tracked.locationMap as lm
+import tracked.trackingHelpers as th
+
 from tracked.location import Location
 from tracked.tracked import Tracked
 from rosslt_msgs.msg import Location as rosLocationMsg
@@ -247,7 +250,27 @@ a_vm = Tracked(list())
 vm_loc1 = Location("foo", 22)
 vm_loc2 = Location("bar", 23)
 
+'''
 print(isinstance(sizeTest.value, list))
 print(isinstance(a_vm.value, list))
 print(type(sizeTest.value))
 print(type(a_vm.value))
+'''
+
+ae_val = 5
+ae_expr = "\"1\";+;"
+ae_stack = list()
+ae_stack.append(ae_val)
+ae_eList = ae_expr.split(";")
+for x in ae_eList:
+    print(x)
+print(ae_eList[0])
+ae_quotList = ae_eList[0].split('\"')
+for y in ae_quotList:
+    print(y)
+ae_token = ae_eList[0]
+if(ae_token[0] == '"'):
+    if(ae_token[-1] == '"'):
+        print(ae_token)
+        ae_newVal = ae_token.split('\"')[1]
+        print(ae_newVal)
