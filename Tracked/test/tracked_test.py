@@ -312,6 +312,7 @@ class Test(unittest.TestCase):
         self.assertEqual(self.a_vm.size(), 0, "size check cleared")
         
     def testApplyExpression(self):
+        # numbers
         self.assertEqual(th.applyExpression(5, ""), 5)
         self.assertEqual(th.applyExpression(5, "\"1\";+;"), 6)
 
@@ -351,11 +352,36 @@ class Test(unittest.TestCase):
         self.assertEqual(th.applyExpression(0.4, "asin;"), math.asin(0.4))
         self.assertEqual(th.applyExpression(0.3, "acos;"), math.acos(0.3))
         
+        # strings
         self.assertEqual(th.applyExpression("Hallo", ""), "Hallo")
         self.assertEqual(th.applyExpression("", "\"Hallo;Hallo;Hallo\";+;"), "Hallo;Hallo;Hallo")
         self.assertEqual(th.applyExpression("Hallo", "\" Welt\";+;"), "Hallo Welt")
         self.assertEqual(th.applyExpression("Hallo", "\" Welt\";swap;+;"), " WeltHallo")
         self.assertEqual(th.applyExpression("Hallo Welt", "\" Welt\";-;"), "Hallo")
+        
+    def testReverseExpression(self):
+        self.assertEqual(th.reverseExpression(""), "");
+
+        self.assertEqual(th.applyExpression(5.0, th.reverseExpression("")), 5)
+        self.assertEqual(th.applyExpression(6.23, th.reverseExpression("\"1.23\";+;")), 5.0)
+
+        self.assertEqual(th.applyExpression(6.5, th.reverseExpression("2.5;+;")), 4.0)
+        self.assertEqual(th.applyExpression(-2.0, th.reverseExpression("2;-;")), 0)
+        self.assertEqual(th.applyExpression(12.0, th.reverseExpression("4;*;")), 3.0)
+        self.assertEqual(th.applyExpression(15.0/6.0, th.reverseExpression("6;/;")), 15.0)
+
+        self.assertEqual(th.applyExpression(6.0, th.reverseExpression("18;swap;/;")), 3.0)
+        self.assertEqual(th.applyExpression(2.0, th.reverseExpression("2;swap;-;")), 0.0)
+        self.assertEqual(th.applyExpression(24.0, th.reverseExpression("4;swap;*;")), 6.0)
+        self.assertEqual(th.applyExpression(5.0, th.reverseExpression("3;swap;+;")), 2.0)
+
+        self.assertEqual(th.applyExpression(8.0, th.reverseExpression("1;1;1;1;+;+;+;+;")), 4.0)
+        self.assertEqual(th.applyExpression(-7.0, th.reverseExpression("2;3;*;4;2;/;+;-;")), 1.0)
+
+        self.assertEqual(th.applyExpression(math.sin(1.0), th.reverseExpression("sin;")), 1.0)
+        self.assertEqual(th.applyExpression(math.cos(2.0), th.reverseExpression("cos;")), 2.0)
+        
+        self.assertEqual(th.applyExpression(1.2, th.reverseExpression("2.000000;+;10.000000;/;")), 10.0)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

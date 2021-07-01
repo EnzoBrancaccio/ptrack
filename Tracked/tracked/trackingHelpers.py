@@ -125,6 +125,49 @@ def applyExpression(value, expression):
                 stack.append(token)
         return stack[-1]
 
+# from trackingnode.cpp    
+def reverseExpression(expr, position = None, swapped = False):
+    if(isinstance(expr, list)):
+        if(position >= len(expr)):
+            return ""
+        else:
+            resultList = list()
+            
+            n = 0
+            i = position
+            for x in range(position, len(expr)):
+                n = n - is_operator(expr[x])
+                if(n < 0):
+                    break
+                else:
+                    n = n + 1
+                    i = i + 1
+                    
+            for y in range(position, i):
+                resultList.append(expr[y])
+            
+            is_rhs = swapped or (((i - 1) >= 0) and (expr[i-1] == "swap"))
+            is_commutative = (expr[i] == "+") or (expr[i] == "*")
+            if(is_commutative):
+                if(is_rhs):
+                    resultList.append("swap")
+                    resultList.append(inverse_op(expr[i]))
+                else:
+                    resultList.append(inverse_op(expr[i]))
+            else:
+                if(is_rhs):
+                    resultList.append(expr[i])
+                else:
+                    resultList.append(inverse_op(expr[i]))
+            resultString = ";".join(resultList)
+            
+            return reverseExpression(expr, i + 1, (expr[i] == "swap")) + resultString   
+    elif(isinstance(expr, str)):
+        exprList = expr.split(";")
+        return reverseExpression(exprList, 0)
+    else:
+        return ""
+
 def inv_plus(lhs, rhs):
     isNumeric = ((isinstance(lhs, Number)) and (isinstance(rhs, Number)))
     if(isNumeric):
@@ -144,3 +187,47 @@ def inv_div(lhs, rhs):
     isNumeric = ((isinstance(lhs, Number)) and (isinstance(rhs, Number)))
     if(isNumeric):
         return lhs * rhs
+    
+def inverse_op(operator):
+    if(operator == "+"):
+        return "-"
+    elif(operator == "-"):
+        return "+"
+    elif(operator == "*"):
+        return "/"
+    elif(operator == "/"):
+        return "*"
+    elif(operator == "swap"):
+        return "swap"
+    elif(operator == "sin"):
+        return "asin"
+    elif(operator == "cos"): 
+        return "acos"
+    elif(operator == "asin"): 
+        return "sin"
+    elif(operator == "acos"): 
+        return "cos"
+    else:
+        raise ValueError("no valid operator '" + operator + "'")
+
+def is_operator(token):
+    if(token == "+"): 
+        return 2
+    elif(token == "-"): 
+        return 2;
+    elif(token == "*"): 
+        return 2;
+    elif(token == "/"): 
+        return 2;
+    elif(token == "sin"): 
+        return 1;
+    elif(token == "cos"): 
+        return 1;
+    elif(token == "asin"): 
+        return 1;
+    elif(token == "acos"): 
+        return 1;
+    elif(token == "swap"): 
+        return 1;
+    else:
+        return 0

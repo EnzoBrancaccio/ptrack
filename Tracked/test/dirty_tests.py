@@ -285,7 +285,9 @@ for subToken in ae_seList:
         if(subToken[-1] == '"'):
             lastIndex = ae_seList.index(subToken)
 ae_subList = ae_seList[firstIndex:(lastIndex+1)]
+'''
 for x in ae_subList:
     print(x)
 ae_newValue = ";".join(ae_subList)
 print(ae_newValue)
+'''
