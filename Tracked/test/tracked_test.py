@@ -312,44 +312,50 @@ class Test(unittest.TestCase):
         self.assertEqual(self.a_vm.size(), 0, "size check cleared")
         
     def testApplyExpression(self):
-        self.assertEqual(th.applyExpression(5, ""), 5);
-        self.assertEqual(th.applyExpression(5, "\"1\";+;"), 6);
+        self.assertEqual(th.applyExpression(5, ""), 5)
+        self.assertEqual(th.applyExpression(5, "\"1\";+;"), 6)
 
-        self.assertEqual(th.applyExpression(4, "2;+;"), 6);
-        self.assertEqual(th.applyExpression(0, "2;-;"), -2);
-        self.assertEqual(th.applyExpression(3, "4;*;"), 12);
-        self.assertEqual(th.applyExpression(15, "5;/;"), 3);
+        self.assertEqual(th.applyExpression(4, "2;+;"), 6)
+        self.assertEqual(th.applyExpression(0, "2;-;"), -2)
+        self.assertEqual(th.applyExpression(3, "4;*;"), 12)
+        self.assertEqual(th.applyExpression(15, "5;/;"), 3)
 
-        self.assertEqual(th.applyExpression(3, "18;swap;/;"), 6);
-        self.assertEqual(th.applyExpression(0, "2;swap;-;"), 2);
+        self.assertEqual(th.applyExpression(3, "18;swap;/;"), 6)
+        self.assertEqual(th.applyExpression(0, "2;swap;-;"), 2)
 
-        self.assertEqual(th.applyExpression(4, "1;1;1;1;+;+;+;+;"), 8);
-        self.assertEqual(th.applyExpression(1, "2;3;*;4;2;/;+;-;"), -7);
+        self.assertEqual(th.applyExpression(4, "1;1;1;1;+;+;+;+;"), 8)
+        self.assertEqual(th.applyExpression(1, "2;3;*;4;2;/;+;-;"), -7)
 
-        self.assertEqual(th.applyExpression(1, "sin;"), math.sin(1));
-        self.assertEqual(th.applyExpression(0, "cos;"), 1);
+        self.assertEqual(th.applyExpression(1, "sin;"), math.sin(1))
+        self.assertEqual(th.applyExpression(0, "cos;"), 1)
         
-        self.assertEqual(th.applyExpression(5.0, ""), 5);
-        self.assertEqual(th.applyExpression(5.0, "\"1.23\";+;"), 6.23);
+        self.assertEqual(th.applyExpression(5.0, ""), 5)
+        self.assertEqual(th.applyExpression(5.0, "\"1.23\";+;"), 6.23)
 
-        self.assertEqual(th.applyExpression(4.0, "2.5;+;"), 6.5);
-        self.assertEqual(th.applyExpression(0.0, "2;-;"), -2);
-        self.assertEqual(th.applyExpression(3.0, "4;*;"), 12);
-        self.assertEqual(th.applyExpression(15.0, "6;/;"), 15.0/6.0);
+        self.assertEqual(th.applyExpression(4.0, "2.5;+;"), 6.5)
+        self.assertEqual(th.applyExpression(0.0, "2;-;"), -2)
+        self.assertEqual(th.applyExpression(3.0, "4;*;"), 12)
+        self.assertEqual(th.applyExpression(15.0, "6;/;"), 15.0/6.0)
 
-        self.assertEqual(th.applyExpression(3.0, "18;swap;/;"), 6);
-        self.assertEqual(th.applyExpression(0.0, "2;swap;-;"), 2);
-        self.assertEqual(th.applyExpression(6.0, "4;swap;*;"), 24.0);
-        self.assertEqual(th.applyExpression(2.0, "3;swap;+;"), 5.0);
+        self.assertEqual(th.applyExpression(3.0, "18;swap;/;"), 6)
+        self.assertEqual(th.applyExpression(0.0, "2;swap;-;"), 2)
+        self.assertEqual(th.applyExpression(6.0, "4;swap;*;"), 24.0)
+        self.assertEqual(th.applyExpression(2.0, "3;swap;+;"), 5.0)
 
-        self.assertEqual(th.applyExpression(4.0, "1;1;1;1;+;+;+;+;"), 8);
-        self.assertEqual(th.applyExpression(1.0, "2;3;*;4;2;/;+;-;"), -7);
+        self.assertEqual(th.applyExpression(4.0, "1;1;1;1;+;+;+;+;"), 8)
+        self.assertEqual(th.applyExpression(1.0, "2;3;*;4;2;/;+;-;"), -7)
 
-        self.assertEqual(th.applyExpression(1.0, "sin;"), math.sin(1.0));
-        self.assertEqual(th.applyExpression(4.0, "cos;"), math.cos(4.0));
+        self.assertEqual(th.applyExpression(1.0, "sin;"), math.sin(1.0))
+        self.assertEqual(th.applyExpression(4.0, "cos;"), math.cos(4.0))
 
-        self.assertEqual(th.applyExpression(0.4, "asin;"), math.asin(0.4));
-        self.assertEqual(th.applyExpression(0.3, "acos;"), math.acos(0.3));
+        self.assertEqual(th.applyExpression(0.4, "asin;"), math.asin(0.4))
+        self.assertEqual(th.applyExpression(0.3, "acos;"), math.acos(0.3))
+        
+        self.assertEqual(th.applyExpression("Hallo", ""), "Hallo")
+        self.assertEqual(th.applyExpression("", "\"Hallo;Hallo;Hallo\";+;"), "Hallo;Hallo;Hallo")
+        self.assertEqual(th.applyExpression("Hallo", "\" Welt\";+;"), "Hallo Welt")
+        self.assertEqual(th.applyExpression("Hallo", "\" Welt\";swap;+;"), " WeltHallo")
+        self.assertEqual(th.applyExpression("Hallo Welt", "\" Welt\";-;"), "Hallo")
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

@@ -262,6 +262,7 @@ ae_expr = "\"1\";+;"
 ae_stack = list()
 ae_stack.append(ae_val)
 ae_eList = ae_expr.split(";")
+'''
 for x in ae_eList:
     print(x)
 print(ae_eList[0])
@@ -274,3 +275,17 @@ if(ae_token[0] == '"'):
         print(ae_token)
         ae_newVal = ae_token.split('\"')[1]
         print(ae_newVal)
+'''
+ae_strexp = "\"Hallo;Hallo;Hallo\";+;"
+ae_seList = ae_strexp.split(";")
+for subToken in ae_seList:
+    if(subToken != ""):
+        if(subToken[0] == '"'):
+            firstIndex = ae_seList.index(subToken)
+        if(subToken[-1] == '"'):
+            lastIndex = ae_seList.index(subToken)
+ae_subList = ae_seList[firstIndex:(lastIndex+1)]
+for x in ae_subList:
+    print(x)
+ae_newValue = ";".join(ae_subList)
+print(ae_newValue)

@@ -57,9 +57,72 @@ def applyExpression(value, expression):
                     newValue = float(token.split('\"')[1])
                     stack.append(newValue)
                 else:
-                    pass # not yet sure which case is covered
+                    # case: expression inside expression, split over several tokens
+                    subList = list()
+                    firstIndex = 0
+                    lastIndex = 0
+                    for subToken in exprList:
+                        if(subToken != ""):
+                            if(subToken[0] == '"'):
+                                firstIndex = exprList.index(subToken)
+                            if(subToken[-1] == '"'):
+                                lastIndex = exprList.index(subToken)
+                    # strings beginning with ", ending with " and those in between
+                    subList = exprList[firstIndex:(lastIndex+1)]
+                    # remove the subList-strings from exprList so they don't interfere
+                    del exprList[firstIndex:(lastIndex+1)]
+                    # turn list into string, separated by ;                      
+                    newValue = ";".join(subList)
+                    # remove quotation marks from string (they are elements with index 0 and 2 in list)
+                    newValue = newValue.split('"')[1]
+                    stack.append(newValue) 
             else:
                 stack.append(float(token))
+        return stack[-1]
+    elif(isinstance(value, str)):
+        stack = list()
+        stack.append(value)
+        # using split to turn expression into list
+        exprList = expression.split(";")
+        for token in exprList:
+            if(token == ""):
+                continue
+            elif(token == "+"):
+                stack[-2] = stack[-2] + stack[-1]
+                stack.pop()
+            elif(token == "-"):
+                minusLength = len(stack[-2]) - len(stack[-1])
+                stack[-2] = stack[-2][0:minusLength]
+                stack.pop()
+            elif(token == "swap"):
+                stack[-2], stack[-1] = stack[-1], stack[-2]
+            elif(token[0] == '"'):
+                if(token[-1] == '"'):
+                    # result of split is like ['', x, ''] so we take index 1
+                    newValue = token.split('\"')[1]
+                    stack.append(newValue)
+                else:
+                    # case: expression inside expression, split over several tokens
+                    subList = list()
+                    firstIndex = 0
+                    lastIndex = 0
+                    for subToken in exprList:
+                        if(subToken != ""):
+                            if(subToken[0] == '"'):
+                                firstIndex = exprList.index(subToken)
+                            if(subToken[-1] == '"'):
+                                lastIndex = exprList.index(subToken)
+                    # strings beginning with ", ending with " and those in between
+                    subList = exprList[firstIndex:(lastIndex+1)]
+                    # remove the subList-strings from exprList so they don't interfere
+                    del exprList[firstIndex:(lastIndex+1)]
+                    # turn list into string, separated by ;                      
+                    newValue = ";".join(subList)
+                    # remove quotation marks from string (they are elements with index 0 and 2 in list)
+                    newValue = newValue.split('"')[1]
+                    stack.append(newValue)                     
+            else:
+                stack.append(token)
         return stack[-1]
 
 def inv_plus(lhs, rhs):
