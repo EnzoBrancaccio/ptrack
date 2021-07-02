@@ -381,7 +381,7 @@ class Test(unittest.TestCase):
 
         self.assertEqual(e.applyExpression(math.sin(1.0), e.reverseExpression("sin;")), 1.0)
         self.assertEqual(e.applyExpression(math.cos(2.0), e.reverseExpression("cos;")), 2.0)
-        
+
         self.assertEqual(e.applyExpression(1.2, e.reverseExpression("2.000000;+;10.000000;/;")), 10.0)
 
 if __name__ == "__main__":

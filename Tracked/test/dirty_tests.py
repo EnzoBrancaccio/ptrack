@@ -8,6 +8,7 @@ import math
 
 import tracked.locationMap as lm
 import tracked.trackingHelpers as th
+import tracked.expression as e
 
 from tracked.location import Location
 from tracked.tracked import Tracked
@@ -290,4 +291,36 @@ for x in ae_subList:
     print(x)
 ae_newValue = ";".join(ae_subList)
 print(ae_newValue)
+'''
+
+re_expr = "\"1.23\";+;"
+re_expList = re_expr.split(";")
+n = 0
+i = 0
+for x in range(0, len(re_expList)):
+    n = n - th.is_operator(re_expList[x])
+    if(n < 0):
+        break
+    else:
+        n = n + 1
+        i = i + 1
+'''
+print(len(re_expList))
+for rex in re_expList:
+    print(rex)
+print(n)
+print(i)
+'''
+re_expResultList = list()
+for y in range(0, i):
+    re_expResultList.append(re_expList[y])
+'''
+for rey in re_expResultList:
+    print(rey)
+'''
+re_is_rhs = (((i - 1) >= 0) and (re_expList[i-1] == "swap"))
+re_is_commutative = (re_expList[i] == "+") or (re_expList[i] == "*")
+'''
+print(re_is_rhs)
+print(re_is_commutative)
 '''

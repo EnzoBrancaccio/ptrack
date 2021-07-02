@@ -150,11 +150,14 @@ def reverseExpression(expr, position = None, swapped = False):
                     resultList.append(expr[i])
                 else:
                     resultList.append(th.inverse_op(expr[i]))
-            resultString = ";".join(resultList)
+            resultString = th.createExpressionString(resultList)
             
             return reverseExpression(expr, i + 1, (expr[i] == "swap")) + resultString   
     elif(isinstance(expr, str)):
-        exprList = expr.split(";")
-        return reverseExpression(exprList, 0)
+        if(expr == ""):
+            return reverseExpression([], 0)
+        else:
+            exprList = th.createExpressionList(expr)
+            return reverseExpression(exprList, 0)
     else:
         return ""

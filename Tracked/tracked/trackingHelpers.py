@@ -80,3 +80,17 @@ def is_operator(token):
         return 1;
     else:
         return 0
+    
+def createExpressionList(string):
+    exprList = list()
+    exprTempList = string.split(";")
+    # string ending with ";" results in "" being appended
+    for x in exprTempList:
+        if(x != ""):
+            exprList.append(x)
+    return exprList
+
+def createExpressionString(exprList):
+    expressionString = ";".join(exprList)
+    expressionString = ";" + expressionString + ";"
+    return expressionString
