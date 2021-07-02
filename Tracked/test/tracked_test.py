@@ -6,6 +6,7 @@ Created on 06.06.2021
 import unittest
 import math
 import tracked.trackingHelpers as th
+import tracked.expression as e
 
 from tracked.tracked import Tracked
 from rosslt_msgs.msg import Int32Tracked
@@ -313,75 +314,75 @@ class Test(unittest.TestCase):
         
     def testApplyExpression(self):
         # numbers
-        self.assertEqual(th.applyExpression(5, ""), 5)
-        self.assertEqual(th.applyExpression(5, "\"1\";+;"), 6)
+        self.assertEqual(e.applyExpression(5, ""), 5)
+        self.assertEqual(e.applyExpression(5, "\"1\";+;"), 6)
 
-        self.assertEqual(th.applyExpression(4, "2;+;"), 6)
-        self.assertEqual(th.applyExpression(0, "2;-;"), -2)
-        self.assertEqual(th.applyExpression(3, "4;*;"), 12)
-        self.assertEqual(th.applyExpression(15, "5;/;"), 3)
+        self.assertEqual(e.applyExpression(4, "2;+;"), 6)
+        self.assertEqual(e.applyExpression(0, "2;-;"), -2)
+        self.assertEqual(e.applyExpression(3, "4;*;"), 12)
+        self.assertEqual(e.applyExpression(15, "5;/;"), 3)
 
-        self.assertEqual(th.applyExpression(3, "18;swap;/;"), 6)
-        self.assertEqual(th.applyExpression(0, "2;swap;-;"), 2)
+        self.assertEqual(e.applyExpression(3, "18;swap;/;"), 6)
+        self.assertEqual(e.applyExpression(0, "2;swap;-;"), 2)
 
-        self.assertEqual(th.applyExpression(4, "1;1;1;1;+;+;+;+;"), 8)
-        self.assertEqual(th.applyExpression(1, "2;3;*;4;2;/;+;-;"), -7)
+        self.assertEqual(e.applyExpression(4, "1;1;1;1;+;+;+;+;"), 8)
+        self.assertEqual(e.applyExpression(1, "2;3;*;4;2;/;+;-;"), -7)
 
-        self.assertEqual(th.applyExpression(1, "sin;"), math.sin(1))
-        self.assertEqual(th.applyExpression(0, "cos;"), 1)
+        self.assertEqual(e.applyExpression(1, "sin;"), math.sin(1))
+        self.assertEqual(e.applyExpression(0, "cos;"), 1)
         
-        self.assertEqual(th.applyExpression(5.0, ""), 5)
-        self.assertEqual(th.applyExpression(5.0, "\"1.23\";+;"), 6.23)
+        self.assertEqual(e.applyExpression(5.0, ""), 5)
+        self.assertEqual(e.applyExpression(5.0, "\"1.23\";+;"), 6.23)
 
-        self.assertEqual(th.applyExpression(4.0, "2.5;+;"), 6.5)
-        self.assertEqual(th.applyExpression(0.0, "2;-;"), -2)
-        self.assertEqual(th.applyExpression(3.0, "4;*;"), 12)
-        self.assertEqual(th.applyExpression(15.0, "6;/;"), 15.0/6.0)
+        self.assertEqual(e.applyExpression(4.0, "2.5;+;"), 6.5)
+        self.assertEqual(e.applyExpression(0.0, "2;-;"), -2)
+        self.assertEqual(e.applyExpression(3.0, "4;*;"), 12)
+        self.assertEqual(e.applyExpression(15.0, "6;/;"), 15.0/6.0)
 
-        self.assertEqual(th.applyExpression(3.0, "18;swap;/;"), 6)
-        self.assertEqual(th.applyExpression(0.0, "2;swap;-;"), 2)
-        self.assertEqual(th.applyExpression(6.0, "4;swap;*;"), 24.0)
-        self.assertEqual(th.applyExpression(2.0, "3;swap;+;"), 5.0)
+        self.assertEqual(e.applyExpression(3.0, "18;swap;/;"), 6)
+        self.assertEqual(e.applyExpression(0.0, "2;swap;-;"), 2)
+        self.assertEqual(e.applyExpression(6.0, "4;swap;*;"), 24.0)
+        self.assertEqual(e.applyExpression(2.0, "3;swap;+;"), 5.0)
 
-        self.assertEqual(th.applyExpression(4.0, "1;1;1;1;+;+;+;+;"), 8)
-        self.assertEqual(th.applyExpression(1.0, "2;3;*;4;2;/;+;-;"), -7)
+        self.assertEqual(e.applyExpression(4.0, "1;1;1;1;+;+;+;+;"), 8)
+        self.assertEqual(e.applyExpression(1.0, "2;3;*;4;2;/;+;-;"), -7)
 
-        self.assertEqual(th.applyExpression(1.0, "sin;"), math.sin(1.0))
-        self.assertEqual(th.applyExpression(4.0, "cos;"), math.cos(4.0))
+        self.assertEqual(e.applyExpression(1.0, "sin;"), math.sin(1.0))
+        self.assertEqual(e.applyExpression(4.0, "cos;"), math.cos(4.0))
 
-        self.assertEqual(th.applyExpression(0.4, "asin;"), math.asin(0.4))
-        self.assertEqual(th.applyExpression(0.3, "acos;"), math.acos(0.3))
+        self.assertEqual(e.applyExpression(0.4, "asin;"), math.asin(0.4))
+        self.assertEqual(e.applyExpression(0.3, "acos;"), math.acos(0.3))
         
         # strings
-        self.assertEqual(th.applyExpression("Hallo", ""), "Hallo")
-        self.assertEqual(th.applyExpression("", "\"Hallo;Hallo;Hallo\";+;"), "Hallo;Hallo;Hallo")
-        self.assertEqual(th.applyExpression("Hallo", "\" Welt\";+;"), "Hallo Welt")
-        self.assertEqual(th.applyExpression("Hallo", "\" Welt\";swap;+;"), " WeltHallo")
-        self.assertEqual(th.applyExpression("Hallo Welt", "\" Welt\";-;"), "Hallo")
+        self.assertEqual(e.applyExpression("Hallo", ""), "Hallo")
+        self.assertEqual(e.applyExpression("", "\"Hallo;Hallo;Hallo\";+;"), "Hallo;Hallo;Hallo")
+        self.assertEqual(e.applyExpression("Hallo", "\" Welt\";+;"), "Hallo Welt")
+        self.assertEqual(e.applyExpression("Hallo", "\" Welt\";swap;+;"), " WeltHallo")
+        self.assertEqual(e.applyExpression("Hallo Welt", "\" Welt\";-;"), "Hallo")
         
     def testReverseExpression(self):
-        self.assertEqual(th.reverseExpression(""), "");
+        self.assertEqual(e.reverseExpression(""), "");
 
-        self.assertEqual(th.applyExpression(5.0, th.reverseExpression("")), 5)
-        self.assertEqual(th.applyExpression(6.23, th.reverseExpression("\"1.23\";+;")), 5.0)
+        self.assertEqual(e.applyExpression(5.0, e.reverseExpression("")), 5)
+        self.assertEqual(e.applyExpression(6.23, e.reverseExpression("\"1.23\";+;")), 5.0)
 
-        self.assertEqual(th.applyExpression(6.5, th.reverseExpression("2.5;+;")), 4.0)
-        self.assertEqual(th.applyExpression(-2.0, th.reverseExpression("2;-;")), 0)
-        self.assertEqual(th.applyExpression(12.0, th.reverseExpression("4;*;")), 3.0)
-        self.assertEqual(th.applyExpression(15.0/6.0, th.reverseExpression("6;/;")), 15.0)
+        self.assertEqual(e.applyExpression(6.5, e.reverseExpression("2.5;+;")), 4.0)
+        self.assertEqual(e.applyExpression(-2.0, e.reverseExpression("2;-;")), 0)
+        self.assertEqual(e.applyExpression(12.0, e.reverseExpression("4;*;")), 3.0)
+        self.assertEqual(e.applyExpression(15.0/6.0, e.reverseExpression("6;/;")), 15.0)
 
-        self.assertEqual(th.applyExpression(6.0, th.reverseExpression("18;swap;/;")), 3.0)
-        self.assertEqual(th.applyExpression(2.0, th.reverseExpression("2;swap;-;")), 0.0)
-        self.assertEqual(th.applyExpression(24.0, th.reverseExpression("4;swap;*;")), 6.0)
-        self.assertEqual(th.applyExpression(5.0, th.reverseExpression("3;swap;+;")), 2.0)
+        self.assertEqual(e.applyExpression(6.0, e.reverseExpression("18;swap;/;")), 3.0)
+        self.assertEqual(e.applyExpression(2.0, e.reverseExpression("2;swap;-;")), 0.0)
+        self.assertEqual(e.applyExpression(24.0, e.reverseExpression("4;swap;*;")), 6.0)
+        self.assertEqual(e.applyExpression(5.0, e.reverseExpression("3;swap;+;")), 2.0)
 
-        self.assertEqual(th.applyExpression(8.0, th.reverseExpression("1;1;1;1;+;+;+;+;")), 4.0)
-        self.assertEqual(th.applyExpression(-7.0, th.reverseExpression("2;3;*;4;2;/;+;-;")), 1.0)
+        self.assertEqual(e.applyExpression(8.0, e.reverseExpression("1;1;1;1;+;+;+;+;")), 4.0)
+        self.assertEqual(e.applyExpression(-7.0, e.reverseExpression("2;3;*;4;2;/;+;-;")), 1.0)
 
-        self.assertEqual(th.applyExpression(math.sin(1.0), th.reverseExpression("sin;")), 1.0)
-        self.assertEqual(th.applyExpression(math.cos(2.0), th.reverseExpression("cos;")), 2.0)
+        self.assertEqual(e.applyExpression(math.sin(1.0), e.reverseExpression("sin;")), 1.0)
+        self.assertEqual(e.applyExpression(math.cos(2.0), e.reverseExpression("cos;")), 2.0)
         
-        self.assertEqual(th.applyExpression(1.2, th.reverseExpression("2.000000;+;10.000000;/;")), 10.0)
+        self.assertEqual(e.applyExpression(1.2, e.reverseExpression("2.000000;+;10.000000;/;")), 10.0)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
