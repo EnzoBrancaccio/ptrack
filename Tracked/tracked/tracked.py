@@ -49,6 +49,10 @@ class Tracked(object):
                 cls.location_map[rosslt_msg.paths[i]] = rosslt_msg.locations[i] 
         return newTracked
     
+    # overloading the dot .
+    def __getattr__(self, name):
+        pass # TODO
+    
     # overloading + operator 
     def __add__(self, other):
         isSelfTracked = isinstance(self, Tracked)
