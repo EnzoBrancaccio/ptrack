@@ -42,31 +42,9 @@ def applyExpression(value, expression):
                 stack[-1] = math.asin(stack[-1])
             elif(token == "acos"):
                 stack[-1] = math.acos(stack[-1])
-            elif(token[0] == '"'):
-                if(token[-1] == '"'):
-                    # result of split is like ['', x, ''] so we take index 1
-                    newValue = float(token.split('\"')[1])
-                    stack.append(newValue)
-                else:
-                    # case: expression inside expression, split over several tokens
-                    subList = list()
-                    firstIndex = 0
-                    lastIndex = 0
-                    for subToken in exprList:
-                        if(subToken != ""):
-                            if(subToken[0] == '"'):
-                                firstIndex = exprList.index(subToken)
-                            if(subToken[-1] == '"'):
-                                lastIndex = exprList.index(subToken)
-                    # strings beginning with ", ending with " and those in between
-                    subList = exprList[firstIndex:(lastIndex+1)]
-                    # remove the subList-strings from exprList so they don't interfere
-                    del exprList[firstIndex:(lastIndex+1)]
-                    # turn list into string, separated by ;                      
-                    newValue = ";".join(subList)
-                    # remove quotation marks from string (they are elements with index 0 and 2 in list)
-                    newValue = newValue.split('"')[1]
-                    stack.append(newValue) 
+            elif('"' in token):
+                newValue = float(token.replace('"', ''))
+                stack.append(newValue)
             else:
                 stack.append(float(token))
         return stack[-1]

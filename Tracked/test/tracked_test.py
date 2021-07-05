@@ -11,7 +11,7 @@ import tracked.expression as e
 from tracked.tracked import Tracked
 from rosslt_msgs.msg import Int32Tracked
 from rosslt_msgs.msg import Location as rosLocationMsg
-from visualization_msgs.msg import Marker
+#from visualization_msgs.msg import Marker
 from tracked.location import Location
 from tracked.tracked2 import Tracked2
 from tracked.location2 import Location2
@@ -354,6 +354,11 @@ class Test(unittest.TestCase):
         self.assertEqual(e.applyExpression(0.4, "asin;"), math.asin(0.4))
         self.assertEqual(e.applyExpression(0.3, "acos;"), math.acos(0.3))
         
+        self.assertEqual(e.applyExpression(4.0, "\"2.5;+;"), 6.5)
+        self.assertEqual(e.applyExpression(4.0, "2.5\";+;"), 6.5)
+        self.assertEqual(e.applyExpression(4.0, "2\".5;+;"), 6.5)
+        self.assertEqual(e.applyExpression(4.0, "\"2.5\";+;"), 6.5)
+        
         # strings
         self.assertEqual(e.applyExpression("Hallo", ""), "Hallo")
         self.assertEqual(e.applyExpression("", "\"Hallo;Hallo;Hallo\";+;"), "Hallo;Hallo;Hallo")
@@ -386,7 +391,7 @@ class Test(unittest.TestCase):
         self.assertEqual(e.applyExpression(1.2, e.reverseExpression("2.000000;+;10.000000;/;")), 10.0)
         
     def testSetPrimitiveField(self):
-        self.spf_TrackedVM = Tracked(Marker)
+        #self.spf_TrackedVM = Tracked(Marker)
         self.spf_loc = Location("foo", 22)
 
 if __name__ == "__main__":

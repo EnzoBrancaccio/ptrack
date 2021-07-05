@@ -50,8 +50,10 @@ class Tracked(object):
         return newTracked
     
     # overloading the dot .
+    '''
     def __getattr__(self, name):
         pass # TODO
+    '''
     
     # overloading + operator 
     def __add__(self, other):
