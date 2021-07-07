@@ -50,10 +50,14 @@ class Tracked(object):
         return newTracked
     
     # overloading the dot .
-    '''
-    def __getattr__(self, name):
-        pass # TODO
-    '''
+    def __getattr__(self, attr):
+        try:
+            # not one of object's writable attributes
+            if(attr not in self.__dict__):
+                pass
+            return self.__dict__[attr]
+        except KeyError:
+            raise AttributeError(attr)
     
     # overloading + operator 
     def __add__(self, other):

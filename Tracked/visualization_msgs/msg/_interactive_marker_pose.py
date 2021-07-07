@@ -5,7 +5,7 @@
 
 # Import statements for member types
 
-import rosidl_parser.definition  # noqa: E402, I100
+from rosidl_parser.rosidl_parser import definition as rosidl_parser_definition  # noqa: E402, I100
 
 
 class Metaclass_InteractiveMarkerPose(type):
@@ -73,9 +73,9 @@ class InteractiveMarkerPose(metaclass=Metaclass_InteractiveMarkerPose):
     }
 
     SLOT_TYPES = (
-        rosidl_parser.definition.NamespacedType(['std_msgs', 'msg'], 'Header'),  # noqa: E501
-        rosidl_parser.definition.NamespacedType(['geometry_msgs', 'msg'], 'Pose'),  # noqa: E501
-        rosidl_parser.definition.UnboundedString(),  # noqa: E501
+        rosidl_parser_definition.NamespacedType(['std_msgs', 'msg'], 'Header'),  # noqa: E501
+        rosidl_parser_definition.NamespacedType(['geometry_msgs', 'msg'], 'Pose'),  # noqa: E501
+        rosidl_parser_definition.UnboundedString(),  # noqa: E501
     )
 
     def __init__(self, **kwargs):
@@ -100,8 +100,8 @@ class InteractiveMarkerPose(metaclass=Metaclass_InteractiveMarkerPose):
             # in them, and "normal" sequences for everything else.  If it is
             # a type that we store in an array, strip off the 'array' portion.
             if (
-                isinstance(t, rosidl_parser.definition.AbstractSequence) and
-                isinstance(t.value_type, rosidl_parser.definition.BasicType) and
+                isinstance(t, rosidl_parser_definition.AbstractSequence) and
+                isinstance(t.value_type, rosidl_parser_definition.BasicType) and
                 t.value_type.typename in ['float', 'double', 'int8', 'uint8', 'int16', 'uint16', 'int32', 'uint32', 'int64', 'uint64']
             ):
                 if len(field) == 0:
