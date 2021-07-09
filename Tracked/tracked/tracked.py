@@ -23,6 +23,7 @@ class Tracked(object):
          Constructor
         '''
         self.value = value
+        self.references = dict()
             
         if location is None:
             self.location = Location()
@@ -254,9 +255,30 @@ class Tracked(object):
             if(isinstance(self.value, list)):
                 return self.value[-1]
     
-    # overload [] for Tracked with value list  
+    # overload [] for Tracked with value list
+    '''
     def __getitem__(self, position):
         if(isinstance(self, Tracked)):
             if(isinstance(self.value, list)):
-                return self
-        
+                listLength = len(self.value)
+                if(position > listLength):
+                    raise IndexError(f"Index is {position} and list length is {listLength}")
+                return self.value[position]
+    '''
+           
+    # overload assignment to save LHS and RHS values
+    def __setattr__(self, name, val):
+        # first, else attribute may not exist (e. g. Tracked.value)
+        super().__setattr__(name, val)
+        if(isinstance(self, Tracked)):
+            if(isinstance(self.value, list)):
+                if(name in self.__dict__):
+                    print(self.value)
+                    #if(getattr(self, "references", False)):
+                    #    setattr(self, "references", dict())
+                    # value appended to list so index will be length of list prior to insertion
+                    newIndex = len(self.value)
+                    # save key-value pair (index, value) in references dict
+                    #self.references[newIndex] = val
+                else:
+                    raise AttributeError(f"Unknown attribute {name}")
