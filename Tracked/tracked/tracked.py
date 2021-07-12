@@ -256,7 +256,6 @@ class Tracked(object):
                 return self.value[-1]
     
     # overload [] for Tracked with value list
-    '''
     def __getitem__(self, position):
         if(isinstance(self, Tracked)):
             if(isinstance(self.value, list)):
@@ -264,21 +263,37 @@ class Tracked(object):
                 if(position > listLength):
                     raise IndexError(f"Index is {position} and list length is {listLength}")
                 return self.value[position]
+    
+    '''
+    def __setitem__(self, position, value):
+        print("setitem")
+        if(isinstance(self, Tracked)):
+            if(isinstance(self.value, list)):
+                self.value[position] = value
     '''
            
     # overload assignment to save LHS and RHS values
-    def __setattr__(self, name, val):
+    def __setattr__(self, attrName, val):
         # first, else attribute may not exist (e. g. Tracked.value)
-        super().__setattr__(name, val)
-        if(isinstance(self, Tracked)):
-            if(isinstance(self.value, list)):
-                if(name in self.__dict__):
-                    print(self.value)
-                    #if(getattr(self, "references", False)):
-                    #    setattr(self, "references", dict())
-                    # value appended to list so index will be length of list prior to insertion
-                    newIndex = len(self.value)
-                    # save key-value pair (index, value) in references dict
-                    #self.references[newIndex] = val
-                else:
-                    raise AttributeError(f"Unknown attribute {name}")
+        super().__setattr__(attrName, val)
+        # only necessary when value attribute is modified
+        if(attrName == "value"):
+            print("first val inside")
+            print(val)
+            print("first attrName inside")
+            print(attrName)
+            if(isinstance(self, Tracked)):
+                if(isinstance(self.value, list)):
+                    if(attrName in self.__dict__):
+                        print("self.value")
+                        print(self.value)
+                        print("val")
+                        print(val)
+                        print("value list")
+                        for i in range(len(self.value)):
+                            print(self.value[i])
+                        self.__dict__[attrName] = val
+                        print("dict")
+                        print(self.__dict__[attrName])
+                    else:
+                        raise AttributeError(f"Unknown attribute {attrName}")

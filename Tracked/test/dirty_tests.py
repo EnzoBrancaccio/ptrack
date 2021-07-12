@@ -15,6 +15,7 @@ from tracked.tracked import Tracked
 from rosslt_msgs.msg import Location as rosLocationMsg
 from tracked.tracked2 import Tracked2
 from tracked.location2 import Location2
+from tracked.refdummy import RefDummy
 
 locationTest = Location("nodeTest", 1)
         
@@ -324,3 +325,20 @@ re_is_commutative = (re_expList[i] == "+") or (re_expList[i] == "*")
 print(re_is_rhs)
 print(re_is_commutative)
 '''
+
+'''
+setat_tracked = Tracked([1, 3, 5])
+print("setat_tracked before")
+print(setat_tracked.value[0])
+print("setat_tracked after")
+setat_tracked.value[0] = 7
+print(setat_tracked.value[0])
+'''
+
+print("RefDummy tests")
+rdum_1 = RefDummy([2, 4, 6])
+print("rdum_1 before")
+print(rdum_1.valueStore[0])
+print("rdum_1 after")
+rdum_1.valueStore[0] = 7
+print(rdum_1.valueStore[0])
