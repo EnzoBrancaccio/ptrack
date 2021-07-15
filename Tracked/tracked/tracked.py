@@ -264,50 +264,12 @@ class Tracked(object):
                     raise IndexError(f"Index is {position} and list length is {listLength}")
                 return self.value[position]
     
-    '''
-    def __setitem__(self, position, value):
-        print("setitem")
-        if(isinstance(self, Tracked)):
-            if(isinstance(self.value, list)):
-                self.value[position] = value
-    '''
-           
-    # overload assignment to save LHS and RHS values
-    '''
-    def __setattr__(self, attrName, val):
-        # first, else attribute may not exist (e. g. Tracked.value)
-        super().__setattr__(attrName, val)
-        # only necessary when value attribute is modified
-        if(attrName == "value"):
-            print("first val inside")
-            print(val)
-            print("first attrName inside")
-            print(attrName)
-            if(isinstance(self, Tracked)):
-                if(isinstance(self.value, list)):
-                    if(attrName in self.__dict__):
-                        print("self.value")
-                        print(self.value)
-                        print("val")
-                        print(val)
-                        print("value list")
-                        for i in range(len(self.value)):
-                            print(self.value[i])
-                        self.__dict__[attrName] = val
-                        print("dict")
-                        print(self.__dict__[attrName])
-                    else:
-                        raise AttributeError(f"Unknown attribute {attrName}")
-    '''
-           
+    # overload [] to save update to list in references dictionary       
     def __setitem__(self, position, item):
-        print("position")
-        print(position)
-        print("item")
-        print(item)
         isTracked = isinstance(self, Tracked)
         isTrackedList = isinstance(self.value, list)
         if(isTracked and isTrackedList):
             if(position >= len(self.value)):
-                self.value.extend(position + 1)
+                self.value.append(item)
             self.value[position] = item
+            self.references[self.value.index(item)] = item
