@@ -16,6 +16,7 @@ from rosslt_msgs.msg import Location as rosLocationMsg
 from tracked.tracked2 import Tracked2
 from tracked.location2 import Location2
 from tracked.refdummy import RefDummy
+from tracked.playground import Playground
 
 locationTest = Location("nodeTest", 1)
         
@@ -335,10 +336,22 @@ setat_tracked.value[0] = 7
 print(setat_tracked.value[0])
 '''
 
+'''
 print("RefDummy tests")
 rdum_1 = RefDummy([2, 4, 6])
+print(rdum_1)
 print("rdum_1 before")
 print(rdum_1.valueStore[0])
 print("rdum_1 after")
 rdum_1.valueStore[0] = 7
 print(rdum_1.valueStore[0])
+rdum_1.valueStore[2] = [8]
+rdum_1.valueStore.append(9)
+'''
+
+print("Playground tests")
+pg_1 = Playground([3, 5, 7])
+pg_1[0] = 2
+pg_1[0] = 11
+pg_1[1] = 12
+pg_1[2] = 13

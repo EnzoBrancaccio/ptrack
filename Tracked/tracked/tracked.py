@@ -273,6 +273,7 @@ class Tracked(object):
     '''
            
     # overload assignment to save LHS and RHS values
+    '''
     def __setattr__(self, attrName, val):
         # first, else attribute may not exist (e. g. Tracked.value)
         super().__setattr__(attrName, val)
@@ -297,3 +298,16 @@ class Tracked(object):
                         print(self.__dict__[attrName])
                     else:
                         raise AttributeError(f"Unknown attribute {attrName}")
+    '''
+           
+    def __setitem__(self, position, item):
+        print("position")
+        print(position)
+        print("item")
+        print(item)
+        isTracked = isinstance(self, Tracked)
+        isTrackedList = isinstance(self.value, list)
+        if(isTracked and isTrackedList):
+            if(position >= len(self.value)):
+                self.value.extend(position + 1)
+            self.value[position] = item

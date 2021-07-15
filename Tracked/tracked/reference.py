@@ -20,6 +20,8 @@ class Reference(object):
         self.position = position
         
     # trying to overload =
-    def __setattr__(self, other):
-        if(isinstance(other, Tracked)):
-            pass
+    def __setattr__(self, attrName, other):
+        isTrackedList = isinstance(self.trackedList, list)
+        isTrackedOther = isinstance(other, Tracked)
+        if(isTrackedList and isTrackedOther):
+            self.trackedList[self.position] = other.value
