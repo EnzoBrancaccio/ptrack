@@ -268,11 +268,11 @@ class Test(unittest.TestCase):
         self.assertEqual(self.c_Trig.location_map["."].expression, "3.0;/;cos;", "expression of cos")
         
     def testMakeTracked(self):
-        self.assertEqual(th.makeTracked(5).value, 5, "simple makeTracked")
-        self.assertEqual(th.makeTracked(th.makeTracked(5)).value, 5, "double makeTracked")
+        self.assertEqual(th.make_tracked(5).value, 5, "simple make_tracked")
+        self.assertEqual(th.make_tracked(th.make_tracked(5)).value, 5, "double make_tracked")
         
-        self.assertTrue(th.makeTracked(False, Location("foo", 42)).location_map["."].isValid(), "location")
-        self.assertFalse(th.makeTracked("Hallo").location_map["."].isValid())
+        self.assertTrue(th.make_tracked(False, Location("foo", 42)).location_map["."].isValid(), "location")
+        self.assertFalse(th.make_tracked("Hallo").location_map["."].isValid())
         
     def testVectorMethods(self):
         self.sizeTest = Tracked([1, 2, 3])
@@ -284,20 +284,20 @@ class Test(unittest.TestCase):
         self.assertEqual(self.a_vm.size(), 0, "size check empty")
         
         self.a_vm.push_back(42)
-        self.a_vm.push_back(th.makeTracked(7, self.vm_loc1))
+        self.a_vm.push_back(th.make_tracked(7, self.vm_loc1))
         self.a_vm.push_back(-7)
-        self.a_vm.push_back(th.makeTracked(15, self.vm_loc2))
+        self.a_vm.push_back(th.make_tracked(15, self.vm_loc2))
         
         self.assertEqual(self.a_vm.size(), 4, "size check filled")
         
-        self.assertEqual(self.a_vm.value[0].value, 42)
-        self.assertEqual(self.a_vm.value[1].value, 7)
-        self.assertEqual(self.a_vm.value[2].value, -7)
-        self.assertEqual(self.a_vm.value[3].value, 15)
-        self.assertEqual(self.a_vm.value[-1].value, 15)
+        self.assertEqual(self.a_vm.value[0], 42)
+        self.assertEqual(self.a_vm.value[1], 7)
+        self.assertEqual(self.a_vm.value[2], -7)
+        self.assertEqual(self.a_vm.value[3], 15)
+        self.assertEqual(self.a_vm.value[-1], 15)
         
-        self.assertEqual(self.a_vm.front().value, 42)
-        self.assertEqual(self.a_vm.back().value, 15)
+        self.assertEqual(self.a_vm.front(), 42)
+        self.assertEqual(self.a_vm.back(), 15)
         
         self.assertFalse(self.a_vm.value[0].location_map["."].isValid(), "no location")
         self.assertEqual(self.a_vm.value[1].location_map["."].location_id, 22, "1st location")
@@ -393,6 +393,24 @@ class Test(unittest.TestCase):
     def testSetPrimitiveField(self):
         self.spf_TrackedVM = Tracked(Marker)
         self.spf_loc = Location("foo", 22)
+        # TODO: Once SET_FIELD and GET_FIELD is solved
+        
+    def testVectorIterator(self):
+        self.vecit = Tracked([])
+        self.vi_loc1 = Location("foo", 22);
+        self.vi_loc2 = Location("bar", 23);
+
+        self.assertEqual(self.vecit.size(), 0);
+
+        self.vecit.push_back(42);
+        self.vecit.push_back(th.make_tracked(7, self.vi_loc1));
+        self.vecit.push_back(-7);
+        self.vecit.push_back(th.make_tracked(15, self.vi_loc2));
+
+        self.assertEqual(self.vecit.size(), 4);
+        
+        # TODO: iterator tests
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

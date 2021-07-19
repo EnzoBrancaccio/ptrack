@@ -8,7 +8,7 @@ from .location import Location
 from .tracked import Tracked
 from numbers import Number
 
-def makeTracked(value, location = None):
+def make_tracked(value, location = None):
     if(isinstance(value, Tracked)):
         return value
     else:

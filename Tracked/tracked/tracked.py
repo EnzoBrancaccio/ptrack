@@ -23,7 +23,6 @@ class Tracked(object):
          Constructor
         '''
         self.value = value
-        self.references = dict()
             
         if location is None:
             self.location = Location()
@@ -228,10 +227,11 @@ class Tracked(object):
         if(isinstance(self, Tracked)):
             if(isinstance(self.value, list)):
                 if(isinstance(inputArg, Tracked)):
-                    self.value.append(inputArg)
+                    #self.value.append(inputArg)
+                    self[len(self.value)] = inputArg
                     self.location_map = lm.addLocations(self.location_map, inputArg.location_map, str(self.size() - 1))
                 else:
-                    self.value.append(th.makeTracked(inputArg))
+                    self[len(self.value)] = th.make_tracked(inputArg)
                     
     def pop_back(self):
         if(isinstance(self, Tracked)):
@@ -269,7 +269,26 @@ class Tracked(object):
         isTracked = isinstance(self, Tracked)
         isTrackedList = isinstance(self.value, list)
         if(isTracked and isTrackedList):
-            if(position >= len(self.value)):
-                self.value.append(item)
-            self.value[position] = item
-            self.references[self.value.index(item)] = item
+            isItemTracked = isinstance(item, Tracked)
+            if(isItemTracked):
+                print("setitem: Tracked added")
+                print(item)
+                print(position)
+                print(item.value)
+                print(len(self.value))
+                if(len(self.value) < position):
+                    self.value[position] = item.value
+                else:
+                    self.value.append(item.value)
+                self.location_map = lm.addLocations(self.location_map, item.location_map, str(position))
+            else:
+                print("setitem: non-Tracked added")
+                print(item)
+                print(position)
+                print(item.value)
+                print(len(self.value))
+                if(len(self.value) < position):
+                    self.value[position] = item
+                else:
+                    self.value.append(item)
+                self.location_map = lm.addLocations(self.location_map, dict(), "")

@@ -334,14 +334,36 @@ setat_tracked.value[0] = 7
 print(setat_tracked.value[0])
 '''
 
+'''
 print("Tracked setitem tests")
 tsi_1 = Tracked([2, 8, 9])
 tsi_1[0] = 5
-tsi_1[3] = 8
-tsi_1[4] = "Foo"
+tsi_1[1] = 8
+tsi_1[2] = "Foo"
 print("content")
 for index, value in enumerate(tsi_1):
     print(index, value)
-print("references")
-for k, v in tsi_1.references.items():
-    print(k, v)
+'''
+
+vecit = Tracked([])
+print("round 1")
+for i in vecit.location_map.items():
+    print(i)
+vi_loc1 = Location("foo", 22);
+vi_loc2 = Location("bar", 23);
+vecit.push_back(42);
+print("round 2")
+for i in vecit.location_map.items():
+    print(i)
+vecit.push_back(th.make_tracked(7, vi_loc1));
+print("round 3")
+for i in vecit.location_map.items():
+    print(i)
+vecit.push_back(-7);
+print("round 4")
+for i in vecit.location_map.items():
+    print(i)
+vecit.push_back(th.make_tracked(15, vi_loc2));
+print("round 5")
+for i in vecit.location_map.items():
+    print(i)
