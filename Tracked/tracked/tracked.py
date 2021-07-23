@@ -23,6 +23,7 @@ class Tracked(object):
          Constructor
         '''
         self.value = value
+        self.references = dict()
             
         if location is None:
             self.location = Location()
@@ -226,6 +227,7 @@ class Tracked(object):
     def push_back(self, inputArg):
         if(isinstance(self, Tracked)):
             if(isinstance(self.value, list)):
+                # no use of 'append' because of setitem overloading
                 if(isinstance(inputArg, Tracked)):
                     #self.value.append(inputArg)
                     self[len(self.value)] = inputArg
@@ -257,12 +259,29 @@ class Tracked(object):
     
     # overload [] for Tracked with value list
     def __getitem__(self, position):
-        if(isinstance(self, Tracked)):
-            if(isinstance(self.value, list)):
-                listLength = len(self.value)
-                if(position > listLength):
-                    raise IndexError(f"Index is {position} and list length is {listLength}")
-                return self.value[position]
+        isTracked = isinstance(self, Tracked)
+        isTrackedList = isinstance(self.value, list)
+        if(isTracked and isTrackedList):
+            listLength = len(self.value)
+            if(position > listLength):
+                raise IndexError(f"Index is {position} and list length is {listLength}")
+            trackedValue = self.value[position]
+            if(position < 0):
+                if(list(self.location_map.keys())[position].isValid()):    
+                    trackedLocation = self.location_map[str(position)]
+                    return th.make_tracked(trackedValue, trackedLocation)
+                else:
+                    #return self.value[position]
+                    return th.make_tracked(trackedValue)
+            else:
+                if(self.location_map[str(position)].isValid()):    
+                    trackedLocation = self.location_map[str(position)]
+                    return th.make_tracked(trackedValue, trackedLocation)
+                else:
+                    #return self.value[position]
+                    return th.make_tracked(trackedValue)
+        else:
+            return self[position]
     
     # overload [] to save update to list in references dictionary       
     def __setitem__(self, position, item):
@@ -271,22 +290,12 @@ class Tracked(object):
         if(isTracked and isTrackedList):
             isItemTracked = isinstance(item, Tracked)
             if(isItemTracked):
-                print("setitem: Tracked added")
-                print(item)
-                print(position)
-                print(item.value)
-                print(len(self.value))
                 if(len(self.value) < position):
                     self.value[position] = item.value
                 else:
                     self.value.append(item.value)
                 self.location_map = lm.addLocations(self.location_map, item.location_map, str(position))
             else:
-                print("setitem: non-Tracked added")
-                print(item)
-                print(position)
-                print(item.value)
-                print(len(self.value))
                 if(len(self.value) < position):
                     self.value[position] = item
                 else:

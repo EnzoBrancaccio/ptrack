@@ -299,15 +299,15 @@ class Test(unittest.TestCase):
         self.assertEqual(self.a_vm.front(), 42)
         self.assertEqual(self.a_vm.back(), 15)
         
-        self.assertFalse(self.a_vm.value[0].location_map["."].isValid(), "no location")
-        self.assertEqual(self.a_vm.value[1].location_map["."].location_id, 22, "1st location")
-        self.assertEqual(self.a_vm.value[-1].location_map["."].location_id, 23, "2nd location")
+        self.assertFalse(self.a_vm[0].location_map["."].isValid(), "no location")
+        self.assertEqual(self.a_vm[1].location_map["."].location_id, 22, "1st location")
+        self.assertEqual(self.a_vm[-1].location_map["."].location_id, 23, "2nd location")
         
         self.a_vm.pop_back()
         
         self.assertEqual(self.a_vm.size(), 3, "size check popped")
-        self.assertEqual(self.a_vm.value[-1].value, -7)
-        self.assertNotEqual(self.a_vm.value[-1].location_map["."].location_id, 23, "2nd location")
+        self.assertEqual(self.a_vm[-1].value, -7)
+        self.assertNotEqual(self.a_vm[-1].location_map["."].location_id, 23, "2nd location")
         
         self.a_vm.clear()
         
