@@ -267,8 +267,9 @@ class Tracked(object):
                 raise IndexError(f"Index is {position} and list length is {listLength}")
             trackedValue = self.value[position]
             if(position < 0):
-                if(list(self.location_map.keys())[position].isValid()):    
-                    trackedLocation = self.location_map[str(position)]
+                actualPosition = list(self.location_map.keys())[position]
+                if(self.location_map[actualPosition].isValid()):    
+                    trackedLocation = self.location_map[actualPosition]
                     return th.make_tracked(trackedValue, trackedLocation)
                 else:
                     #return self.value[position]
