@@ -266,6 +266,7 @@ class Tracked(object):
             if(position > listLength):
                 raise IndexError(f"Index is {position} and list length is {listLength}")
             trackedValue = self.value[position]
+            # negative index: -1 for last list element etc.
             if(position < 0):
                 actualPosition = list(self.location_map.keys())[position]
                 if(self.location_map[actualPosition].isValid()):    

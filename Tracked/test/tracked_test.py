@@ -409,6 +409,24 @@ class Test(unittest.TestCase):
 
         self.assertEqual(self.vecit.size(), 4);
         
+        self.vecit_tracked1 = self.vecit[0]
+        self.vecit_tracked2 = self.vecit[1]
+        self.vecit_tracked3 = self.vecit[2]
+        self.vecit_tracked4 = self.vecit[3]
+        
+        self.assertEqual(self.vecit_tracked1.value, 42)
+        self.assertEqual(self.vecit_tracked2.value, 7)
+        self.assertEqual(self.vecit_tracked3.value, -7)
+        self.assertEqual(self.vecit_tracked4.value, 15)
+
+        self.assertFalse(self.vecit_tracked1.location_map["."].isValid())
+        self.assertTrue(self.vecit_tracked2.location_map["."].isValid())
+        self.assertFalse(self.vecit_tracked3.location_map["."].isValid())
+        self.assertTrue(self.vecit_tracked4.location_map["."].isValid())
+        
+        self.assertEqual(self.vecit_tracked2.location_map["."].location_id, 22, "1st location")
+        self.assertEqual(self.vecit_tracked4.location_map["."].location_id, 23, "2nd location")
+        
         # TODO: iterator tests
 
 
