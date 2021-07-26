@@ -345,6 +345,7 @@ for index, value in enumerate(tsi_1):
     print(index, value)
 '''
 
+'''
 vecit = Tracked([])
 print("round 1")
 for i in vecit.location_map.items():
@@ -367,3 +368,59 @@ vecit.push_back(th.make_tracked(15, vi_loc2));
 print("round 5")
 for i in vecit.location_map.items():
     print(i)
+'''
+
+vecit = Tracked([])
+vi_loc1 = Location("foo", 22)
+vi_loc2 = Location("bar", 23)
+
+vecit.push_back(42)
+print("item 1")
+for i in vecit:
+    print(i)
+    print(i.value)
+    print(i.location_map["."].isValid())
+    for j in i.location_map.items():
+        print(j)
+vecit.push_back(th.make_tracked(7, vi_loc1))
+print("item 2")
+for i in vecit:
+    print(i)
+    print(i.value)
+    print(i.location_map["."].isValid())
+    for j in i.location_map.items():
+        print(j)
+vecit.push_back(-7)
+print("item 3")
+for i in vecit:
+    print(i)
+    print(i.value)
+    print(i.location_map["."].isValid())
+    for j in i.location_map.items():
+        print(j)
+vecit.push_back(th.make_tracked(15, vi_loc2))
+print("item 4")
+for i in vecit:
+    print(i)
+    print(i.value)
+    print(i.location_map["."].isValid())
+    for j in i.location_map.items():
+        print(j)
+
+vecit_tracked1 = vecit[0]
+vecit_tracked2 = vecit[1]
+vecit_tracked3 = vecit[2]
+vecit_tracked4 = vecit[3]
+
+print("vecit_tracked1")
+print(vecit_tracked1.value)
+print(vecit_tracked1.location_map["."].isValid())
+print("vecit_tracked2")
+print(vecit_tracked2.value)
+print(vecit_tracked2.location_map["."].isValid())
+print("vecit_tracked3")
+print(vecit_tracked3.value)
+print(vecit_tracked3.location_map["."].isValid())
+print("vecit_tracked4")
+print(vecit_tracked4.value)
+print(vecit_tracked4.location_map["."].isValid())

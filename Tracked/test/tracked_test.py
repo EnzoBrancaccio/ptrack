@@ -397,35 +397,39 @@ class Test(unittest.TestCase):
         
     def testVectorIterator(self):
         self.vecit = Tracked([])
-        self.vi_loc1 = Location("foo", 22);
-        self.vi_loc2 = Location("bar", 23);
+        self.vi_loc1 = Location("foo", 22)
+        self.vi_loc2 = Location("bar", 23)
 
-        self.assertEqual(self.vecit.size(), 0);
+        self.assertEqual(self.vecit.size(), 0)
 
-        self.vecit.push_back(42);
-        self.vecit.push_back(th.make_tracked(7, self.vi_loc1));
-        self.vecit.push_back(-7);
-        self.vecit.push_back(th.make_tracked(15, self.vi_loc2));
+        self.vecit.push_back(42)
+        self.vecit.push_back(th.make_tracked(7, self.vi_loc1))
+        self.vecit.push_back(-7)
+        self.vecit.push_back(th.make_tracked(15, self.vi_loc2))
 
-        self.assertEqual(self.vecit.size(), 4);
+        self.assertEqual(self.vecit.size(), 4)
         
         self.vecit_tracked1 = self.vecit[0]
         self.vecit_tracked2 = self.vecit[1]
         self.vecit_tracked3 = self.vecit[2]
         self.vecit_tracked4 = self.vecit[3]
+        self.vecit_tracked5 = self.vecit[-1]
         
         self.assertEqual(self.vecit_tracked1.value, 42)
         self.assertEqual(self.vecit_tracked2.value, 7)
         self.assertEqual(self.vecit_tracked3.value, -7)
         self.assertEqual(self.vecit_tracked4.value, 15)
+        self.assertEqual(self.vecit_tracked5.value, 15)
 
         self.assertFalse(self.vecit_tracked1.location_map["."].isValid())
         self.assertTrue(self.vecit_tracked2.location_map["."].isValid())
         self.assertFalse(self.vecit_tracked3.location_map["."].isValid())
         self.assertTrue(self.vecit_tracked4.location_map["."].isValid())
+        self.assertTrue(self.vecit_tracked5.location_map["."].isValid())
         
         self.assertEqual(self.vecit_tracked2.location_map["."].location_id, 22, "1st location")
         self.assertEqual(self.vecit_tracked4.location_map["."].location_id, 23, "2nd location")
+        self.assertEqual(self.vecit_tracked5.location_map["."].location_id, 23, "2nd location")
         
         # TODO: iterator tests
 
