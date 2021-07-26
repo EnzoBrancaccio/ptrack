@@ -263,7 +263,7 @@ class Tracked(object):
         isTrackedList = isinstance(self.value, list)
         if(isTracked and isTrackedList):
             listLength = len(self.value)
-            if(position > listLength):
+            if(position >= listLength):
                 raise IndexError(f"Index is {position} and list length is {listLength}")
             trackedValue = self.value[position]
             # negative index: -1 for last list element etc.
@@ -273,17 +273,18 @@ class Tracked(object):
                     trackedLocation = self.location_map[actualPosition]
                     return th.make_tracked(trackedValue, trackedLocation)
                 else:
-                    #return self.value[position]
                     return th.make_tracked(trackedValue)
             else:
                 if(self.location_map[str(position)].isValid()):    
                     trackedLocation = self.location_map[str(position)]
                     return th.make_tracked(trackedValue, trackedLocation)
                 else:
-                    #return self.value[position]
                     return th.make_tracked(trackedValue)
         else:
-            return self[position]
+            try:
+                return self[position]
+            except IndexError:
+                raise IndexError(f"Index is {position} and list length is {len(self)}")
     
     # overload [] to save update to list in references dictionary       
     def __setitem__(self, position, item):
