@@ -50,7 +50,8 @@ class Tracked(object):
                 cls.location_map[rosslt_msg.paths[i]] = rosslt_msg.locations[i] 
         return newTracked
     
-    # overloading the dot .
+    # overloading the dot
+    '''
     def __getattr__(self, attr):
         try:
             # not one of object's writable attributes
@@ -59,8 +60,15 @@ class Tracked(object):
             return self.__dict__[attr]
         except KeyError:
             raise AttributeError(attr)
+    '''
+   
+    # overloading the dot . (attribute access)
+    # called when attr is not one of object's writable attributes 
+    def __getattr__(self, attr):
+        return th.interpret_dot_attr(attr)
     
-    # overloading + operator 
+    # overloading + operator
+    # x + y => x.__add__(y)
     def __add__(self, other):
         isSelfTracked = isinstance(self, Tracked)
         isOtherTracked = isinstance(other, Tracked)
@@ -80,7 +88,8 @@ class Tracked(object):
             newValue = self + other
             return newValue
         
-    # if left hand type is not Tracked   
+    # if left hand type is not Tracked
+    # x + y => y.__radd__(x)
     def __radd__(self, other):
         isSelfTracked = isinstance(self, Tracked)
         if(isSelfTracked):

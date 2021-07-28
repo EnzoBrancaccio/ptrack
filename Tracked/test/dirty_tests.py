@@ -5,6 +5,7 @@ Created on 10.06.2021
 '''
 
 import math
+import copy
 
 import tracked.locationMap as lm
 import tracked.trackingHelpers as th
@@ -370,6 +371,7 @@ for i in vecit.location_map.items():
     print(i)
 '''
 
+'''
 vecit = Tracked([])
 vi_loc1 = Location("foo", 22)
 vi_loc2 = Location("bar", 23)
@@ -424,3 +426,8 @@ print(vecit_tracked3.location_map["."].isValid())
 print("vecit_tracked4")
 print(vecit_tracked4.value)
 print(vecit_tracked4.location_map["."].isValid())
+'''
+
+dotTracked1 = Tracked(5)
+dotTracked1.foo
+dotTracked1.bar

@@ -16,6 +16,15 @@ def make_tracked(value, location = None):
             return Tracked(value, Location())
         else:
             return Tracked(value, location)
+    
+def interpret_dot_attr(name):
+    print(name)
+    if("foo" in name):
+        print(name)
+    elif("bar" in name):
+        print(name)
+    else:
+        raise AttributeError(name)
 
 def inv_plus(lhs, rhs):
     isNumeric = ((isinstance(lhs, Number)) and (isinstance(rhs, Number)))
