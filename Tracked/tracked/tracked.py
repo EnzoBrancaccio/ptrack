@@ -17,38 +17,25 @@ class Tracked(object):
     '''
     classdocs
     '''
-
-    def __init__(self, value, location = None):
+    
+    def __init__(self, value, y = None):
         '''
-         Constructor
+        Constructor
         '''
         self.value = value
-        self.references = dict()
-            
-        if location is None:
-            self.location = Location()
-        else:
-            self.location = location
-        
+        self.location = Location()
         self.location_map = dict([(".", self.location)])
+        self.rosslt_msg = None
         
-    @classmethod
-    def withLocationMap(cls, value, location_map):
-        newTracked = cls.__new__(cls)
-        super(Tracked, newTracked).__init__()
-        cls.value = value
-        cls.location_map = location_map
-        return newTracked
-    
-    @classmethod
-    def withRossltMsg(cls, value, rosslt_msg):
-        newTracked = cls.__new__(cls)
-        super(Tracked, newTracked).__init__()
-        cls.value = value
-        if(isinstance(rosslt_msg, LocationHeader)):
-            for i in range(len(rosslt_msg.paths)):
-                cls.location_map[rosslt_msg.paths[i]] = rosslt_msg.locations[i] 
-        return newTracked
+        if(not (y is None)):
+            if(isinstance(y, Location)):
+                self.location = y
+                self.location_map = dict([(".", self.location)])
+            if(isinstance(y, dict)):
+                self.locationMap = y
+            if(isinstance(y, LocationHeader)):
+                for i in range(len(y.paths)):
+                    self.location_map[y.paths[i]] = y.locations[i]
     
     # overloading the dot
     '''

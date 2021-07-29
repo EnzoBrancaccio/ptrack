@@ -14,22 +14,35 @@ class Tracked2(object):
     '''
 
 
-    def __init__(self, value, y = None):
+    def __init__(self, value, location = None):
         '''
-        Constructor
+         Constructor
         '''
         self.value = value
-        self.location = Location2()
-        self.location_map = dict([(".", self.location)])
-        self.rosslt_msg = None
+        self.references = dict()
+            
+        if location is None:
+            self.location = Location2()
+        else:
+            self.location = location
         
-        if(not (y is None)):
-            if(isinstance(y, Location2)):
-                self.location = y
-                self.location_map = dict([(".", self.location)])
-            if(isinstance(y, dict)):
-                self.locationMap = y
-            if(isinstance(y, LocationHeader)):
-                for i in range(len(y.paths)):
-                    self.location_map[y.paths[i]] = y.locations[i]
+        self.location_map = dict([(".", self.location)])
+        
+    @classmethod
+    def withLocationMap(cls, value, location_map):
+        newTracked = cls.__new__(cls)
+        super(Tracked2, newTracked).__init__()
+        cls.value = value
+        cls.location_map = location_map
+        return newTracked
+    
+    @classmethod
+    def withRossltMsg(cls, value, rosslt_msg):
+        newTracked = cls.__new__(cls)
+        super(Tracked2, newTracked).__init__()
+        cls.value = value
+        if(isinstance(rosslt_msg, LocationHeader)):
+            for i in range(len(rosslt_msg.paths)):
+                cls.location_map[rosslt_msg.paths[i]] = rosslt_msg.locations[i] 
+        return newTracked
         

@@ -13,24 +13,23 @@ class Location2(object):
     '''
 
 
-    def __init__(self, x = None, y = None):
+    def __init__(self, source_node = "", location_id = 0):
         '''
         Constructor
         '''
-        self.source_node = ""
-        self.location_id = 0
+        self.source_node = source_node
+        self.location_id = location_id
         self.expression = ""
-        
-        if(not (x is None)):
-            if(isinstance(x, str)):
-                self.source_node = x
-            if(isinstance(x, rosLocationMsg)):
-                self.source_node = x.source_node
-                self.location_id = x.location_id
-        
-        if(not(y is None)):
-            if(isinstance(y, int)):
-                self.location_id = y
+    
+    # constructor for rosslt location message as argument    
+    @classmethod
+    def withRossltMsg(cls, rossltMsg = None):
+        newLocation = cls.__new__(cls)
+        super(Location2, newLocation).__init__()
+        if not (rossltMsg is None):
+            cls.source_node = rossltMsg.source_node
+            cls.location_id = rossltMsg.location_id
+        return newLocation
     
     
     # overloading boolean operator  

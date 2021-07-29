@@ -10,26 +10,25 @@ class Location(object):
     '''
     Persevering a message's location data.
     '''
-
-
-    def __init__(self, source_node = "", location_id = 0):
+    
+    def __init__(self, x = None, y = None):
         '''
         Constructor
         '''
-        self.source_node = source_node
-        self.location_id = location_id
+        self.source_node = ""
+        self.location_id = 0
         self.expression = ""
-    
-    # constructor for rosslt location message as argument    
-    @classmethod
-    def withRossltMsg(cls, rossltMsg = None):
-        newLocation = cls.__new__(cls)
-        super(Location, newLocation).__init__()
-        if not (rossltMsg is None):
-            cls.source_node = rossltMsg.source_node
-            cls.location_id = rossltMsg.location_id
-        return newLocation
-            
+        
+        if(not (x is None)):
+            if(isinstance(x, str)):
+                self.source_node = x
+            if(isinstance(x, rosLocationMsg)):
+                self.source_node = x.source_node
+                self.location_id = x.location_id
+        
+        if(not(y is None)):
+            if(isinstance(y, int)):
+                self.location_id = y           
       
     # overloading boolean operator  
     def __eq__(self, other):

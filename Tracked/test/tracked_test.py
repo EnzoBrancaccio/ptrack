@@ -83,7 +83,8 @@ class Test(unittest.TestCase):
         self.assertEqual(self.testMsg.source_node, "mynode", "source node")
         self.assertEqual(self.testMsg.location_id, 42, "location_id")
         
-        self.testLocation3 = Location.withRossltMsg(self.testMsg)
+        #self.testLocation3 = Location.withRossltMsg(self.testMsg)
+        self.testLocation3 = Location(self.testMsg)
         
         self.assertEqual(self.testLocation3.source_node, "mynode", "source node")
         self.assertEqual(self.testLocation3.location_id, 42, "location_id")
@@ -102,7 +103,8 @@ class Test(unittest.TestCase):
         self.assertEqual(self.testMsgG.source_node, "mynode", "source node")
         self.assertEqual(self.testMsgG.location_id, 42, "location_id")
         
-        self.testLocationG3 = Location2(self.testMsg)
+        #self.testLocationG3 = Location2(self.testMsg)
+        self.testLocationG3 = Location2.withRossltMsg(self.testMsg)
         
         self.assertEqual(self.testLocationG3.source_node, "mynode", "source node")
         self.assertEqual(self.testLocationG3.location_id, 42, "location_id")
