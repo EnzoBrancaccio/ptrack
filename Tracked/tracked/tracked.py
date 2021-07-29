@@ -65,7 +65,7 @@ class Tracked(object):
     # overloading the dot . (attribute access)
     # called when attr is not one of object's writable attributes 
     def __getattr__(self, attr):
-        return th.interpret_dot_attr(attr)
+        return th.interpret_dot_attr(self, attr)
     
     # overloading + operator
     # x + y => x.__add__(y)

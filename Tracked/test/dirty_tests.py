@@ -429,5 +429,12 @@ print(vecit_tracked4.location_map["."].isValid())
 '''
 
 dotTracked1 = Tracked(5)
+print(dotTracked1.value)
 dotTracked1.foo
+dotVariable1 = dotTracked1.foo
+print(dotVariable1)
 dotTracked1.bar
+dotTracked1.foot
+print(dotTracked1.value)
+dotVariable2 = dotTracked1.foo
+print(dotVariable2)

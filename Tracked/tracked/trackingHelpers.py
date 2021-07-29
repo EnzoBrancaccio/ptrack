@@ -16,13 +16,16 @@ def make_tracked(value, location = None):
             return Tracked(value, Location())
         else:
             return Tracked(value, location)
-    
-def interpret_dot_attr(name):
-    print(name)
+
+# interprets attributes unknown to object
+# every case needs to be covered    
+def interpret_dot_attr(obj, name):
     if("foo" in name):
         print(name)
+        return obj.value
     elif("bar" in name):
         print(name)
+        obj.value = 7
     else:
         raise AttributeError(name)
 
