@@ -26,6 +26,13 @@ def interpret_dot_attr(obj, name):
     elif("bar" in name):
         print(name)
         obj.value = 7
+    elif("setTo" in name):
+        # note that just "set" is not possible because of setstate etc.
+        print(name)
+        splitName = name.split("_")
+        newValue = splitName[-1]
+        print(newValue)
+        obj.value = newValue
     else:
         raise AttributeError(name)
 

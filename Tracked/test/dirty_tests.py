@@ -438,3 +438,5 @@ dotTracked1.foot
 print(dotTracked1.value)
 dotVariable2 = dotTracked1.foo
 print(dotVariable2)
+dotTracked1.setToValue_6
+print(dotTracked1.value)
