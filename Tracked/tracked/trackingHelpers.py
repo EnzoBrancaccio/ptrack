@@ -20,21 +20,16 @@ def make_tracked(value, location = None):
 # interprets attributes unknown to object
 # every case needs to be covered    
 def interpret_dot_attr(obj, name):
-    if("foo" in name):
+    if(name in dotGetAttr):
         print(name)
-        return obj.value
-    elif("bar" in name):
-        print(name)
-        obj.value = 7
+        print(obj.value)
+    # not "set" because of setstate etc.
     elif("setTo" in name):
-        # note that just "set" is not possible because of setstate etc.
         print(name)
-        splitName = name.split("_")
-        newValue = splitName[-1]
-        print(newValue)
-        obj.value = newValue
     else:
         raise AttributeError(name)
+
+dotGetAttr = ["header", "ns", "id", "type", "action", "pose", "scale", "color", "lifetime", "frame_locked", "points", "colors", "text", "mesh_resource", "mesh_use_embedded_materials"]
 
 def inv_plus(lhs, rhs):
     isNumeric = ((isinstance(lhs, Number)) and (isinstance(rhs, Number)))

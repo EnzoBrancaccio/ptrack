@@ -428,6 +428,8 @@ print(vecit_tracked4.value)
 print(vecit_tracked4.location_map["."].isValid())
 '''
 
+# will no longer work (respective code deleted):
+'''
 dotTracked1 = Tracked(5)
 print(dotTracked1.value)
 dotTracked1.foo
@@ -440,3 +442,7 @@ dotVariable2 = dotTracked1.foo
 print(dotVariable2)
 dotTracked1.setToValue_6
 print(dotTracked1.value)
+'''
+
+dotTracked2 = Tracked(5)
+dotTracked2.header
