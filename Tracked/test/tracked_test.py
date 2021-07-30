@@ -395,7 +395,27 @@ class Test(unittest.TestCase):
     def testSetPrimitiveField(self):
         self.spf_TrackedVM = Tracked(Marker)
         self.spf_loc = Location("foo", 22)
-        # TODO: Once SET_FIELD and GET_FIELD is solved
+        
+        self.spf_TrackedVM.id = th.make_tracked(42, self.spf_loc)
+        
+        self.assertEqual(self.spf_TrackedVM.id.location_map["."].location_id, 22)
+        self.assertEqual(self.spf_TrackedVM.id.value, 42)
+        
+        self.spf_TrackedInt = self.spf_TrackedVM.id
+        
+        self.assertEqual(self.spf_TrackedInt.location_map["."].location_id, 22)
+        self.assertEqual(self.spf_TrackedInt.value, 42)
+        
+        self.spf_TrackedVM.id = 25
+        
+        self.spf_TrackedInt = th.make_tracked(self.spf_TrackedVM.id)
+        
+        self.assertFalse(self.spf_TrackedInt.location_map["."].isValid())
+        self.assertEqual(self.spf_TrackedInt.value, 25)
+        
+        self.spf_TrackedVM.text = "test"
+        
+        self.assertEqual(self.spf_TrackedVM.text, "test")
         
     def testVectorIterator(self):
         self.vecit = Tracked([])

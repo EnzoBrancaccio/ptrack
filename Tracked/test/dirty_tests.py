@@ -16,6 +16,7 @@ from tracked.tracked import Tracked
 from rosslt_msgs.msg import Location as rosLocationMsg
 from tracked.tracked2 import Tracked2
 from tracked.location2 import Location2
+from visualization_msgs.msg import Marker
 
 locationTest = Location("nodeTest", 1)
         
@@ -459,6 +460,7 @@ print(msgTestTracked.value.source_node)
 print(msgTestTracked.source_node)
 '''
 
+'''
 msgAttrTestLocation = Location("attrTest", 17)
 msgAttrTestLocationMsg = msgAttrTestLocation.makeRossltLocationMsg()
 msgAttrTestTracked = Tracked(msgAttrTestLocationMsg)
@@ -467,3 +469,34 @@ print(msgAttrTestTracked.source_node)
 print(msgAttrTestTracked.location_id)
 msgAttrTestTracked.source_node = "SET_FIELD Test"
 print(msgAttrTestTracked.source_node)
+'''
+
+spf_TrackedVM = Tracked(Marker)
+spf_loc = Location("foo", 22)
+
+'''
+print("before")
+print(spf_TrackedVM.id)
+spf_TrackedVM.id = th.make_tracked(42, spf_loc)
+print("after")
+print(spf_TrackedVM.id)
+print(spf_TrackedVM.id.location_map)
+print(spf_TrackedVM.id.location_map["."])
+print(spf_TrackedVM.id.location_map["."].location_id)
+print(spf_TrackedVM.id.value)
+print("examination")
+print(spf_TrackedVM)
+print(spf_TrackedVM.value)
+print(spf_TrackedVM.location_map)
+print(spf_TrackedVM.location_map["."])
+print(spf_TrackedVM.location_map["."].location_id)
+
+print("TrackedInt Test")
+print(spf_TrackedVM.id)
+spf_TrackedInt = spf_TrackedVM.id
+print(spf_TrackedInt)
+print(spf_TrackedInt.value)
+print(spf_TrackedInt.location_map)
+print(spf_TrackedInt.location_map["."])
+print(spf_TrackedInt.location_map["."].location_id)
+'''
