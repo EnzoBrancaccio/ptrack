@@ -137,7 +137,7 @@ testLocation2 = Location("mynode", 42)
 testMsg = rosLocationMsg()
 testMsg = testLocation2.makeRossltLocationMsg()
         
-testLocation3 = Location.withRossltMsg(testMsg)
+testLocation3 = Location2.withRossltMsg(testMsg)
 
 '''
 print("testLocation1")
@@ -445,4 +445,23 @@ print(dotTracked1.value)
 '''
 
 dotTracked2 = Tracked(5)
-dotTracked2.header
+#dotTracked2.header
+
+# doesn't work even without modified getattr (source_node not found)
+# just to check if getattr-overloading is necessary
+'''
+msgTestLocation = Location("msgTest", 24)
+msgTestLocationMsg = msgTestLocation.makeRossltLocationMsg()
+msgTestTracked = Tracked(msgTestLocationMsg)
+# this works, so only works with .value
+print(msgTestTracked.value.source_node)
+# this can only work with overloading getattr
+print(msgTestTracked.source_node)
+'''
+
+msgAttrTestLocation = Location("attrTest", 17)
+msgAttrTestLocationMsg = msgAttrTestLocation.makeRossltLocationMsg()
+msgAttrTestTracked = Tracked(msgAttrTestLocationMsg)
+print(msgAttrTestTracked.value.source_node)
+print(msgAttrTestTracked.source_node)
+print(msgAttrTestTracked.location_id)

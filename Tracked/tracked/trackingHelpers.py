@@ -20,7 +20,19 @@ def make_tracked(value, location = None):
 # interprets attributes unknown to object
 # every case needs to be covered    
 def interpret_dot_attr(obj, name):
-    if(name in dotGetAttr):
+    # first check if name in Tracked.value's attributes
+    try:
+        attr = getattr(obj.value, name)
+        print(attr)
+        return attr
+    except:
+        raise AttributeError(name)
+    '''
+    if(name in obj.value.__dict__):
+        print("in value's attributes")
+        print(name)
+        print(obj.value.name)
+    elif(name in dotGetAttr):
         print(name)
         print(obj.value)
     # not "set" because of setstate etc.
@@ -28,6 +40,7 @@ def interpret_dot_attr(obj, name):
         print(name)
     else:
         raise AttributeError(name)
+    '''
 
 dotGetAttr = ["header", "ns", "id", "type", "action", "pose", "scale", "color", "lifetime", "frame_locked", "points", "colors", "text", "mesh_resource", "mesh_use_embedded_materials"]
 
