@@ -465,3 +465,5 @@ msgAttrTestTracked = Tracked(msgAttrTestLocationMsg)
 print(msgAttrTestTracked.value.source_node)
 print(msgAttrTestTracked.source_node)
 print(msgAttrTestTracked.location_id)
+msgAttrTestTracked.source_node = "SET_FIELD Test"
+print(msgAttrTestTracked.source_node)

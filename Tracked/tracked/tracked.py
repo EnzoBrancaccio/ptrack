@@ -37,22 +37,25 @@ class Tracked(object):
                 for i in range(len(y.paths)):
                     self.location_map[y.paths[i]] = y.locations[i]
     
-    # overloading the dot
-    '''
-    def __getattr__(self, attr):
-        try:
-            # not one of object's writable attributes
-            if(attr not in self.__dict__):
-                pass
-            return self.__dict__[attr]
-        except KeyError:
-            raise AttributeError(attr)
-    '''
-   
     # overloading the dot . (attribute access)
     # called when attr is not one of object's writable attributes
     def __getattr__(self, attr):
-        return th.interpret_dot_attr(self, attr)
+        """Override attribute access
+        
+        Keyword arguments:
+        self -- Tracked object
+        attr -- Name of attribute not in Tracked's attribute list
+        
+        Allows direct access to ROS message attributes if it's the Tracked.value
+        For example, instead of Tracked.value.source_node, write Tracked.source_node
+        Also possible is Tracked.source_node = "some value"
+        Replaces GET_FIELD and SET_FIELD
+        """
+        try:
+            attr = getattr(self.value, attr)
+            return attr
+        except:
+            raise AttributeError(attr)
     
     # overloading + operator
     # x + y => x.__add__(y)
