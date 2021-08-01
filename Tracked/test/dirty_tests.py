@@ -11,6 +11,8 @@ import tracked.locationMap as lm
 import tracked.trackingHelpers as th
 import tracked.expression as e
 
+from builtin_interfaces.msg import Time
+
 from tracked.location import Location
 from tracked.tracked import Tracked
 from rosslt_msgs.msg import Location as rosLocationMsg
@@ -499,4 +501,11 @@ print(spf_TrackedInt.value)
 print(spf_TrackedInt.location_map)
 print(spf_TrackedInt.location_map["."])
 print(spf_TrackedInt.location_map["."].location_id)
+'''
+
+'''
+scf_time = Time()
+print(scf_time)
+scf_time.nanosec = 12345
+print(scf_time)
 '''

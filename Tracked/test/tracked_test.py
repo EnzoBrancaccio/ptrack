@@ -8,11 +8,13 @@ import math
 import tracked.trackingHelpers as th
 import tracked.expression as e
 
-from tracked.tracked import Tracked
 from rosslt_msgs.msg import Int32Tracked
 from rosslt_msgs.msg import Location as rosLocationMsg
 from std_msgs.msg import Header
 from visualization_msgs.msg import Marker
+from builtin_interfaces.msg import Time
+
+from tracked.tracked import Tracked
 from tracked.location import Location
 from tracked.tracked2 import Tracked2
 from tracked.location2 import Location2
@@ -421,6 +423,38 @@ class Test(unittest.TestCase):
     def testSetComplexField(self):
         self.scf_TrackedVM = Tracked(Marker)
         self.scf_loc = Location("foo", 22)
+        self.scf_head = Header()
+        self.scf_time = Time()
+        self.scf_time.nanosec = 12345
+        
+        self.scf_head.frame_id = "bar"
+        self.scf_head.stamp = self.scf_time
+        
+        self.scf_TrackedVM.header = self.scf_head
+        
+        self.assertEqual(self.scf_TrackedVM.header.frame_id, "bar")
+        self.assertFalse(self.scf_TrackedVM.location_map["."].isValid())
+        
+        self.scf_TrackedH = Tracked(Header)
+        self.scf_TrackedH.value = self.scf_TrackedVM.header
+        
+        self.assertTrue(isinstance(self.scf_TrackedH, Tracked))
+        self.assertFalse(self.scf_TrackedH.location_map["."].isValid())
+        self.assertEqual(self.scf_TrackedH.stamp, self.scf_head.stamp)
+        
+        self.scf_head.frame_id = "baz"
+        self.scf_time.nanosec = 10
+        self.scf_head.stamp = self.scf_time
+
+        self.scf_TrackedVM.header = th.make_tracked(self.scf_head, self.scf_loc)
+
+        self.assertEqual(self.scf_TrackedVM.header.frame_id, "baz")
+        self.assertFalse(self.scf_TrackedVM.location_map["."].isValid())
+
+        self.scf_TrackedH = self.scf_TrackedVM.header
+
+        self.assertTrue(self.scf_TrackedH.location_map["."].isValid())
+        self.assertEqual(self.scf_TrackedH.stamp, self.scf_head.stamp)
         
     def testVectorIterator(self):
         self.vecit = Tracked([])
