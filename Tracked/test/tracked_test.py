@@ -11,6 +11,7 @@ import tracked.expression as e
 from tracked.tracked import Tracked
 from rosslt_msgs.msg import Int32Tracked
 from rosslt_msgs.msg import Location as rosLocationMsg
+from std_msgs.msg import Header
 from visualization_msgs.msg import Marker
 from tracked.location import Location
 from tracked.tracked2 import Tracked2
@@ -416,6 +417,10 @@ class Test(unittest.TestCase):
         self.spf_TrackedVM.text = "test"
         
         self.assertEqual(self.spf_TrackedVM.text, "test")
+        
+    def testSetComplexField(self):
+        self.scf_TrackedVM = Tracked(Marker)
+        self.scf_loc = Location("foo", 22)
         
     def testVectorIterator(self):
         self.vecit = Tracked([])
