@@ -19,6 +19,7 @@ from rosslt_msgs.msg import Location as rosLocationMsg
 from tracked.tracked2 import Tracked2
 from tracked.location2 import Location2
 from visualization_msgs.msg import Marker
+from std_msgs.msg import ColorRGBA
 
 locationTest = Location("nodeTest", 1)
         
@@ -508,4 +509,40 @@ scf_time = Time()
 print(scf_time)
 scf_time.nanosec = 12345
 print(scf_time)
+'''
+
+'''
+saf_TrackedVM = Tracked(Marker)
+saf_loc = Location("foo", 22)
+saf_col1 = ColorRGBA()
+saf_col2 = ColorRGBA()
+        
+saf_col1.r = 0.5
+saf_col2.r = 0.2
+
+print(saf_TrackedVM.colors)
+print(type(saf_TrackedVM.colors))
+
+saf_trackedColors = Tracked(list())
+#saf_trackedColors.value = saf_TrackedVM.colors
+saf_trackedColors2 = Tracked(saf_TrackedVM.colors)
+print(type(saf_trackedColors.value))
+print(type(saf_trackedColors2.value))
+        
+saf_trackedColors.push_back(saf_col1)
+saf_trackedColors.push_back(th.make_tracked(saf_col2, saf_loc))
+    
+print(saf_trackedColors[0])
+print(saf_trackedColors[1])    
+print(saf_trackedColors[0].r)
+print(saf_trackedColors[1].r)
+
+print("pure marker info")
+saf_marker = Marker
+print(type(saf_marker))
+print(type(saf_marker.colors))
+saf_marker.colors = 25
+print(saf_marker.colors)
+saf_marker.colors = 26
+print(saf_marker.colors)
 '''

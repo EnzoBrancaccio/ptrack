@@ -11,6 +11,7 @@ import tracked.expression as e
 from rosslt_msgs.msg import Int32Tracked
 from rosslt_msgs.msg import Location as rosLocationMsg
 from std_msgs.msg import Header
+from std_msgs.msg import ColorRGBA
 from visualization_msgs.msg import Marker
 from builtin_interfaces.msg import Time
 
@@ -493,7 +494,34 @@ class Test(unittest.TestCase):
         self.assertEqual(self.vecit_tracked5.location_map["."].location_id, 23, "2nd location")
         
         # TODO: iterator tests
-
+        
+    def testSetArrayField(self):
+        self.saf_TrackedVM = Tracked(Marker)
+        self.saf_loc = Location("foo", 22)
+        self.saf_col1 = ColorRGBA()
+        self.saf_col2 = ColorRGBA()
+        
+        self.saf_col1.r = 0.5
+        self.saf_col2.r = 0.2
+        
+        self.saf_trackedColors = Tracked(list())
+        
+        self.saf_trackedColors.push_back(self.saf_col1)
+        self.saf_trackedColors.push_back(th.make_tracked(self.saf_col2, self.saf_loc))
+        
+        self.assertEqual(self.saf_trackedColors[0].r, 0.5)
+        self.assertEqual(self.saf_trackedColors[1].r, 0.2)
+        
+        self.saf_TrackedVM.colors = self.saf_trackedColors
+        
+        self.assertEqual(len(self.saf_TrackedVM.colors.value), 2)
+        self.assertEqual(self.saf_TrackedVM.colors[0].r, 0.5)
+        self.assertEqual(self.saf_TrackedVM.colors[1].r, 0.2)
+        
+        self.assertFalse(self.saf_TrackedVM.colors.location_map["."].isValid())
+        self.assertFalse(self.saf_TrackedVM.colors[0].location_map["."].isValid())
+        self.assertTrue(self.saf_TrackedVM.colors[1].location_map["."].isValid())
+        self.assertEqual(self.saf_TrackedVM.colors[1].location_map["."].location_id, 22)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
