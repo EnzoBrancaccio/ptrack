@@ -493,8 +493,18 @@ class Test(unittest.TestCase):
         self.assertEqual(self.vecit_tracked4.location_map["."].location_id, 23, "2nd location")
         self.assertEqual(self.vecit_tracked5.location_map["."].location_id, 23, "2nd location")
         
-        # TODO: iterator tests
+        for index in range(len(self.vecit.value)):
+            self.vecit.value[index] = th.make_tracked(111, self.vi_loc2)
+            
+        for index in range(len(self.vecit.value)):
+            with self.subTest(index = index):
+                self.assertEqual(self.vecit[index].value, 111)
+                self.assertEqual(self.vecit[index].location_map["."], self.vi_loc2)
+                
+        self.vecit.clear()
         
+        self.assertEqual(self.vecit.size(), 0)
+                
     def testSetArrayField(self):
         self.saf_TrackedVM = Tracked(Marker)
         self.saf_loc = Location("foo", 22)

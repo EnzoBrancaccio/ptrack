@@ -546,3 +546,25 @@ print(saf_marker.colors)
 saf_marker.colors = 26
 print(saf_marker.colors)
 '''
+
+'''
+vecit = Tracked([])
+vi_loc1 = Location("foo", 22)
+vi_loc2 = Location("bar", 23)
+
+vecit.push_back(42)
+vecit.push_back(th.make_tracked(7, vi_loc1))
+vecit.push_back(-7)
+vecit.push_back(th.make_tracked(15, vi_loc2))
+
+for i in vecit.value:
+    print(i)
+    
+for index in range(len(vecit.value)):
+    print(vecit.value[index])
+    vecit.value[index] = vecit.value[index] + 1
+    print(vecit.value[index])
+    
+for i in vecit.value:
+    print(i)
+'''    
