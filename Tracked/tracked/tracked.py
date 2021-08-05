@@ -223,12 +223,11 @@ class Tracked(object):
                 return len(self.value)
     
     # everything in list is of / will be turned into type Tracked        
-    def push_back(self, inputArg):
+    def append(self, inputArg):
         if(isinstance(self, Tracked)):
             if(isinstance(self.value, list)):
-                # no use of 'append' because of setitem overloading
                 if(isinstance(inputArg, Tracked)):
-                    #self.value.append(inputArg)
+                    # for overloading of __setitem__ to take effect
                     self[len(self.value)] = inputArg
                     self.location_map = lm.addLocations(self.location_map, inputArg.location_map, str(self.size() - 1))
                 else:

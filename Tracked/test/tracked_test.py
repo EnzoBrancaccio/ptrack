@@ -289,10 +289,10 @@ class Test(unittest.TestCase):
         self.assertEqual(self.sizeTest.size(), 3, "size check  test")
         self.assertEqual(self.a_vm.size(), 0, "size check empty")
         
-        self.a_vm.push_back(42)
-        self.a_vm.push_back(th.make_tracked(7, self.vm_loc1))
-        self.a_vm.push_back(-7)
-        self.a_vm.push_back(th.make_tracked(15, self.vm_loc2))
+        self.a_vm.append(42)
+        self.a_vm.append(th.make_tracked(7, self.vm_loc1))
+        self.a_vm.append(-7)
+        self.a_vm.append(th.make_tracked(15, self.vm_loc2))
         
         self.assertEqual(self.a_vm.size(), 4, "size check filled")
         
@@ -464,10 +464,10 @@ class Test(unittest.TestCase):
 
         self.assertEqual(self.vecit.size(), 0)
 
-        self.vecit.push_back(42)
-        self.vecit.push_back(th.make_tracked(7, self.vi_loc1))
-        self.vecit.push_back(-7)
-        self.vecit.push_back(th.make_tracked(15, self.vi_loc2))
+        self.vecit.append(42)
+        self.vecit.append(th.make_tracked(7, self.vi_loc1))
+        self.vecit.append(-7)
+        self.vecit.append(th.make_tracked(15, self.vi_loc2))
 
         self.assertEqual(self.vecit.size(), 4)
         
@@ -516,8 +516,8 @@ class Test(unittest.TestCase):
         
         self.saf_trackedColors = Tracked(list())
         
-        self.saf_trackedColors.push_back(self.saf_col1)
-        self.saf_trackedColors.push_back(th.make_tracked(self.saf_col2, self.saf_loc))
+        self.saf_trackedColors.append(self.saf_col1)
+        self.saf_trackedColors.append(th.make_tracked(self.saf_col2, self.saf_loc))
         
         self.assertEqual(self.saf_trackedColors[0].r, 0.5)
         self.assertEqual(self.saf_trackedColors[1].r, 0.2)
