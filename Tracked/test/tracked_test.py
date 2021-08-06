@@ -493,8 +493,13 @@ class Test(unittest.TestCase):
         self.assertEqual(self.vecit_tracked4.location_map["."].location_id, 23, "2nd location")
         self.assertEqual(self.vecit_tracked5.location_map["."].location_id, 23, "2nd location")
         
+        '''
+        # regular for loop
         for index in range(len(self.vecit.value)):
             self.vecit.value[index] = th.make_tracked(111, self.vi_loc2)
+        '''
+        # with list comprehension
+        self.vecit.value = [th.make_tracked(111, self.vi_loc2) for self.vecit.value in range(len(self.vecit.value))]
             
         for index in range(len(self.vecit.value)):
             with self.subTest(index = index):

@@ -4,6 +4,8 @@ Created on 06.08.2021
 @author: Enzo Brancaccio
 '''
 
+import inspect
+
 from rclpy.node import Node
 
 class TrackingNode(Node):
@@ -12,7 +14,7 @@ class TrackingNode(Node):
     '''
 
 
-    def __init__(self, params):
+    def __init__(self, node):
         '''
         Constructor
         '''
