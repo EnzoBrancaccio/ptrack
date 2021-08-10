@@ -4,6 +4,7 @@ Created on 06.08.2021
 @author: Enzo Brancaccio
 '''
 
+import rclpy
 from rclpy.node import Node
 from rosslt_msgs.msg import SourceChange
 from rosslt_msgs.srv import GetValue
@@ -19,7 +20,11 @@ class LocationManager(object):
         '''
         Constructor
         '''
+        # {scource_location: int}
         self.source_locations = dict()
+        # {int (location_id): string}, replaces struct locationFunc in C++
+        self.locationFunction = dict()
+        # list of locationFunctions
         self.locations = list()
         self.get_value_service = None
         self.node = Node
@@ -38,8 +43,10 @@ class LocationManager(object):
     def on_source_change(self, msg):
         if(msg.source_node == self.node.get_name()):
             self.id = msg.location_id
-            if(0 > self.id >= len(self.locations)):
-                #RCLCPP_WARN(node.get_logger(), "source change to unknown location id %d", id);
-                pass
+            if(self.id < 0 or self.id >= len(self.locations)):
+                rclpy.logging.LoggingSeverity.WARN(self.node.get_logger(), f"source change to unknown location id {self.id}")
             else:
                 self.locations[self.id].set(self.id, msg.new_value)
+                
+    def create_location(self, location_func, source_location):
+        pass

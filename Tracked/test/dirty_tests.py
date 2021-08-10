@@ -6,6 +6,7 @@ Created on 10.06.2021
 
 import math
 import copy
+import inspect
 
 import tracked.locationMap as lm
 import tracked.trackingHelpers as th
@@ -567,4 +568,22 @@ for index in range(len(vecit.value)):
     
 for i in vecit.value:
     print(i)
-'''    
+'''
+
+i_loc = Location("foo", 22)
+i_members = inspect.getmembers(i_loc)
+i_sfile = inspect.getsourcefile(type(i_loc))
+i_file = inspect.getfile(type(i_loc))
+i_source = inspect.getsource(type(i_loc))
+i_slines = inspect.getsourcelines(type(i_loc))
+
+print("members")
+print(i_members)
+print("sourcefile")
+print(i_sfile)
+print("file")
+print(i_file)
+print("source")
+print(i_source)
+print("sourcelines")
+print(i_slines)
