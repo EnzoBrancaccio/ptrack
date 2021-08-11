@@ -50,3 +50,18 @@ class LocationManager(object):
                 
     def create_location(self, location_func, source_location):
         pass
+    
+    def change_location(self, source_node, location_id, new_value):
+        self.msg = SourceChange
+        self.msg.source_node(source_node)
+        self.msg.location_id(location_id)
+        self.msg.new_value(new_value)
+        
+        if(source_node == self.node.get_name()):
+            self.on_source_change(self.msg)
+        else:
+            self.sc_pub.publish(self.msg)
+            
+    def current_value(self, location_id):
+        locFun = self.locations[location_id]
+        return locFun[location_id]
