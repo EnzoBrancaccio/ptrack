@@ -15,7 +15,13 @@ class LocationManager(object):
     classdocs
     '''
 
-
+    '''
+    currently considering: is locations necessary?
+    when locationFunction is a dict, it can be filled and searched.
+    no necessity to have a 1-elem dict in a list (i. e. locations)
+    would make sense if locationFunction was a tuple, but no advantage
+    (it's immutable but that doesn't seem to be needed)
+    '''
     def __init__(self, node):
         '''
         Constructor
