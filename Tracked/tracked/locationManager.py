@@ -15,23 +15,14 @@ class LocationManager(object):
     classdocs
     '''
 
-    '''
-    currently considering: is locations necessary?
-    when locationFunction is a dict, it can be filled and searched.
-    no necessity to have a 1-elem dict in a list (i. e. locations)
-    would make sense if locationFunction was a tuple, but no advantage
-    (it's immutable but that doesn't seem to be needed)
-    '''
     def __init__(self, node):
         '''
         Constructor
         '''
         # {scource_location: int}
         self.source_locations = dict()
-        # {int (location_id): string}, replaces struct locationFunc in C++
-        self.locationFunction = dict()
-        # list of locationFunctions
-        self.locations = list()
+        # replaces C++ locations and locationFunc, key -value pair int (location_id): string
+        self.locations = dict()
         self.get_value_service = None
         self.node = Node
         
@@ -69,5 +60,4 @@ class LocationManager(object):
             self.sc_pub.publish(self.msg)
             
     def current_value(self, location_id):
-        locFun = self.locations[location_id]
-        return locFun[location_id]
+        return self.locations[location_id]

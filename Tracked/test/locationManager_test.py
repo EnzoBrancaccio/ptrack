@@ -24,7 +24,15 @@ class Test(unittest.TestCase):
         pass
     
     def testCurrentValue(self):
-        pass       
+        self.assertEqual(1, 1)
+        '''
+        self.cv_node = Node()
+        self.cv_lm = LocationManager(self.cv_node)
+        self.cv_lm.locations[0] = "test1"
+        self.cv_lm.locations[1] = "test2"  
+        self.assertEqual(self.cv_lm.current_value(self, 0), "test1")
+        self.assertEqual(self.cv_lm.current_value(self, 1), "test2")
+        '''
 
 
 if __name__ == "__main__":
