@@ -12,7 +12,8 @@ class SourceLocation(object):
     classdocs
     '''
 
-
+    # best option seems to be stack from
+    # https://docs.python.org/3/library/inspect.html#the-interpreter-stack
     def __init__(self, objToInspect):
         '''
         Constructor
