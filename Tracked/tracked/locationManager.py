@@ -9,6 +9,7 @@ from rclpy.node import Node
 from rosslt_msgs.msg import SourceChange
 from rosslt_msgs.srv import GetValue
 from .location import Location
+from .locationFunc import LocationFunc
 
 class LocationManager(object):
     '''
@@ -21,8 +22,8 @@ class LocationManager(object):
         '''
         # {scource_location: int}
         self.source_locations = dict()
-        # replaces C++ locations and locationFunc, key -value pair int (location_id): string
-        self.locations = dict()
+        # replaces C++ locations, list of LocationFunc instances
+        self.locations = list()
         self.get_value_service = None
         self.node = Node
         
@@ -58,6 +59,7 @@ class LocationManager(object):
             self.on_source_change(self.msg)
         else:
             self.sc_pub.publish(self.msg)
-            
+    
+    # self.locations is list of locationFunc instances        
     def current_value(self, location_id):
-        return self.locations[location_id]
+        return self.locations[location_id].get_value(location_id)
