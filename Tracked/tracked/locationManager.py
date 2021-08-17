@@ -5,6 +5,8 @@ Created on 06.08.2021
 '''
 
 import rclpy
+import inspect
+
 from rclpy.node import Node
 from rosslt_msgs.msg import SourceChange
 from rosslt_msgs.srv import GetValue
@@ -16,11 +18,19 @@ class LocationManager(object):
     classdocs
     '''
 
+    '''
+    Regarding source_location:
+    https://docs.python.org/3/library/inspect.html#the-interpreter-stack
+    returns named tuple, so source_location is simply an instance of named tuple
+    in TrackingNode's loc-function a named tuple will be created from inspect.stack
+    source_locations is just a list of such named tuples
+    '''
+
     def __init__(self, node):
         '''
         Constructor
         '''
-        # {scource_location: int}
+        # {scource_location: int}, note that source_location is a named tuple
         self.source_locations = dict()
         # replaces C++ locations, list of LocationFunc instances
         self.locations = list()
@@ -46,8 +56,14 @@ class LocationManager(object):
             else:
                 self.locations[self.id].set(self.id, msg.new_value)
                 
-    def create_location(self, location_func, source_location):
-        pass
+    def create_location(self, location_func, source_location = inspect.stack()):
+        self.it = self.source_locations[source_location]
+        if(self.it == list(self.source_locations.keys())[-1]):
+            self.locations.append(location_func)
+            self.source_locations[source_location] = len(self.locations) - 1
+            return len(self.locations) - 1
+        else:
+            self.it[source_location]
     
     def change_location(self, source_node, location_id, new_value):
         self.msg = SourceChange
