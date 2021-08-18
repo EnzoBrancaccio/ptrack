@@ -57,13 +57,22 @@ class LocationManager(object):
                 self.locations[self.id].set(self.id, msg.new_value)
                 
     def create_location(self, location_func, source_location = inspect.stack()):
+        # source_locations is dict with key: source_location, value: int
         self.it = self.source_locations[source_location]
         if(self.it == list(self.source_locations.keys())[-1]):
             self.locations.append(location_func)
             self.source_locations[source_location] = len(self.locations) - 1
             return len(self.locations) - 1
         else:
-            self.it[source_location]
+            return self.it[source_location]
+    
+    def get_location(self, source_location):
+        # source_locations is dict with key: source_location, value: int
+        self.it = self.source_locations[source_location]
+        if(self.it != list(self.source_locations.keys())[-1]):
+            return self.it[source_location]
+        else:
+            return -1
     
     def change_location(self, source_node, location_id, new_value):
         self.msg = SourceChange
