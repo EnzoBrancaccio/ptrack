@@ -37,6 +37,7 @@ class LocationManager(object):
         self.get_value_service = None
         self.node = Node
         
+        # wondering where the msg for the placeholders come from
         self.sc_sub = node.create_subscription(SourceChange, "/sc", self.on_source_change(self), 10)
         self.sc_pub = node.create_publisher(SourceChange, "/sc", 10)
         self.get_value_service = node.create_service(GetValue, node.get_name() + "/get_slt_value", self.on_get_value(self, self), 10)
@@ -66,7 +67,7 @@ class LocationManager(object):
         else:
             return self.it[source_location]
     
-    def get_location(self, source_location):
+    def get_location_id(self, source_location):
         # source_locations is dict with key: source_location, value: int
         self.it = self.source_locations[source_location]
         if(self.it != list(self.source_locations.keys())[-1]):
