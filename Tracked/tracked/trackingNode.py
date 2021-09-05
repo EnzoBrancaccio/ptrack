@@ -24,16 +24,20 @@ class TrackingNode(Node):
         Constructor
         '''
         self.name = name
-        self.loc_mgr = LocationManager()
+        self.loc_mgr = LocationManager(self)
         
     def loc(self, data, source_location = inspect.stack()):
-        # not with parameter node?
         self.id = self.loc_mgr.get_location_id(source_location)
+        self.loc_name = "loc" + str(self.id)
         
         if(self.id < 0):
-            pass
+            self.new_string = self.get_parameter(self.loc_name)
+            self.loc_fun = LocationFunc(self.id, self.new_string)
+            self.set_parameters(self.loc_name, self.loc_fun.new_value)
+            self.id = self.loc_mgr.create_location(self.loc_fun, source_location)
+            self.declare_parameter(self.loc_name, data)
         else:
-            pass
+            data = self.get_parameter(self.loc_name)
         
         self.location = Location(self.get_name(), self.id)
         return Tracked(data, self.location)
