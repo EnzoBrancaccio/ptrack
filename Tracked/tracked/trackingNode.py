@@ -12,6 +12,9 @@ from .tracked import Tracked
 from .locationManager import LocationManager
 from .locationFunc import LocationFunc
 from .location import Location
+from rosslt_msgs.srv import GetValue
+from rosslt_msgs.srv._get_value import GetValue_Request
+#from rosidl_runtime_py import utilities
 
 class TrackingNode(Node):
     '''
@@ -55,4 +58,23 @@ class TrackingNode(Node):
             self.loc_mgr.change_location(self.source_node, self.location_id, self.updated_value)
             
     def reevaluate(self, tracked_value):
-        pass
+        # something like: if(utilities.message)
+        if(True):
+            pass
+        else:
+            self.tv_source_node = tracked_value.location_map["."].source_node
+            self.tv_location_id = tracked_value.location_map["."].location_id
+            if(not tracked_value.location_map["."].isValid()):
+                return tracked_value
+            if (self.tv_source_node == self.get_name()):
+                tracked_value.value = self.loc_mgr.current_value(self.tv_location_id)
+            else:
+                self.client = self.create_client(GetValue, self.tv_source_node + "/get_slt_value")
+                self.client.wait_for_service(1)
+                
+                self.request = GetValue_Request
+                self.request.location_id(self.tv_location_id)
+                
+                self.response_future = self.client.call_async(self.request)
+                # self.response = 
+            
