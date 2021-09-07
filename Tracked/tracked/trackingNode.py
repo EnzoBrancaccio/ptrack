@@ -70,7 +70,7 @@ class TrackingNode(Node):
                 tracked_value.value = self.loc_mgr.current_value(self.tv_location_id)
             else:
                 self.client = self.create_client(GetValue, self.tv_source_node + "/get_slt_value")
-                self.client.wait_for_service(1)
+                self.client.wait_for_service(timeout_sec=1.0)
                 
                 self.request = GetValue_Request
                 self.request.location_id(self.tv_location_id)
@@ -78,3 +78,5 @@ class TrackingNode(Node):
                 self.response_future = self.client.call_async(self.request)
                 # self.response = 
             
+            tracked_value.value = e.applyExpression(tracked_value.value, tracked_value.location_map["."].expression)
+            return tracked_value
