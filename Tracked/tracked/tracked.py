@@ -57,9 +57,20 @@ class Tracked(object):
         except:
             raise AttributeError(attr)
     
-    # overloading + operator
-    # x + y => x.__add__(y)
     def __add__(self, other):
+        """Override the + operator
+        
+        Keyword arguments:
+        self -- Tracked object
+        other -- Right-hand object added to self
+        
+        x + y => x.__add__(y)
+        Here: self + other = self.__add__(other)
+        Allows adding to a left-hand side Tracked object's value
+        No need to write Tracked.value explicitly, Tracked alone also works
+        Covers the cases that "other" is Tracked or not
+        Covers string concatenation
+        """
         isSelfTracked = isinstance(self, Tracked)
         isOtherTracked = isinstance(other, Tracked)
         if(isSelfTracked and (not isOtherTracked)):
@@ -78,9 +89,20 @@ class Tracked(object):
             newValue = self + other
             return newValue
         
-    # if left hand type is not Tracked
-    # x + y => y.__radd__(x)
     def __radd__(self, other):
+        """Special case of overriding the + operator
+        
+        Keyword arguments:
+        self -- Tracked object
+        other -- Right-hand object added to self
+        
+        x + y => y.__radd__(x)
+        Here: other + self = self.__add__(other)
+        Special case of left-hand side object not being of type Tracked
+        Allows adding to a right-hand side Tracked object's value
+        No need to write Tracked.value explicitly, Tracked alone also works
+        Covers string concatenation
+        """
         isSelfTracked = isinstance(self, Tracked)
         if(isSelfTracked):
             copiedVar = copy.deepcopy(self)
@@ -89,8 +111,19 @@ class Tracked(object):
             copiedVar.location_map["."].expression = expr + str(other) + ";swap;+;"
             return copiedVar
         
-    # overloading - operator 
     def __sub__(self, other):
+        """Override the - operator
+        
+        Keyword arguments:
+        self -- Tracked object
+        other -- Right-hand object subtracted from self
+        
+        x - y => x.__sub__(y)
+        Here: self - other = self.__sub__(other)
+        Allows subtracting from a left-hand side Tracked object's value
+        No need to write Tracked.value explicitly, Tracked alone also works
+        Covers the cases that "other" is Tracked or not
+        """
         isSelfTracked = isinstance(self, Tracked)
         isOtherTracked = isinstance(other, Tracked)
         if(isSelfTracked and (not isOtherTracked)):
@@ -108,9 +141,20 @@ class Tracked(object):
         else:
             newValue = self - other
             return newValue
-        
-    # if left hand type is not Tracked   
+          
     def __rsub__(self, other):
+        """Special case of overriding the - operator
+        
+        Keyword arguments:
+        self -- Tracked object
+        other -- Right-hand object subtracting self
+        
+        x - y => y.__rsub__(x)
+        Here: other - self = self.__rsub__(other)
+        Special case of left-hand side object not being of type Tracked
+        Allows subtracting from a right-hand side Tracked object's value
+        No need to write Tracked.value explicitly, Tracked alone also works
+        """
         isSelfTracked = isinstance(self, Tracked)
         if(isSelfTracked):
             copiedVar = copy.deepcopy(self)
@@ -118,9 +162,21 @@ class Tracked(object):
             expr = copiedVar.location_map["."].expression
             copiedVar.location_map["."].expression = expr + str(other) + ";swap;-;"
             return copiedVar
-    
-    # overloading * operator    
+       
     def __mul__(self, other):
+        """Override the * operator
+        
+        Keyword arguments:
+        self -- Tracked object
+        other -- Right-hand object multiplied with self
+        
+        x * y => x.__mul__(y)
+        Here: self * other = self.__mul__(other)
+        Allows multiplying with a left-hand side Tracked object's value
+        No need to write Tracked.value explicitly, Tracked alone also works
+        Covers the cases that "other" is Tracked or not
+        Covers the case of other being 0
+        """
         isSelfTracked = isinstance(self, Tracked)
         isOtherTracked = isinstance(other, Tracked)
         if(isSelfTracked and isOtherTracked):
@@ -151,9 +207,21 @@ class Tracked(object):
         else:
             newValue = self * other
             return newValue
-        
-    # if left hand type is not Tracked   
+      
     def __rmul__(self, other):
+        """Special case of overriding the * operator
+        
+        Keyword arguments:
+        self -- Tracked object
+        other -- Right-hand object multiplied with self
+        
+        x * y => y.__rmul__(x)
+        Here: other * self = self.__rmul__(other)
+        Special case of left-hand side object not being of type Tracked
+        Allows multiplying with a right-hand side Tracked object's value
+        No need to write Tracked.value explicitly, Tracked alone also works
+        Covers the case of other being 0
+        """
         isSelfTracked = isinstance(self, Tracked)
         if(isSelfTracked):
             copiedVar = copy.deepcopy(self)
@@ -165,9 +233,20 @@ class Tracked(object):
             if(isOtherNumber and isOtherNull):
                 copiedVar.location_map["."] = Location()
             return copiedVar
-        
-    # overloading / operator 
+    
     def __truediv__(self, other):
+        """Override the / operator
+        
+        Keyword arguments:
+        self -- Tracked object
+        other -- Right-hand object self is divided by
+        
+        x / y => x.__truediv__(y)
+        Here: self / other = self.__truediv__(other)
+        Allows dividing a left-hand side Tracked object's value
+        No need to write Tracked.value explicitly, Tracked alone also works
+        Covers the cases that "other" is Tracked or not
+        """
         isSelfTracked = isinstance(self, Tracked)
         isOtherTracked = isinstance(other, Tracked)
         if(isSelfTracked and isOtherTracked):
@@ -185,9 +264,20 @@ class Tracked(object):
         else:
             newValue = self / other
             return newValue
-        
-    # if left hand type is not Tracked   
+     
     def __rtruediv__(self, other):
+        """Special case of overriding the / operator
+        
+        Keyword arguments:
+        self -- Tracked object
+        other -- Right-hand object divided by self
+        
+        x / y => y.__rtruediv__(x)
+        Here: other / self = self.__rtruediv__(other)
+        Special case of left-hand side object not being of type Tracked
+        Allows dividing by a right-hand side Tracked object's value
+        No need to write Tracked.value explicitly, Tracked alone also works
+        """
         isSelfTracked = isinstance(self, Tracked)
         if(isSelfTracked):
             copiedVar = copy.deepcopy(self)
@@ -197,6 +287,13 @@ class Tracked(object):
             return copiedVar
         
     def sin(self):
+        """Sine function for Tracked based on math.sin
+        
+        Keyword arguments:
+        self -- Tracked object
+        
+        Returns the sine of Tracked.value if it's a number
+        """
         isSelfTracked = isinstance(self, Tracked)
         isValueNumber = isinstance(self.value, Number)
         if(isSelfTracked and isValueNumber):
@@ -207,6 +304,13 @@ class Tracked(object):
             return copiedVar
         
     def cos(self):
+        """Cosine function for Tracked based on math.cos
+        
+        Keyword arguments:
+        self -- Tracked object
+        
+        Returns the cosine of Tracked.value if it's a number
+        """
         isSelfTracked = isinstance(self, Tracked)
         isValueNumber = isinstance(self.value, Number)
         if(isSelfTracked and isValueNumber):
@@ -215,15 +319,30 @@ class Tracked(object):
             expr = copiedVar.location_map["."].expression
             copiedVar.location_map["."].expression = expr + "cos;"
             return copiedVar
-        
-    # vector methods: Choosing its Python counterpart "list"
+    
     def size(self):
+        """Length of Tracked.value if it's a list
+        
+        Keyword arguments:
+        self -- Tracked object
+        
+        Uses list for Tracked.value (vector in C++ Tracked)
+        """
         if(isinstance(self, Tracked)):
             if(isinstance(self.value, list)):
                 return len(self.value)
-    
-    # everything in list is of / will be turned into type Tracked        
+            
     def append(self, inputArg):
+        """Override the append method covering Tracked objects
+        
+        Keyword arguments:
+        self -- Tracked object
+        inputArg -- Object appended to Tracked.value == list
+        
+        Tracked.value is a list of Tracked and object shall be added to its end
+        If inputArg is not Tracked then it's turned into a Tracked object
+        Necessity to avoid using append itself because of __setitem__ overriding
+        """
         if(isinstance(self, Tracked)):
             if(isinstance(self.value, list)):
                 if(isinstance(inputArg, Tracked)):
@@ -234,6 +353,13 @@ class Tracked(object):
                     self[len(self.value)] = th.make_tracked(inputArg)
                     
     def pop_back(self):
+        """Remove element from end of Tracked.value list
+        
+        Keyword arguments:
+        self -- Tracked object
+        
+        Equivalent of C++ std::vector<T,Allocator>::pop_back
+        """
         if(isinstance(self, Tracked)):
             if(isinstance(self.value, list)):
                 del(self.value[-1])
