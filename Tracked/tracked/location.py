@@ -32,11 +32,26 @@ class Location(object):
       
     # overloading boolean operator  
     def __eq__(self, other):
+        """Override boolean operator
+        
+        Keyword arguments:
+        self -- Location object
+        other -- Other location object
+        
+        Compares two Location objects based on source_node and location_id
+        """
         sameSource = (self.source_node == other.source_node)
         sameId = (self.location_id == other.location_id)
         return (sameSource and sameId)
     
     def isValid(self):
+        """Checks if Location is valid
+        
+        Keyword arguments:
+        self -- Location object
+        
+        Location is valid if source_node is not empty
+        """
         isSourceNode = not (self.source_node == "")
         return isSourceNode
     

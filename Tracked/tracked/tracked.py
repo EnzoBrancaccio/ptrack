@@ -366,23 +366,54 @@ class Tracked(object):
                 self.location_map = lm.removeLocations(self.location_map, str(self.size()))
                 
     def clear(self):
+        """Clears the Tracked.value list
+        
+        Keyword arguments:
+        self -- Tracked object
+        
+        Uses Python's own clear() methods for lists
+        """
         if(isinstance(self, Tracked)):
             if(isinstance(self.value, list)):
                 self.value.clear()
                 self.location_map = lm.locationSlice(self.location_map, ".")
                     
     def front(self):
+        """Return the first element of Tracked.value list
+        
+        Keyword arguments:
+        self -- Tracked object
+        
+        The list itself remains unchanged
+        """
         if(isinstance(self, Tracked)):
             if(isinstance(self.value, list)):
                 return self.value[0]
             
     def back(self):
+        """Return the last element of Tracked.value list
+        
+        Keyword arguments:
+        self -- Tracked object
+        
+        In a Python list, -1 is the index of the last element
+        """
         if(isinstance(self, Tracked)):
             if(isinstance(self.value, list)):
                 return self.value[-1]
     
-    # overload [] for Tracked with value list
     def __getitem__(self, position):
+        """Override the [] operator for retrieving from Tracked.value list
+        
+        Keyword arguments:
+        self -- Tracked object
+        position -- Index of element in Tracked.value list
+        
+        Directly access elements in Tracked.value list 
+        For example, write Tracked[position] instead of Tracked.value[position]
+        Covers the case that the index does not exist in the list
+        Covers the case of a negative index for it to behave like in normal Python lists
+        """
         isTracked = isinstance(self, Tracked)
         isTrackedList = isinstance(self.value, list)
         if(isTracked and isTrackedList):
@@ -409,9 +440,20 @@ class Tracked(object):
                 return self[position]
             except IndexError:
                 raise IndexError(f"Index is {position} and list length is {len(self)}")
-    
-    # overload [] to save update to list in references dictionary       
+          
     def __setitem__(self, position, item):
+        """Override the [] operator for adding to Tracked.value list
+        
+        Keyword arguments:
+        self -- Tracked object
+        position -- Index of element in Tracked.value list
+        item -- Element to be added to Tracked.value list at index position
+        
+        Directly add elements to Tracked.value list at index
+        For example, write Tracked[position] = item instead of Tracked.value[position] = item
+        Covers the cases that item is Tracked or not
+        If the position is an invalid index, the element is appended
+        """
         isTracked = isinstance(self, Tracked)
         isTrackedList = isinstance(self.value, list)
         if(isTracked and isTrackedList):
