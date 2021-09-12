@@ -9,6 +9,14 @@ from .tracked import Tracked
 from numbers import Number
 
 def make_tracked(value, location = None):
+    """Create a new Tracked object
+        
+    Keyword arguments:
+    value -- New Tracked.value
+    location -- Location of new Tracked if provided
+        
+    New Tracked object is created with value and location as paramaters
+    """
     if(isinstance(value, Tracked)):
         return value
     else:
@@ -82,6 +90,14 @@ def is_operator(token):
         return 0
     
 def createExpressionList(string):
+    """Creates a list of expression strings
+        
+    Keyword arguments:
+    string -- String of semicolon-separated expressions
+        
+    Takes the expression string and splits it with semicolon as delimiter
+    Returns list of single expression strings
+    """
     exprList = list()
     exprTempList = string.split(";")
     # string ending with ";" results in "" being appended
@@ -91,6 +107,14 @@ def createExpressionList(string):
     return exprList
 
 def createExpressionString(exprList):
+    """Creates a string of expressions
+        
+    Keyword arguments:
+    exprList -- List of expression strings
+        
+    Joins the expression strings to one String using as delimiter semicolon
+    Returns string of expressions
+    """
     expressionString = ";".join(exprList)
     expressionString = ";" + expressionString + ";"
     return expressionString
