@@ -12,6 +12,15 @@ from numbers import Number
 
 # from helper.h
 def applyExpression(value, expression):
+    """Apply expression to a value
+        
+    Keyword arguments:
+    value -- Number or String to be modified by expression
+    expression -- String of expressions
+        
+    String expression contains all modifications for a value
+    Goes through expression and applies operations to value
+    """
     if(isinstance(value, Number)):
         stack = list()
         stack.append(value)
@@ -96,6 +105,16 @@ def applyExpression(value, expression):
 
 # from trackingnode.cpp    
 def reverseExpression(expr, position = None, swapped = False):
+    """Reverses a given expression String
+        
+    Keyword arguments:
+    expr -- String or list of strings of expressions
+    position -- Index in list (optional)
+    swapped -- Boolean special case of swapped, non-commutative operator
+        
+    Takes given expression and reverses, 
+    it so modification of value through expression can be reversed
+    """
     if(isinstance(expr, list)):
         if(position >= len(expr)):
             return ""

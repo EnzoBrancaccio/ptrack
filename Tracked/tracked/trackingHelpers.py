@@ -4,9 +4,12 @@ Created on 24.06.2021
 @author: Enzo Brancaccio
 '''
 
+from rclpy.executors import Executor
+from rclpy.task import Future
 from .location import Location
 from .tracked import Tracked
 from numbers import Number
+from rclpy.node import Node
 
 def make_tracked(value, location = None):
     """Create a new Tracked object
@@ -118,3 +121,15 @@ def createExpressionString(exprList):
     expressionString = ";".join(exprList)
     expressionString = ";" + expressionString + ";"
     return expressionString
+
+def get_future(node, future):
+    # method always returns None
+    Executor.spin_until_future_complete(node, future)
+    # from rclpy.task.Future
+    isCompletedSuccessfully = (future.done() and (not future.cancelled()))
+    if(isCompletedSuccessfully):
+        return future
+    else:
+        node.get_logger().info("Error getting result from future")
+        
+        

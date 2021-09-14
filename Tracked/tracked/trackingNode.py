@@ -6,6 +6,7 @@ Created on 06.08.2021
 
 import inspect
 import tracked.expression as e
+import tracked.trackingHelpers as th
 
 from rclpy.node import Node
 from .tracked import Tracked
@@ -76,7 +77,10 @@ class TrackingNode(Node):
                 self.request.location_id(self.tv_location_id)
                 
                 self.response_future = self.client.call_async(self.request)
-                # self.response = 
+                self.response = th.get_future(self, self.response_future)
+                
+                if(self.response is not None):
+                    tracked_value.value = self.response.result
             
             tracked_value.value = e.applyExpression(tracked_value.value, tracked_value.location_map["."].expression)
             return tracked_value
