@@ -4,6 +4,8 @@ Created on 24.06.2021
 @author: Enzo Brancaccio
 '''
 
+import inspect
+
 from rclpy.executors import Executor
 from rclpy.task import Future
 from .location import Location
@@ -131,5 +133,10 @@ def get_future(node, future):
         return future
     else:
         node.get_logger().info("Error getting result from future")
+        
+def reevaluate_complex_value(tracked_value):
+    # using inspect.getmembers() because messages use slots
+    # tv_attrs is a list
+    tv_attrs = inspect.getmembers(tracked_value)
         
         

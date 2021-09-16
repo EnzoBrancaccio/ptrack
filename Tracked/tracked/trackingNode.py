@@ -58,17 +58,20 @@ class TrackingNode(Node):
             self.updated_value = str(self.new_value_rev)
             self.loc_mgr.change_location(self.source_node, self.location_id, self.updated_value)
             
-    def reevaluate(self, tracked_value):
+    def reevaluate(self, tracked_obj):
         # something like: if(utilities.message)
-        if(True):
+        self.isMessage = "TODO"
+        if(self.isMessage):
+            # use trackingHelper method reevaluate_complex_value()
+            # will take Tracked.value, so call like reevaluate_complex_value(tracked_obj.value)
             pass
         else:
-            self.tv_source_node = tracked_value.location_map["."].source_node
-            self.tv_location_id = tracked_value.location_map["."].location_id
-            if(not tracked_value.location_map["."].isValid()):
-                return tracked_value
+            self.tv_source_node = tracked_obj.location_map["."].source_node
+            self.tv_location_id = tracked_obj.location_map["."].location_id
+            if(not tracked_obj.location_map["."].isValid()):
+                return tracked_obj
             if (self.tv_source_node == self.get_name()):
-                tracked_value.value = self.loc_mgr.current_value(self.tv_location_id)
+                tracked_obj.value = self.loc_mgr.current_value(self.tv_location_id)
             else:
                 self.client = self.create_client(GetValue, self.tv_source_node + "/get_slt_value")
                 self.client.wait_for_service(timeout_sec=1.0)
@@ -80,7 +83,7 @@ class TrackingNode(Node):
                 self.response = th.get_future(self, self.response_future)
                 
                 if(self.response is not None):
-                    tracked_value.value = self.response.result
+                    tracked_obj.value = self.response.result
             
-            tracked_value.value = e.applyExpression(tracked_value.value, tracked_value.location_map["."].expression)
-            return tracked_value
+            tracked_obj.value = e.applyExpression(tracked_obj.value, tracked_obj.location_map["."].expression)
+            return tracked_obj
