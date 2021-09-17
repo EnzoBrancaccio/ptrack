@@ -600,3 +600,32 @@ print(i_source)
 print("sourcelines")
 print(i_slines)
 print(i_slinf)
+
+i_crgba_msg = ColorRGBA()
+i_rloc_msg = rosLocationMsg()
+i_marker_msg = Marker
+
+i_crgba_msg_inspec = inspect.getmembers(i_crgba_msg)
+i_rloc_msg_inspec = inspect.getmembers(i_rloc_msg)
+i_marker_msg_inspec = inspect.getmembers(i_marker_msg)
+
+print("message inspection")
+print("ColorRGBA")
+print(i_crgba_msg_inspec)
+for key, value in i_crgba_msg_inspec:
+    if(key == "_fields_and_field_types"):
+        print(value)
+        print(type(value))
+        for key, val in value.items():
+            print(key)
+            print(val)
+print("rosLocation")
+print(i_rloc_msg_inspec)
+for key, value in i_rloc_msg_inspec:
+    if(key == "_fields_and_field_types"):
+        print(value)
+print("Marker")
+print(i_marker_msg_inspec)
+for key, value in i_marker_msg_inspec:
+    if(key == "_fields_and_field_types"):
+        print(value)

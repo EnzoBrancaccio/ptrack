@@ -138,5 +138,9 @@ def reevaluate_complex_value(tracked_value):
     # using inspect.getmembers() because messages use slots
     # tv_attrs is a list
     tv_attrs = inspect.getmembers(tracked_value)
+    tv_fields = dict()
+    for key, value in tv_attrs:
+        if(key == "_fields_and_field_types"):
+            tv_fields = value
         
         
