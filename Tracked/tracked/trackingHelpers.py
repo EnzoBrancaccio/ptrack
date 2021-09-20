@@ -134,7 +134,10 @@ def get_future(node, future):
     else:
         node.get_logger().info("Error getting result from future")
         
+# parameter is value of Tracked object
 def reevaluate_complex_value(tracked_value):
+    # built-in primitive types according to http://wiki.ros.org/msg
+    built_in_primitive_types = ["bool", "int", "long", "float", "rospy.Time", "rospy.Duration"]
     # using inspect.getmembers() because messages use slots
     # tv_attrs is a list
     tv_attrs = inspect.getmembers(tracked_value)
@@ -142,5 +145,12 @@ def reevaluate_complex_value(tracked_value):
     for key, value in tv_attrs:
         if(key == "_fields_and_field_types"):
             tv_fields = value
+    for key, value in tv_fields.items():
+        if(value in built_in_primitive_types):
+            # reevaluate value directly
+            pass
+        else:
+            # dig deeper
+            pass
         
         
