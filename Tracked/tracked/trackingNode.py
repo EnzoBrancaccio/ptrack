@@ -62,7 +62,7 @@ class TrackingNode(Node):
         # something like: if(utilities.message)
         self.isMessage = "TODO"
         if(self.isMessage):
-            # use trackingHelper method reevaluate_complex_value()
+            # use method reevaluate_complex_value()
             # will take Tracked.value, so call like reevaluate_complex_value(tracked_obj.value)
             pass
         else:
@@ -87,3 +87,22 @@ class TrackingNode(Node):
             
             tracked_obj.value = e.applyExpression(tracked_obj.value, tracked_obj.location_map["."].expression)
             return tracked_obj
+        
+    # parameter is Tracked object
+    def reevaluate_complex_value(self, tracked_obj):
+        # built-in primitive types according to http://wiki.ros.org/msg
+        built_in_primitive_types = ["bool", "int", "long", "float", "rospy.Time", "rospy.Duration"]
+        # using inspect.getmembers() because messages use slots
+        # tv_attrs is a list
+        tv_attrs = inspect.getmembers(tracked_obj.value)
+        tv_fields = dict()
+        for key, value in tv_attrs:
+            if(key == "_fields_and_field_types"):
+                tv_fields = value
+        for key, value in tv_fields.items():
+            if(value in built_in_primitive_types):
+                # reevaluate value directly
+                self.reevaluate(tracked_obj.value)
+            else:
+                # dig deeper
+                pass
