@@ -62,9 +62,8 @@ class TrackingNode(Node):
         # something like: if(utilities.is_message)
         self.isMessage = "TODO"
         if(self.isMessage):
-            # use method reevaluate_complex_value()
-            # will take Tracked.value, so call like reevaluate_complex_value(tracked_obj.value)
-            pass
+            # will take full Tracked object
+            self.reevaluate_complex_value(tracked_obj)
         else:
             self.tv_source_node = tracked_obj.location_map["."].source_node
             self.tv_location_id = tracked_obj.location_map["."].location_id
@@ -89,20 +88,22 @@ class TrackingNode(Node):
             return tracked_obj
         
     # parameter is Tracked object
+    # also see http://wiki.ros.org/msg
     def reevaluate_complex_value(self, tracked_obj):
-        # built-in primitive types according to http://wiki.ros.org/msg
-        built_in_primitive_types = ["bool", "int8", "uint8", "int16", "uint16", "int32", "uint32", "int64", "uint64", "float32", "float64", "string", "time", "duration"]
         # using inspect.getmembers() because messages use slots
         # tv_attrs is a list
-        tv_attrs = inspect.getmembers(tracked_obj.value)
-        tv_fields = dict()
-        for key, value in tv_attrs:
+        to_attrs = inspect.getmembers(tracked_obj.value)
+        to_fields = dict()
+        for key, value in to_attrs:
             if(key == "_fields_and_field_types"):
-                tv_fields = value
-        for key, value in tv_fields.items():
-            if(value in built_in_primitive_types):
-                # reevaluate value directly
-                self.reevaluate(tracked_obj.value)
-            elif(True): #utilities.is_message(tracked_obj.value)):
-                # dig deeper
-                self.reevaluate_complex_value(tracked_obj.value)
+                to_fields = value
+        for fieldname, fieldtype in to_fields.items():
+            if(hasattr(tracked_obj.value, fieldname)):
+                # check this value:
+                to_field = getattr(tracked_obj.value, fieldname)
+                # if message -> dig deeper, else -> reevaluate value
+                if(True): #utilities.is_message(tracked_obj.value)):
+                    self.reevaluate_complex_value(tracked_obj.value)
+                else: #utilities.is_message(tracked_obj.value)):
+                    # reevaluate value directly
+                    self.reevaluate(tracked_obj.value)
