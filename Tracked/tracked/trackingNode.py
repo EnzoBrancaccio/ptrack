@@ -60,10 +60,10 @@ class TrackingNode(Node):
             
     def reevaluate(self, tracked_obj):
         # something like: if(utilities.is_message)
-        self.isMessage = "TODO"
+        self.isMessage = "TODO" #utilities.is_message(tracked_obj.value))
         if(self.isMessage):
-            # will take full Tracked object
-            self.reevaluate_complex_value(tracked_obj)
+            self.reevaluate_msg(tracked_obj)
+            return tracked_obj
         else:
             self.tv_source_node = tracked_obj.location_map["."].source_node
             self.tv_location_id = tracked_obj.location_map["."].location_id
@@ -89,7 +89,7 @@ class TrackingNode(Node):
         
     # parameter is Tracked object
     # also see http://wiki.ros.org/msg
-    def reevaluate_complex_value(self, tracked_obj):
+    def reevaluate_msg(self, tracked_obj):
         # using inspect.getmembers() because messages use slots
         # tv_attrs is a list
         to_attrs = inspect.getmembers(tracked_obj.value)
@@ -97,13 +97,20 @@ class TrackingNode(Node):
         for key, value in to_attrs:
             if(key == "_fields_and_field_types"):
                 to_fields = value
+        # key: fieldname, value: fieldtype in Python
         for fieldname, fieldtype in to_fields.items():
             if(hasattr(tracked_obj.value, fieldname)):
-                # check this value:
+                # check this value (fieldname of Tracked.value):
                 to_field = getattr(tracked_obj.value, fieldname)
                 # if message -> dig deeper, else -> reevaluate value
-                if(True): #utilities.is_message(tracked_obj.value)):
-                    self.reevaluate_complex_value(tracked_obj.value)
-                else: #utilities.is_message(tracked_obj.value)):
+                if(True): #utilities.is_message(to_field)):
+                    self.reevaluate_msg(tracked_obj.value)
+                else:
                     # reevaluate value directly
-                    self.reevaluate(tracked_obj.value)
+                    return self.reevaluate(tracked_obj.value)
+        
+    # outsourcing update of value to also use it inside reevaluate_msg
+    # either update Tracked.value directly
+    # or via fieldname with getattr and setattr        
+    def reevaluate_value(self, tracked_obj, fieldname = ""):
+        pass
