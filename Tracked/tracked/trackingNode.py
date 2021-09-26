@@ -65,6 +65,8 @@ class TrackingNode(Node):
             self.reevaluate_msg(tracked_obj)
             return tracked_obj
         else:
+            return self.reevaluate_value(tracked_obj)
+            '''
             self.tv_source_node = tracked_obj.location_map["."].source_node
             self.tv_location_id = tracked_obj.location_map["."].location_id
             if(not tracked_obj.location_map["."].isValid()):
@@ -86,6 +88,7 @@ class TrackingNode(Node):
             
             tracked_obj.value = e.applyExpression(tracked_obj.value, tracked_obj.location_map["."].expression)
             return tracked_obj
+            '''
         
     # parameter is Tracked object
     # also see http://wiki.ros.org/msg
@@ -93,6 +96,7 @@ class TrackingNode(Node):
         # using inspect.getmembers() because messages use slots
         # tv_attrs is a list
         to_attrs = inspect.getmembers(tracked_obj.value)
+        to_reevaluated = Tracked()
         to_fields = dict()
         for key, value in to_attrs:
             if(key == "_fields_and_field_types"):
@@ -107,10 +111,31 @@ class TrackingNode(Node):
                     self.reevaluate_msg(tracked_obj.value)
                 else:
                     # reevaluate value directly
-                    return self.reevaluate(tracked_obj.value)
+                    to_reevaluated = self.reevaluate_value(tracked_obj.value, fieldname)
+        return to_reevaluated
         
     # outsourcing update of value to also use it inside reevaluate_msg
     # either update Tracked.value directly
     # or via fieldname with getattr and setattr        
-    def reevaluate_value(self, tracked_obj, fieldname = ""):
-        pass
+    def reevaluate_value(self, tracked_obj, fieldname = "value"):
+        self.tv_source_node = tracked_obj.location_map["."].source_node
+        self.tv_location_id = tracked_obj.location_map["."].location_id
+        if(not tracked_obj.location_map["."].isValid()):
+            return tracked_obj
+        if (self.tv_source_node == self.get_name()):
+            setattr(tracked_obj, fieldname, self.loc_mgr.current_value(self.tv_location_id))
+        else:
+            self.client = self.create_client(GetValue, self.tv_source_node + "/get_slt_value")
+            self.client.wait_for_service(timeout_sec=1.0)
+                
+            self.request = GetValue_Request
+            self.request.location_id(self.tv_location_id)
+                
+            self.response_future = self.client.call_async(self.request)
+            self.response = th.get_future(self, self.response_future)
+                
+            if(self.response is not None):
+                setattr(tracked_obj, fieldname, self.response.result)
+            
+        setattr(tracked_obj, fieldname, e.applyExpression(tracked_obj.value, tracked_obj.location_map["."].expression))
+        return tracked_obj
