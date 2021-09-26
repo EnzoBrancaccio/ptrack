@@ -59,36 +59,12 @@ class TrackingNode(Node):
             self.loc_mgr.change_location(self.source_node, self.location_id, self.updated_value)
             
     def reevaluate(self, tracked_obj):
-        # something like: if(utilities.is_message)
         self.isMessage = "TODO" #utilities.is_message(tracked_obj.value))
         if(self.isMessage):
             self.reevaluate_msg(tracked_obj)
             return tracked_obj
         else:
             return self.reevaluate_value(tracked_obj)
-            '''
-            self.tv_source_node = tracked_obj.location_map["."].source_node
-            self.tv_location_id = tracked_obj.location_map["."].location_id
-            if(not tracked_obj.location_map["."].isValid()):
-                return tracked_obj
-            if (self.tv_source_node == self.get_name()):
-                tracked_obj.value = self.loc_mgr.current_value(self.tv_location_id)
-            else:
-                self.client = self.create_client(GetValue, self.tv_source_node + "/get_slt_value")
-                self.client.wait_for_service(timeout_sec=1.0)
-                
-                self.request = GetValue_Request
-                self.request.location_id(self.tv_location_id)
-                
-                self.response_future = self.client.call_async(self.request)
-                self.response = th.get_future(self, self.response_future)
-                
-                if(self.response is not None):
-                    tracked_obj.value = self.response.result
-            
-            tracked_obj.value = e.applyExpression(tracked_obj.value, tracked_obj.location_map["."].expression)
-            return tracked_obj
-            '''
         
     # parameter is Tracked object
     # also see http://wiki.ros.org/msg
@@ -116,7 +92,7 @@ class TrackingNode(Node):
         
     # outsourcing update of value to also use it inside reevaluate_msg
     # either update Tracked.value directly
-    # or via fieldname with getattr and setattr        
+    # or via fieldname with setattr ("value" is default for ease of use)     
     def reevaluate_value(self, tracked_obj, fieldname = "value"):
         self.tv_source_node = tracked_obj.location_map["."].source_node
         self.tv_location_id = tracked_obj.location_map["."].location_id
