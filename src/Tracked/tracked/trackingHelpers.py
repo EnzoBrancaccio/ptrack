@@ -4,12 +4,12 @@ Created on 24.06.2021
 @author: Enzo Brancaccio
 '''
 
-#from rclpy.executors import Executor
-#from rclpy.task import Future
+from rclpy.executors import Executor
+from rclpy.task import Future
 from .location import Location
 from .tracked import Tracked
 from numbers import Number
-#from rclpy.node import Node
+from rclpy.node import Node
 
 def make_tracked(value, location = None):
     """Create a new Tracked object

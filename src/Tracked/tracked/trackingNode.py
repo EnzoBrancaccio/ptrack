@@ -8,7 +8,7 @@ import inspect
 import tracked.expression as e
 import tracked.trackingHelpers as th
 
-from rclpy.node import Node
+#from rclpy.node import Node
 from .tracked import Tracked
 from .locationManager import LocationManager
 from .locationFunc import LocationFunc
@@ -84,6 +84,7 @@ class TrackingNode(Node):
                 to_field = getattr(tracked_obj.value, fieldname)
                 # if message -> dig deeper, else -> reevaluate value
                 if(True): #utilities.is_message(to_field)):
+                #if(utilities.is_message(to_field))):
                     self.reevaluate_msg(tracked_obj.value)
                 else:
                     # reevaluate value directly
