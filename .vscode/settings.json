@@ -1,3 +1,10 @@
 {
-    "python.pythonPath": "C:\\Users\\Enzo Brancaccio\\AppData\\Local\\Microsoft\\WindowsApps\\python3.9.exe"
+    //"python.pythonPath": "D:\\Users\\Enzo Brancaccio\\AppData\\Local\\Programs\\Python\\Python39\\python.exe",
+    "ros.distro": "foxy",
+    "python.autoComplete.extraPaths": [
+        "/opt/ros/foxy/lib/python3.8/site-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/opt/ros/foxy/lib/python3.8/site-packages"
+    ]
 }

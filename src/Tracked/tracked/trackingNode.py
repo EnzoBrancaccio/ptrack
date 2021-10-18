@@ -8,14 +8,14 @@ import inspect
 import tracked.expression as e
 import tracked.trackingHelpers as th
 
-#from rclpy.node import Node
+from rclpy.node import Node
 from .tracked import Tracked
 from .locationManager import LocationManager
 from .locationFunc import LocationFunc
 from .location import Location
 from rosslt_msgs.srv import GetValue
 from rosslt_msgs.srv._get_value import GetValue_Request
-#from rosidl_runtime_py import utilities
+from rosidl_runtime_py import utilities
 
 class TrackingNode(Node):
     '''
@@ -83,8 +83,8 @@ class TrackingNode(Node):
                 # check this value (fieldname of Tracked.value):
                 to_field = getattr(tracked_obj.value, fieldname)
                 # if message -> dig deeper, else -> reevaluate value
-                if(True): #utilities.is_message(to_field)):
-                #if(utilities.is_message(to_field))):
+                #if(True): #utilities.is_message(to_field)):
+                if(utilities.is_message(to_field)):
                     self.reevaluate_msg(tracked_obj.value)
                 else:
                     # reevaluate value directly
