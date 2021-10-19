@@ -46,6 +46,7 @@ class TrackingNode(Node):
         self.location = Location(self.get_name(), self.id)
         return Tracked(data, self.location)
     
+    # unfinished and will possibly never be used
     def force_value(self, tracked_value, new_value):
         if(not tracked_value.location_map["."].isValid()):
             return
@@ -59,7 +60,7 @@ class TrackingNode(Node):
             self.loc_mgr.change_location(self.source_node, self.location_id, self.updated_value)
             
     def reevaluate(self, tracked_obj):
-        self.isMessage = "TODO" #utilities.is_message(tracked_obj.value))
+        self.isMessage = utilities.is_message(tracked_obj.value)
         if(self.isMessage):
             self.reevaluate_msg(tracked_obj)
             return tracked_obj
@@ -70,7 +71,7 @@ class TrackingNode(Node):
     # also see http://wiki.ros.org/msg
     def reevaluate_msg(self, tracked_obj):
         # using inspect.getmembers() because messages use slots
-        # tv_attrs is a list
+        # to_attrs is a list
         to_attrs = inspect.getmembers(tracked_obj.value)
         to_reevaluated = Tracked()
         to_fields = dict()
@@ -83,7 +84,6 @@ class TrackingNode(Node):
                 # check this value (fieldname of Tracked.value):
                 to_field = getattr(tracked_obj.value, fieldname)
                 # if message -> dig deeper, else -> reevaluate value
-                #if(True): #utilities.is_message(to_field)):
                 if(utilities.is_message(to_field)):
                     self.reevaluate_msg(tracked_obj.value)
                 else:
