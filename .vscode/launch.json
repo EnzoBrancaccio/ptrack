@@ -16,6 +16,7 @@
             "args": [],
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",
+            "env": {"PYTHONPATH": "${cwd}"},
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",

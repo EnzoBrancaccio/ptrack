@@ -17,8 +17,6 @@ from builtin_interfaces.msg import Time
 
 from tracked.tracked import Tracked
 from tracked.location import Location
-from tracked.tracked2 import Tracked2
-from tracked.location2 import Location2
 
 class Test(unittest.TestCase):
 
@@ -42,15 +40,6 @@ class Test(unittest.TestCase):
         
         self.assertEqual(self.value, 5, "Value")
         self.assertFalse(self.location_map["."].isValid(), "emptyLocation")
-        
-        # variables with G ("Generic") are with Tracked2 or Location2
-        self.trackedTestG = Tracked2(5)
-        
-        self.valueG = self.trackedTestG.value
-        self.location_mapG = self.trackedTestG.location_map
-        
-        self.assertEqual(self.valueG, 5, "Value")
-        self.assertFalse(self.location_mapG["."].isValid(), "emptyLocation")
 
     def testIntFromMsgCreation(self):
         self.msg = Int32Tracked
@@ -63,14 +52,6 @@ class Test(unittest.TestCase):
         
         self.assertEqual(self.value, 7, "Value rosslt_msgs")
         self.assertFalse(self.location_map["."].isValid(), "emptyLocation")
-        
-        self.trackedTestG = Tracked2(self.msg.data)
-        
-        self.valueG = self.trackedTestG.value
-        self.location_mapG = self.trackedTestG.location_map
-        
-        self.assertEqual(self.valueG, 7, "Value rosslt_msgs")
-        self.assertFalse(self.location_mapG["."].isValid(), "emptyLocation")
 
     def testLocation(self):
         self.testLocation1 = Location()
@@ -92,26 +73,6 @@ class Test(unittest.TestCase):
         
         self.assertEqual(self.testLocation3.source_node, "mynode", "source node")
         self.assertEqual(self.testLocation3.location_id, 42, "location_id")
-        
-        self.testLocationG = Location2()
-        
-        self.assertFalse(self.testLocationG.isValid(), "empty Location")
-        
-        self.testLocationG2 = Location2("mynode", 42)
-        
-        self.assertTrue(self.testLocationG2.isValid(), "filled Location")
-        
-        self.testMsgG = rosLocationMsg()
-        self.testMsgG = self.testLocationG2.makeRossltLocationMsg()
-        
-        self.assertEqual(self.testMsgG.source_node, "mynode", "source node")
-        self.assertEqual(self.testMsgG.location_id, 42, "location_id")
-        
-        #self.testLocationG3 = Location2(self.testMsg)
-        self.testLocationG3 = Location2.withRossltMsg(self.testMsg)
-        
-        self.assertEqual(self.testLocationG3.source_node, "mynode", "source node")
-        self.assertEqual(self.testLocationG3.location_id, 42, "location_id")
 
     def testTrackedWithLocation(self):
         self.trackedLocation1 = Location("mynode", 42)
@@ -129,22 +90,6 @@ class Test(unittest.TestCase):
         self.newTrackedDoubleLocation = self.newTrackedDouble.location_map["."]
         self.newTrackedDoubleLocationId = self.newTrackedDoubleLocation.location_id
         self.assertEqual(self.newTrackedDoubleLocationId, 42, "tracked location id")
-        
-        self.trackedLocationG = Location2("mynode", 42)
-        
-        self.assertTrue(self.trackedLocationG.isValid(), "filled tracked Location")
-        
-        self.trackedDoubleG = Tracked2(2.0, self.trackedLocationG)
-        
-        self.trackedDoubleLocationG = self.trackedDoubleG.location_map["."]
-        self.trackedDoubleLocationIdG = self.trackedDoubleLocationG.location_id
-        self.assertEqual(self.trackedDoubleLocationIdG, 42, "tracked location id")
-        
-        self.newTrackedDoubleG = self.trackedDoubleG
-        
-        self.newTrackedDoubleLocationG = self.newTrackedDoubleG.location_map["."]
-        self.newTrackedDoubleLocationIdG = self.newTrackedDoubleLocationG.location_id
-        self.assertEqual(self.newTrackedDoubleLocationIdG, 42, "tracked location id")
         
     def testArithmeticDoublePlus(self):
         self.a_adp = Tracked(5.0)
