@@ -3,10 +3,11 @@ Created on 06.06.2021
 
 @author: Enzo Brancaccio
 '''
+
 import unittest
 import math
-import tracked.trackingHelpers as th
-import tracked.expression as e
+import src.ptracking.ptracking.trackingHelpers as th
+import src.ptracking.ptracking.expression as e
 
 from rosslt_msgs.msg import Int32Tracked
 from rosslt_msgs.msg import Location as rosLocationMsg
@@ -15,8 +16,8 @@ from std_msgs.msg import ColorRGBA
 from visualization_msgs.msg import Marker
 from builtin_interfaces.msg import Time
 
-from tracked.tracked import Tracked
-from tracked.location import Location
+from src.ptracking.ptracking.tracked import Tracked
+from src.ptracking.ptracking.location import Location
 
 class Test(unittest.TestCase):
 
