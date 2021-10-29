@@ -12,8 +12,8 @@ import math
 import src.ptracking.ptracking.trackingHelpers as th
 import src.ptracking.ptracking.expression as e
 
-from rosslt_msgs.msg import Int32Tracked
-from rosslt_msgs.msg import Location as rosLocationMsg
+from src.rosslt_msgs.msg import Int32Tracked
+from src.rosslt_msgs.msg import Location as rosLocationMsg
 from std_msgs.msg import Header
 from std_msgs.msg import ColorRGBA
 from visualization_msgs.msg import Marker

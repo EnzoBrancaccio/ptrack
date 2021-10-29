@@ -8,15 +8,15 @@ import math
 import copy
 import inspect
 
-import tracked.locationMap as lm
-import tracked.trackingHelpers as th
-import tracked.expression as e
+import src.ptracking.ptracking.locationMap as lm
+import src.ptracking.ptracking.trackingHelpers as th
+import src.ptracking.ptracking.expression as e
 
 from builtin_interfaces.msg import Time
 
-from tracked.location import Location
-from tracked.tracked import Tracked
-from rosslt_msgs.msg import Location as rosLocationMsg
+from src.ptracking.ptracking.location import Location
+from src.ptracking.ptracking.tracked import Tracked
+from src.rosslt_msgs.msg import Location as rosLocationMsg
 #from tracked.tracked2 import Tracked2
 #from tracked.location2 import Location2
 from visualization_msgs.msg import Marker

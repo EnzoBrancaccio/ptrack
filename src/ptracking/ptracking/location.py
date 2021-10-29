@@ -4,7 +4,7 @@ Created on 01.06.2021
 @author: Enzo Brancaccio
 '''
 
-from rosslt_msgs.msg import Location as rosLocationMsg
+from src.rosslt_msgs.msg import Location as rosLocationMsg
 
 class Location(object):
     '''

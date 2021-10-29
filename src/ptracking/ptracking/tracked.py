@@ -6,11 +6,11 @@ Created on 01.06.2021
 
 import copy
 import math
-import tracked.locationMap as lm
-import tracked.trackingHelpers as th
+import src.ptracking.ptracking.locationMap as lm
+import src.ptracking.ptracking.trackingHelpers as th
 
-from .location import Location
-from rosslt_msgs.msg import LocationHeader
+from src.ptracking.ptracking.location import Location
+from src.rosslt_msgs.msg import LocationHeader
 from numbers import Number
 
 class Tracked(object):

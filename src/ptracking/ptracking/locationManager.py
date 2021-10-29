@@ -8,10 +8,10 @@ import rclpy
 import inspect
 
 from rclpy.node import Node
-from rosslt_msgs.msg import SourceChange
-from rosslt_msgs.srv import GetValue
-from .location import Location
-from .locationFunc import LocationFunc
+from src.rosslt_msgs.msg import SourceChange
+from src.rosslt_msgs.srv import GetValue
+from src.ptracking.ptracking.location import Location
+from src.ptracking.ptracking.locationFunc import LocationFunc
 
 class LocationManager(object):
     '''

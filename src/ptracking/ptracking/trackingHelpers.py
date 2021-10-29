@@ -6,8 +6,8 @@ Created on 24.06.2021
 
 from rclpy.executors import Executor
 from rclpy.task import Future
-from .location import Location
-from .tracked import Tracked
+from src.ptracking.ptracking.location import Location
+from src.ptracking.ptracking.tracked import Tracked
 from numbers import Number
 from rclpy.node import Node
 

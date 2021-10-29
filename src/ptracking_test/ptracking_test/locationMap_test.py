@@ -5,8 +5,8 @@ Created on 09.06.2021
 '''
 import unittest
 
-import tracked.locationMap as lm
-from tracked.location import Location
+import src.ptracking.ptracking.locationMap as lm
+from src.ptracking.ptracking.location import Location
 
 class Test(unittest.TestCase): 
 
