@@ -85,6 +85,8 @@ class TrackingNode(Node):
                 to_field = getattr(tracked_obj.value, fieldname)
                 # if message -> dig deeper, else -> reevaluate value
                 if(utilities.is_message(to_field)):
+                    # since C++ GET_FIELD turns field into Tracked, this turns message into Tracked
+                    to_field = th.make_tracked(to_field)
                     self.reevaluate_msg(tracked_obj.value)
                 else:
                     # reevaluate value directly
@@ -95,18 +97,18 @@ class TrackingNode(Node):
     # either update Tracked.value directly
     # or via fieldname with setattr ("value" is default for ease of use)     
     def reevaluate_value(self, tracked_obj, fieldname = "value"):
-        self.tv_source_node = tracked_obj.location_map["."].source_node
-        self.tv_location_id = tracked_obj.location_map["."].location_id
+        self.to_source_node = tracked_obj.location_map["."].source_node
+        self.to_location_id = tracked_obj.location_map["."].location_id
         if(not tracked_obj.location_map["."].isValid()):
             return tracked_obj
-        if (self.tv_source_node == self.get_name()):
-            setattr(tracked_obj, fieldname, self.loc_mgr.current_value(self.tv_location_id))
+        if (self.to_source_node == self.get_name()):
+            setattr(tracked_obj, fieldname, self.loc_mgr.current_value(self.to_location_id))
         else:
-            self.client = self.create_client(GetValue, self.tv_source_node + "/get_slt_value")
+            self.client = self.create_client(GetValue, self.to_source_node + "/get_slt_value")
             self.client.wait_for_service(timeout_sec=1.0)
                 
             self.request = GetValue_Request
-            self.request.location_id(self.tv_location_id)
+            self.request.location_id(self.to_location_id)
                 
             self.response_future = self.client.call_async(self.request)
             self.response = th.get_future(self, self.response_future)

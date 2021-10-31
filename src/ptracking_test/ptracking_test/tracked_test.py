@@ -4,9 +4,6 @@ Created on 06.06.2021
 @author: Enzo Brancaccio
 '''
 
-import sys
-print(sys.path)
-
 import unittest
 import math
 import src.ptracking.ptracking.trackingHelpers as th
