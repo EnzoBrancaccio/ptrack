@@ -85,13 +85,11 @@ class TrackingNode(Node):
                 to_field = getattr(tracked_obj.value, fieldname)
                 # if message -> dig deeper, else -> reevaluate value
                 if(utilities.is_message(to_field)):
-                    # since C++ GET_FIELD turns field into Tracked, this turns message into Tracked
-                    to_field = th.make_tracked(to_field)
                     self.reevaluate_msg(tracked_obj.value)
                 else:
-                    # reevaluate value directly
-                    to_reevaluated = self.reevaluate_value(tracked_obj.value, fieldname)
-        return to_reevaluated
+                    # reevaluate value directly and update tracked object's value
+                    tracked_obj.value = self.reevaluate_value(tracked_obj.value, fieldname)
+        return tracked_obj
         
     # outsourcing update of value to also use it inside reevaluate_msg
     # either update Tracked.value directly
