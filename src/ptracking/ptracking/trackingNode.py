@@ -70,14 +70,7 @@ class TrackingNode(Node):
     # parameter is Tracked object
     # also see http://wiki.ros.org/msg
     def reevaluate_msg(self, tracked_obj):
-        # using inspect.getmembers() because messages use slots
-        # to_attrs is a list
-        to_attrs = inspect.getmembers(tracked_obj.value)
-        to_reevaluated = Tracked()
-        to_fields = dict()
-        for key, value in to_attrs:
-            if(key == "_fields_and_field_types"):
-                to_fields = value
+        to_fields = th.extract_fields(tracked_obj.value, "_fields_and_field_types")
         # key: fieldname, value: fieldtype in Python
         for fieldname, fieldtype in to_fields.items():
             if(hasattr(tracked_obj.value, fieldname)):

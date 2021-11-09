@@ -4,6 +4,7 @@ Created on 24.06.2021
 @author: Enzo Brancaccio
 '''
 
+import inspect
 from rclpy.executors import Executor
 from rclpy.task import Future
 from src.ptracking.ptracking.location import Location
@@ -131,5 +132,25 @@ def get_future(node, future):
         return future
     else:
         node.get_logger().info("Error getting result from future")
+
+def extract_fields(obj, attr_key):
+    """Return the fields of an object
+        
+    Keyword arguments:
+    obj -- Object to be inspected
+    attr_key -- Key to look for in list from inspection
+        
+    Inspects object (a message) to get a list of the attributes
+    Go through the list to find the dictionary with provided key
+    Return the dictionary (key: fieldname, value: fieldtype) 
+    """
+    # using inspect.getmembers() because messages use slots
+    # attrs is a list
+    attrs = inspect.getmembers(obj)
+    fields = dict()
+    for key, value in attrs:
+        if(key == attr_key):
+            fields = value
+    return fields
         
         

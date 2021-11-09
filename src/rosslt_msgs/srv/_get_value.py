@@ -284,7 +284,7 @@ class Metaclass_GetValue(type):
         else:
             cls._TYPE_SUPPORT = module.type_support_srv__srv__get_value
 
-            from rosslt_msgs.srv import _get_value
+            from src.rosslt_msgs.srv import _get_value
             if _get_value.Metaclass_GetValue_Request._TYPE_SUPPORT is None:
                 _get_value.Metaclass_GetValue_Request.__import_type_support__()
             if _get_value.Metaclass_GetValue_Response._TYPE_SUPPORT is None:
@@ -292,8 +292,8 @@ class Metaclass_GetValue(type):
 
 
 class GetValue(metaclass=Metaclass_GetValue):
-    from rosslt_msgs.srv._get_value import GetValue_Request as Request
-    from rosslt_msgs.srv._get_value import GetValue_Response as Response
+    from src.rosslt_msgs.srv._get_value import GetValue_Request as Request
+    from src.rosslt_msgs.srv._get_value import GetValue_Response as Response
 
     def __init__(self):
         raise NotImplementedError('Service classes can not be instantiated')
