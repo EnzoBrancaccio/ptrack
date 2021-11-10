@@ -71,17 +71,7 @@ class TrackingNode(Node):
     # also see http://wiki.ros.org/msg
     def reevaluate_msg(self, tracked_obj):
         to_fields = th.extract_fields(tracked_obj.value, "_fields_and_field_types")
-        # key: fieldname, value: fieldtype in Python
-        for fieldname, fieldtype in to_fields.items():
-            if(hasattr(tracked_obj.value, fieldname)):
-                # check this value (fieldname of Tracked.value):
-                to_field = getattr(tracked_obj.value, fieldname)
-                # if message -> dig deeper, else -> reevaluate value
-                if(utilities.is_message(to_field)):
-                    tracked_obj.value = self.reevaluate_submsg(tracked_obj.value, fieldname)
-                else:
-                    # reevaluate value directly and update tracked object's value
-                    tracked_obj.value = self.reevaluate_value(tracked_obj.value, fieldname)
+        tracked_obj.value = self.reevaluate_generic(tracked_obj, to_fields)
         return tracked_obj
 
     # first try: act as if the sub-Tracked.value values were not Tracked
@@ -89,15 +79,24 @@ class TrackingNode(Node):
     def reevaluate_submsg(self, obj, ex_fieldname):
         field = getattr(obj, ex_fieldname)
         field_fields = th.extract(field, "_fields_and_field_types")
-        for fieldname, fieldtype in field_fields.items():
-            if(hasattr(field, fieldname)):
-                sub_field = getattr(field, fieldname)
-                if(utilities.is_message(sub_field)):
-                    field = self.reevaluate_submsg(field, fieldname)
-                else:
-                    field = self.reevaluate_value(field, fieldname)
+        field = self.reevaluate_generic(field, field_fields)
         setattr(obj, ex_fieldname, field)
         return obj
+
+    def reevaluate_generic(self, obj, fields):
+        # key: fieldname, value: fieldtype in Python
+        for fieldname, fieldtype in fields.items():
+            if(hasattr(obj, fieldname)):
+                # check this value (fieldname of Tracked.value):
+                sub_field = getattr(obj, fieldname)
+                # if message -> dig deeper, else -> reevaluate value
+                if(utilities.is_message(sub_field)):
+                    obj = self.reevaluate_submsg(obj, fieldname)
+                else:
+                    # reevaluate value directly and update tracked object's value
+                    obj = self.reevaluate_value(obj, fieldname)
+        return obj
+
         
     # outsourcing update of value to also use it inside reevaluate_msg
     # either update Tracked.value directly
