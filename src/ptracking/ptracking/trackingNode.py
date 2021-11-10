@@ -78,11 +78,26 @@ class TrackingNode(Node):
                 to_field = getattr(tracked_obj.value, fieldname)
                 # if message -> dig deeper, else -> reevaluate value
                 if(utilities.is_message(to_field)):
-                    self.reevaluate_msg(tracked_obj.value)
+                    tracked_obj.value = self.reevaluate_submsg(tracked_obj.value, fieldname)
                 else:
                     # reevaluate value directly and update tracked object's value
                     tracked_obj.value = self.reevaluate_value(tracked_obj.value, fieldname)
         return tracked_obj
+
+    # first try: act as if the sub-Tracked.value values were not Tracked
+    # obj = tracked_obj.value
+    def reevaluate_submsg(self, obj, ex_fieldname):
+        field = getattr(obj, ex_fieldname)
+        field_fields = th.extract(field, "_fields_and_field_types")
+        for fieldname, fieldtype in field_fields.items():
+            if(hasattr(field, fieldname)):
+                sub_field = getattr(field, fieldname)
+                if(utilities.is_message(sub_field)):
+                    field = self.reevaluate_submsg(field, fieldname)
+                else:
+                    field = self.reevaluate_value(field, fieldname)
+        setattr(obj, ex_fieldname, field)
+        return obj
         
     # outsourcing update of value to also use it inside reevaluate_msg
     # either update Tracked.value directly
