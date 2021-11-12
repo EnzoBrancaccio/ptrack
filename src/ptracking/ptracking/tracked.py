@@ -7,7 +7,6 @@ Created on 01.06.2021
 import copy
 import math
 import src.ptracking.ptracking.locationMap as lm
-import src.ptracking.ptracking.trackingHelpers as th
 
 from src.ptracking.ptracking.location import Location
 from src.rosslt_msgs.msg import LocationHeader
@@ -350,7 +349,7 @@ class Tracked(object):
                     self[len(self.value)] = inputArg
                     self.location_map = lm.addLocations(self.location_map, inputArg.location_map, str(self.size() - 1))
                 else:
-                    self[len(self.value)] = th.make_tracked(inputArg)
+                    self[len(self.value)] = self.make_tracked(inputArg)
                     
     def pop_back(self):
         """Remove element from end of Tracked.value list
@@ -426,15 +425,15 @@ class Tracked(object):
                 actualPosition = list(self.location_map.keys())[position]
                 if(self.location_map[actualPosition].isValid()):    
                     trackedLocation = self.location_map[actualPosition]
-                    return th.make_tracked(trackedValue, trackedLocation)
+                    return self.make_tracked(trackedValue, trackedLocation)
                 else:
-                    return th.make_tracked(trackedValue)
+                    return self.make_tracked(trackedValue)
             else:
                 if(self.location_map[str(position)].isValid()):    
                     trackedLocation = self.location_map[str(position)]
-                    return th.make_tracked(trackedValue, trackedLocation)
+                    return self.make_tracked(trackedValue, trackedLocation)
                 else:
-                    return th.make_tracked(trackedValue)
+                    return self.make_tracked(trackedValue)
         else:
             try:
                 return self[position]
@@ -470,3 +469,20 @@ class Tracked(object):
                 else:
                     self.value.append(item)
                 self.location_map = lm.addLocations(self.location_map, dict(), "")
+
+    def make_tracked(self, value, location = None):
+        """Create a new Tracked object
+        
+        Keyword arguments:
+        value -- New Tracked.value
+        location -- Location of new Tracked if provided
+        
+        New Tracked object is created with value and location as paramaters
+        """
+        if(isinstance(value, Tracked)):
+            return value
+        else:
+            if(location is None):
+                return Tracked(value, Location())
+            else:
+                return Tracked(value, location)

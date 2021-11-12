@@ -6,28 +6,7 @@ Created on 24.06.2021
 
 import inspect
 from rclpy.executors import Executor
-from rclpy.task import Future
-from src.ptracking.ptracking.location import Location
-from src.ptracking.ptracking.tracked import Tracked
 from numbers import Number
-from rclpy.node import Node
-
-def make_tracked(value, location = None):
-    """Create a new Tracked object
-        
-    Keyword arguments:
-    value -- New Tracked.value
-    location -- Location of new Tracked if provided
-        
-    New Tracked object is created with value and location as paramaters
-    """
-    if(isinstance(value, Tracked)):
-        return value
-    else:
-        if(location is None):
-            return Tracked(value, Location())
-        else:
-            return Tracked(value, location)
 
 def inv_plus(lhs, rhs):
     isNumeric = ((isinstance(lhs, Number)) and (isinstance(rhs, Number)))

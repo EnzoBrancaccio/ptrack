@@ -220,11 +220,13 @@ class Test(unittest.TestCase):
         self.assertEqual(self.c_Trig.location_map["."].expression, "3.0;/;cos;", "expression of cos")
         
     def testMakeTracked(self):
-        self.assertEqual(th.make_tracked(5).value, 5, "simple make_tracked")
-        self.assertEqual(th.make_tracked(th.make_tracked(5)).value, 5, "double make_tracked")
+        self.tmt_Tracked = Tracked(7)
+
+        self.assertEqual(self.tmt_Tracked.make_tracked(5).value, 5, "simple make_tracked")
+        self.assertEqual(self.tmt_Tracked.make_tracked(self.tmt_Tracked.make_tracked(5)).value, 5, "double make_tracked")
         
-        self.assertTrue(th.make_tracked(False, Location("foo", 42)).location_map["."].isValid(), "location")
-        self.assertFalse(th.make_tracked("Hallo").location_map["."].isValid())
+        self.assertTrue(self.tmt_Tracked.make_tracked(False, Location("foo", 42)).location_map["."].isValid(), "location")
+        self.assertFalse(self.tmt_Tracked.make_tracked("Hallo").location_map["."].isValid())
         
     def testVectorMethods(self):
         self.sizeTest = Tracked([1, 2, 3])
@@ -236,9 +238,9 @@ class Test(unittest.TestCase):
         self.assertEqual(self.a_vm.size(), 0, "size check empty")
         
         self.a_vm.append(42)
-        self.a_vm.append(th.make_tracked(7, self.vm_loc1))
+        self.a_vm.append(self.a_vm.make_tracked(7, self.vm_loc1))
         self.a_vm.append(-7)
-        self.a_vm.append(th.make_tracked(15, self.vm_loc2))
+        self.a_vm.append(self.a_vm.make_tracked(15, self.vm_loc2))
         
         self.assertEqual(self.a_vm.size(), 4, "size check filled")
         
@@ -346,7 +348,7 @@ class Test(unittest.TestCase):
         self.spf_TrackedVM = Tracked(Marker)
         self.spf_loc = Location("foo", 22)
         
-        self.spf_TrackedVM.id = th.make_tracked(42, self.spf_loc)
+        self.spf_TrackedVM.id = self.spf_TrackedVM.make_tracked(42, self.spf_loc)
         
         self.assertEqual(self.spf_TrackedVM.id.location_map["."].location_id, 22)
         self.assertEqual(self.spf_TrackedVM.id.value, 42)
@@ -358,7 +360,7 @@ class Test(unittest.TestCase):
         
         self.spf_TrackedVM.id = 25
         
-        self.spf_TrackedInt = th.make_tracked(self.spf_TrackedVM.id)
+        self.spf_TrackedInt = self.spf_TrackedVM.make_tracked(self.spf_TrackedVM.id)
         
         self.assertFalse(self.spf_TrackedInt.location_map["."].isValid())
         self.assertEqual(self.spf_TrackedInt.value, 25)
@@ -393,7 +395,7 @@ class Test(unittest.TestCase):
         self.scf_time.nanosec = 10
         self.scf_head.stamp = self.scf_time
 
-        self.scf_TrackedVM.header = th.make_tracked(self.scf_head, self.scf_loc)
+        self.scf_TrackedVM.header = self.scf_TrackedVM.make_tracked(self.scf_head, self.scf_loc)
 
         self.assertEqual(self.scf_TrackedVM.header.frame_id, "baz")
         self.assertFalse(self.scf_TrackedVM.location_map["."].isValid())
@@ -411,9 +413,9 @@ class Test(unittest.TestCase):
         self.assertEqual(self.vecit.size(), 0)
 
         self.vecit.append(42)
-        self.vecit.append(th.make_tracked(7, self.vi_loc1))
+        self.vecit.append(self.vecit.make_tracked(7, self.vi_loc1))
         self.vecit.append(-7)
-        self.vecit.append(th.make_tracked(15, self.vi_loc2))
+        self.vecit.append(self.vecit.make_tracked(15, self.vi_loc2))
 
         self.assertEqual(self.vecit.size(), 4)
         
@@ -442,10 +444,10 @@ class Test(unittest.TestCase):
         '''
         # regular for loop
         for index in range(len(self.vecit.value)):
-            self.vecit.value[index] = th.make_tracked(111, self.vi_loc2)
+            self.vecit.value[index] = self.vecit.make_tracked(111, self.vi_loc2)
         '''
         # with list comprehension
-        self.vecit.value = [th.make_tracked(111, self.vi_loc2) for self.vecit.value in range(len(self.vecit.value))]
+        self.vecit.value = [self.vecit.make_tracked(111, self.vi_loc2) for self.vecit.value in range(len(self.vecit.value))]
             
         for index in range(len(self.vecit.value)):
             with self.subTest(index = index):
@@ -468,7 +470,7 @@ class Test(unittest.TestCase):
         self.saf_trackedColors = Tracked(list())
         
         self.saf_trackedColors.append(self.saf_col1)
-        self.saf_trackedColors.append(th.make_tracked(self.saf_col2, self.saf_loc))
+        self.saf_trackedColors.append(self.saf_TrackedVM.make_tracked(self.saf_col2, self.saf_loc))
         
         self.assertEqual(self.saf_trackedColors[0].r, 0.5)
         self.assertEqual(self.saf_trackedColors[1].r, 0.2)
