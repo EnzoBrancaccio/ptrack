@@ -78,7 +78,7 @@ class TrackingNode(Node):
     # obj = tracked_obj.value
     def reevaluate_submsg(self, obj, ex_fieldname):
         field = getattr(obj, ex_fieldname)
-        field_fields = th.extract(field, "_fields_and_field_types")
+        field_fields = th.extract_fields(field, "_fields_and_field_types")
         field = self.reevaluate_generic(field, field_fields)
         setattr(obj, ex_fieldname, field)
         return obj
@@ -96,7 +96,6 @@ class TrackingNode(Node):
                     # reevaluate value directly and update tracked object's value
                     obj = self.reevaluate_value(obj, fieldname)
         return obj
-
         
     # outsourcing update of value to also use it inside reevaluate_msg
     # either update Tracked.value directly
