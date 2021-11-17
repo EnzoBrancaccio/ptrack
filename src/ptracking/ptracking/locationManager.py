@@ -8,6 +8,8 @@ import rclpy
 import inspect
 
 from rclpy.node import Node
+from rclpy.qos import QoSHistoryPolicy
+from rclpy.qos import QoSProfile
 from src.rosslt_msgs.msg import SourceChange
 from src.rosslt_msgs.srv import GetValue
 from src.ptracking.ptracking.location import Location
@@ -36,11 +38,14 @@ class LocationManager(object):
         self.locations = list()
         self.get_value_service = None
         self.node = Node
+
+        qos_profile = QoSProfile(depth=10)
+        qos_profile.history = QoSHistoryPolicy.KEEP_LAST
         
         # wondering where the msg for the placeholders come from
-        self.sc_sub = node.create_subscription(SourceChange, "/sc", self.on_source_change, 10)
-        self.sc_pub = node.create_publisher(SourceChange, "/sc", 10)
-        self.get_value_service = node.create_service(GetValue, node.get_name() + "/get_slt_value", self.on_get_value, 10)
+        self.sc_sub = self.node.create_subscription(SourceChange, "/sc", self.on_source_change, qos_profile.history)
+        self.sc_pub = self.node.create_publisher(SourceChange, "/sc", qos_profile.history)
+        self.get_value_service = self.node.create_service(GetValue, node.get_name() + "/get_slt_value", self.on_get_value)
         
     def on_get_value(self, request, response):
         if(len(self.locations) > request.location_id >= 0):
