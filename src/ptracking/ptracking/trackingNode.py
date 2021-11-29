@@ -28,6 +28,7 @@ class TrackingNode(Node):
         Constructor
         '''
         self.name = name
+        super().__init__(self.name)
         self.loc_mgr = LocationManager(self)
         
     def loc(self, data, source_location = inspect.stack()):

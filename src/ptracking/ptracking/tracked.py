@@ -49,10 +49,20 @@ class Tracked(object):
         For example, instead of Tracked.value.source_node, write Tracked.source_node
         Also possible is Tracked.source_node = "some value"
         Replaces GET_FIELD and SET_FIELD
+        A Tracked object is returned, e. g. to access the value write Tracked.souce_node.value 
         """
+        '''
         try:
             attr = getattr(self.value, attr)
             return attr
+        except:
+            raise AttributeError(attr)
+        '''
+        try:
+            attr_value = getattr(self.value, attr)
+            # returns a Tracked object instead of the value directly
+            tracked_attr = self.make_tracked(attr_value, lm.locationSlice(self.location_map, attr))
+            return tracked_attr
         except:
             raise AttributeError(attr)
     
