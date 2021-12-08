@@ -113,7 +113,7 @@ class TrackingNode(Node):
             self.client.wait_for_service(timeout_sec=1.0)
                 
             self.request = GetValue_Request
-            self.request.location_id(self.to_location_id)
+            self.request.location_id = self.to_location_id
                 
             self.response_future = self.client.call_async(self.request)
             self.response = th.get_future(self, self.response_future)
