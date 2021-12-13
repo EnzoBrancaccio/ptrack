@@ -131,5 +131,27 @@ def extract_fields(obj, attr_key):
         if(key == attr_key):
             fields = value
     return fields
+
+def create_source_location_str(frame, key):
+    """Return string to use as source location key
+        
+    Keyword arguments:
+    frame -- List of frame records
+    key -- Key of the frame with method call
+        
+    Takes frame and key (usually 1, since 0 is the frame in which getcurrentframe() was called)
+    Extracts line number and code context, i. e. when TrackingNode's loc-function was called
+    Turns them into a string to use as key for the source location number
+    Returns the string 
+    """
+    o_frames = inspect.getouterframes(frame)
+    sl_frame = o_frames.pop(key)
+    sl_lineno = sl_frame.lineno
+    # list with 1 element
+    sl_cc = sl_frame.code_context.pop(0)
+    # strip it off leading whitespaces
+    sl_cc = sl_cc.lstrip()
+    source_location = f"{sl_lineno} {sl_cc}"
+    return source_location
         
         

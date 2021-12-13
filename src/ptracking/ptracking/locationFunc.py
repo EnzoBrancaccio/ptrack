@@ -24,5 +24,5 @@ class LocationFunc(object):
         self.new_value = new_value
         
     def get_value(self, location_id):
-        if(self-location_id == location_id):
+        if(self.location_id == location_id):
             return self.new_value
