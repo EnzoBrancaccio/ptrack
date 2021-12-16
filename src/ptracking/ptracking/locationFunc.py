@@ -14,15 +14,19 @@ class LocationFunc(object):
     '''
 
 
-    def __init__(self, location_id, new_value):
+    def __init__(self):
         '''
         Constructor
         '''
         # int
-        self.location_id = location_id
+        self.location_id = None
         # generic
-        self.new_value = new_value
+        self.new_value = None
         
-    def get_value(self, location_id):
+    def get(self, location_id):
         if(self.location_id == location_id):
             return self.new_value
+
+    def set(self, location_id, new_value):
+        self.location_id = location_id
+        self.new_value = new_value

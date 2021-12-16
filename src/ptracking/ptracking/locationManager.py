@@ -60,20 +60,19 @@ class LocationManager(object):
                 
     def create_location(self, location_func, source_location):
         # source_locations is dict with key: source_location, value: int
-        self.it = self.source_locations[source_location]
-        if(self.it == list(self.source_locations.keys())[-1]):
+        if(source_location not in self.source_locations):
             self.locations.append(location_func)
             self.source_locations[source_location] = len(self.locations) - 1
             return len(self.locations) - 1
         else:
-            return self.it
+            return self.source_locations[source_location]
     
     def get_location_id(self, source_location):
         # source_locations is dict with key: source_location, value: int
         # 1st: check if source_location is a key in self.source_locations
         if(source_location in self.source_locations):
             self.it = self.source_locations[source_location]
-			# 2nd check if self.it is not the last value in self.source_locations
+			# 2nd: check if self.it is not the last value in self.source_locations
             if(self.it != list(self.source_locations.keys())[-1]):
                 return self.it
         else:
@@ -92,4 +91,4 @@ class LocationManager(object):
     
     # self.locations is list of locationFunc instances        
     def current_value(self, location_id):
-        return self.locations[location_id].get_value(location_id)
+        return self.locations[location_id].get(location_id)

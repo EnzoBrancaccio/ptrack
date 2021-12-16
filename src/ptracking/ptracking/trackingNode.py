@@ -4,10 +4,12 @@ Created on 06.08.2021
 @author: Enzo Brancaccio
 '''
 
+import types
 import inspect
 import src.ptracking.ptracking.expression as e
 import src.ptracking.ptracking.trackingHelpers as th
 
+from rclpy.parameter import Parameter
 from rclpy.node import Node
 from src.ptracking.ptracking.tracked import Tracked
 from src.ptracking.ptracking.locationManager import LocationManager
@@ -31,18 +33,29 @@ class TrackingNode(Node):
         super().__init__(self.name)
         self.loc_mgr = LocationManager(self)
         
-    def loc(self, data, source_location = inspect.stack()):
+    def loc(self, data, source_location = None):
+        if(source_location is None):
+            frame = inspect.currentframe()
+            source_location = th.create_source_location_str(frame, 1)
         self.id = self.loc_mgr.get_location_id(source_location)
-        self.loc_name = "loc" + str(self.id)
         
         if(self.id < 0):
-            self.new_string = self.get_parameter(self.loc_name)
-            self.loc_fun = LocationFunc(self.id, self.new_string)
-            self.set_parameters(self.loc_name, self.loc_fun.new_value)
+            # changing the LocationFunc methods get and set at instance level
+            # define new _get and _set method
+            # "own" is "self" to avoid shadowing and keep number of parameters correct 
+            def _get(own, id):
+                return self.get_parameter("loc" + str(id)).value
+            def _set(own, id, val):
+                self.set_parameters(Parameter("loc" + str(id), value = val))
+            # create new LocationFunc instance
+            self.loc_fun = LocationFunc()
+            # Override the get and set methods of this LocationFunc instance
+            self.loc_fun.get = types.MethodType(_get, self.loc_fun)
+            self.loc_fun.set = types.MethodType(_set, self.loc_fun)
             self.id = self.loc_mgr.create_location(self.loc_fun, source_location)
-            self.declare_parameter(self.loc_name, data)
+            self.declare_parameter("loc" + str(self.id), data)
         else:
-            data = self.get_parameter(self.loc_name)
+            data = self.get_parameter("loc" + str(self.id)).value
         
         self.location = Location(self.get_name(), self.id)
         return Tracked(data, self.location)
