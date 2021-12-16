@@ -39,6 +39,20 @@ class Test(unittest.TestCase):
         self.assertIn("location_id", self.fields)
         self.assertIn("source_node", self.fields)
 
+    def testDocumentation(self):
+        self.a = t.Tracked(5.0)
+        self.b = self.a + 2.0
+
+        self.assertEqual(self.b.value, 7.0)
+
+        self.tmsg = t.Tracked(SourceChange)
+        self.tmsg.source_node = "foo"
+        self.name = self.tmsg.source_node
+
+        self.assertEqual(self.tmsg.source_node, "foo")
+        self.assertEqual(self.name, "foo")
+        self.assertIsInstance(self.tmsg, t.Tracked)
+
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
