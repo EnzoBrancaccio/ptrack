@@ -30,4 +30,20 @@ self.name = self.tsmg.source_node # Not necessary: self.name = self.tsmg.value.s
 If Tracked.value is itself a Tracked object, it works without the need for an extra `GET_FIELD` method, but the value has to be accessed as value like for other Tracked objects, e. g. `Tracked.value` is a Tracked object, so access the value with `Tracked.value.value`.
 An extra `get_field` method was added for the case when Tracked.value is not a Tracked object also. In the above example, `self.tmsg.source_node` is a string and calls its own `__getattr__` method, not the overridden Tracked version, making a new method necessary.
 The `__setattr__` method was also overridden to update the Tracked object's location_map (in case the new value is a Tracked object).
+
 The brackets operator (`__getitem__`, `__setitem__`) deals with the case that the Tracked value is a list. Accessing a list element becomes easier by writing, for example, `Tracked[index]` instead of `Tracked.value[index]`. Further methods have been overridden, like `size` or `append`, or were added like `pop_back` (same name as a C++ method, removing the last element of a list), `clear` (empty the list), and `front` and `back` (returning the first or last element of a list respectively).
+
+## Architecture
+
+The project has been split up into several modules, one for each class or related functions. Examles for the latter are a module `expression.py` with the `applyExpression` and `reverseExpression` functions, `locationMap.py` for the location map functions (since location map is just a dictionary here), and `trackingHelpers.py` with independent functions for the Tracked and TrackingNode classes. An example for the former is the class `LocationManager` having its own module and no longer being together with `TrackingNode`.
+
+### Constructors
+In the C++ version, `Tracked` and `Location` have multiple constructors, e. g. a `Location` (in `location.h`) can be initialised with `location_id` and `source_node`, or with a ROS location message. To avoid extra code (e g. with `@classmethod` based solutions), the `Tracked` and `Location` classes have at least one unspecified parameter that defaults to `None` and is the value is checked in the body of the `__init__` method via if-statements. This is not more code than adding classmethods and allows the user to create new instances of those classes without extra code (e. g. something like `Location.rosLocationMsg(...)`).
+
+### LocationFunc
+Has its own class (`struct` in `trackingNode.h`), takes no arguments but `self`, has two attributes, `self.location_id` and ``self.new_value` and a `get` and `set` method. In C++, it roughly works like an interface (see lines 142-152 in `trackingNode.h`). A similar behavior is achieved in `trackingNode.py`'s `loc`-method, by defining two nested methods `_get` and `_set` and then use them to override a `LocationFunc` instance's `get` and `set` method via the `types` library, using the `MethodType` function.
+
+### LocationManager
+The datatype of `self.source_locations` is a dictionary with key `source_location` (a string) and value `int`, while `self.locations` is a list of instances of `LocationFunc` objects. The dict `self.source_locations` is filled in method `create_location` in case the provided `source_location` is not yet in the dict.
+
+### TrackingNode

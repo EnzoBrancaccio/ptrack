@@ -5,15 +5,11 @@ Created on 06.08.2021
 '''
 
 import rclpy
-import inspect
 
-from rclpy.node import Node
 from rclpy.qos import qos_profile_services_default
 from rclpy.callback_groups import MutuallyExclusiveCallbackGroup
 from src.rosslt_msgs.msg import SourceChange
 from src.rosslt_msgs.srv import GetValue
-from src.ptracking.ptracking.location import Location
-from src.ptracking.ptracking.locationFunc import LocationFunc
 
 class LocationManager(object):
     '''
@@ -32,7 +28,7 @@ class LocationManager(object):
         '''
         Constructor
         '''
-        # {scource_location: int}, note that source_location is a named tuple
+        # {scource_location: int}, note that source_location is a string
         self.source_locations = dict()
         # replaces C++ locations, list of LocationFunc instances
         self.locations = list()
@@ -67,6 +63,7 @@ class LocationManager(object):
         else:
             return self.source_locations[source_location]
     
+    # TODO: see if 2nd check is necessary and correct
     def get_location_id(self, source_location):
         # source_locations is dict with key: source_location, value: int
         # 1st: check if source_location is a key in self.source_locations
