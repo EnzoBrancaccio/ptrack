@@ -54,10 +54,25 @@ class Tracked(object):
         try:
             attr_value = getattr(self.value, attr)
             # returns a Tracked object instead of the value directly
-            tracked_attr = self.make_tracked(attr_value, lm.locationSlice(self.location_map, attr))
+            tracked_attr = Tracked(attr_value, lm.locationSlice(self.location_map, attr))
             return tracked_attr
         except:
             raise AttributeError(attr)
+
+    def __setattr__(self, attr, value):
+        """Override attribute access
+        
+        Keyword arguments:
+        self  -- Tracked object
+        attr  -- Name of attribute
+        value -- New value for attribute
+        
+        Implementing the SET_FIELD functionality
+        If value is a Tracked object, self's location_map is updated 
+        """
+        if(isinstance(value, Tracked)):
+            self.location_map = lm.addLocations(self.location_map, value.location_map, attr)
+        return super().__setattr__(attr, value)
     
     def __add__(self, other):
         """Override the + operator
@@ -472,6 +487,27 @@ class Tracked(object):
                 else:
                     self.value.append(item)
                 self.location_map = lm.addLocations(self.location_map, dict(), "")
+
+    def get_field(self, attr):
+        """Return field as Tracked object
+        
+        Keyword arguments:
+        self -- Outer Tracked object
+        attr -- Name of attribute to get value from
+        
+        Returns the value as Tracked object if Tracked.value is not a Tracked object itself.
+        E. g. Tracked.value is a SourceChange message, so Tracked.source_node is a string.
+        In such a case, overriding __getattr__, as was done above, is not enough,
+        because it just overrides the access for Tracked objects, and not globally.
+        When it's known that Tracked.value is also Tracked, this method is not necessary,
+        else, like in our example, Tracked.get_field("source_node") returns a Tracked object.
+        """
+        attr_value = getattr(self, attr)
+        if(not isinstance(attr_value, Tracked)):
+            return Tracked(attr_value, lm.locationSlice(self.location_map, attr))
+        else:
+            attr_value.location_map = lm.locationSlice(self.location_map, attr)
+            return attr_value
 
     def make_tracked(self, value, location = None):
         """Create a new Tracked object

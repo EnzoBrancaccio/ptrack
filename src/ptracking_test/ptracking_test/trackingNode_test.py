@@ -53,6 +53,32 @@ class Test(unittest.TestCase):
         self.assertEqual(self.name, "foo")
         self.assertIsInstance(self.tmsg, t.Tracked)
 
+        self.retracked = self.tmsg.get_field("source_node")
+
+        self.assertIsInstance(self.retracked, t.Tracked)
+        self.assertEqual(self.retracked.value, "foo")
+
+        # testing __setattr__ by adding Tracked to another Tracked
+        self.torigin = t.Tracked(5)
+        self.tadded = t.Tracked(7)
+
+        self.assertEqual(self.torigin.value, 5)
+        self.assertEqual(self.tadded.value, 7)
+
+        self.assertEqual(self.torigin.location_map["."].location_id, 0)
+        self.assertEqual(self.torigin.location_map["."].source_node, "")
+        self.assertEqual(len(self.torigin.location_map), 1)
+
+        self.torigin.value = self.tadded
+        
+        self.assertEqual(self.torigin.value.value, 7)
+        self.assertEqual(len(self.torigin.location_map), 2)
+
+        self.torigin.value = 9
+        self.assertEqual(self.torigin.value, 9)
+        self.assertEqual(len(self.torigin.location_map), 2)
+
+
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
