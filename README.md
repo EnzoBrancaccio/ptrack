@@ -47,3 +47,11 @@ Has its own class (`struct` in `trackingNode.h`), takes no arguments but `self`,
 The datatype of `self.source_locations` is a dictionary with key `source_location` (a string) and value `int`, while `self.locations` is a list of instances of `LocationFunc` objects. The dict `self.source_locations` is filled in method `create_location` in case the provided `source_location` is not yet in the dict.
 
 ### TrackingNode
+The reevaluate and map_leaves methods of C++ are all in this class and have been turned into the methods
+- `reevaluate`: main method and checks if value is of type message or not (if yes, it calls `reevaluate_msg`)
+- `reevaluate_msg`: extracts the fields and calls `reevaluate_generic`
+- `reevaluate_submsg`: for recursive calls when a message contains a message etc.
+- `reevaluate_generic`: checks if a message contains a message and then calls `reevaluate_submsg` again
+- `reevaluate_value`: does the actual reevaluating and gets called when the object is not nested
+![Connection between reevaluate methods](/reevaluate_diag.svg)
+The relationship between the methods is shown in the above diagram. With `reevaluate_msg` and `reevaluate_generic`, the methods go deeper into nested message structures.
