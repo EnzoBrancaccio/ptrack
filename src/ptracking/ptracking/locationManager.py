@@ -63,15 +63,12 @@ class LocationManager(object):
         else:
             return self.source_locations[source_location]
     
-    # TODO: see if 2nd check is necessary and correct
     def get_location_id(self, source_location):
         # source_locations is dict with key: source_location, value: int
-        # 1st: check if source_location is a key in self.source_locations
+        # check if source_location is a key in self.source_locations
         if(source_location in self.source_locations):
             self.it = self.source_locations[source_location]
-			# 2nd: check if self.it is not the last value in self.source_locations
-            if(self.it != list(self.source_locations.keys())[-1]):
-                return self.it
+            return self.it
         else:
             return -1
     
