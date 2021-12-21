@@ -389,7 +389,7 @@ class Test(unittest.TestCase):
         
         self.assertTrue(isinstance(self.scf_TrackedH, Tracked))
         self.assertFalse(self.scf_TrackedH.location_map["."].isValid())
-        self.assertEqual(self.scf_TrackedH.stamp.value, self.scf_head.stamp)
+        self.assertEqual(self.scf_TrackedH.value.stamp, self.scf_head.stamp)
         
         self.scf_head.frame_id = "baz"
         self.scf_time.nanosec = 10
@@ -397,13 +397,13 @@ class Test(unittest.TestCase):
 
         self.scf_TrackedVM.header = self.scf_TrackedVM.make_tracked(self.scf_head, self.scf_loc)
 
-        self.assertEqual(self.scf_TrackedVM.header.frame_id.value, "baz")
+        self.assertEqual(self.scf_TrackedVM.header.value.frame_id, "baz")
         self.assertFalse(self.scf_TrackedVM.location_map["."].isValid())
 
         self.scf_TrackedH = self.scf_TrackedVM.header
 
         self.assertTrue(self.scf_TrackedH.location_map["."].isValid())
-        self.assertEqual(self.scf_TrackedH.stamp.value, self.scf_head.stamp)
+        self.assertEqual(self.scf_TrackedH.value.stamp, self.scf_head.stamp)
         
     def testVectorIterator(self):
         self.vecit = Tracked([])
@@ -472,14 +472,14 @@ class Test(unittest.TestCase):
         self.saf_trackedColors.append(self.saf_col1)
         self.saf_trackedColors.append(self.saf_TrackedVM.make_tracked(self.saf_col2, self.saf_loc))
         
-        self.assertEqual(self.saf_trackedColors[0].r.value, 0.5)
-        self.assertEqual(self.saf_trackedColors[1].r.value, 0.2)
+        self.assertEqual(self.saf_trackedColors[0].value.r, 0.5)
+        self.assertEqual(self.saf_trackedColors[1].value.r, 0.2)
         
         self.saf_TrackedVM.colors = self.saf_trackedColors
         
         self.assertEqual(len(self.saf_TrackedVM.colors.value), 2)
-        self.assertEqual(self.saf_TrackedVM.colors[0].r.value, 0.5)
-        self.assertEqual(self.saf_TrackedVM.colors[1].r.value, 0.2)
+        self.assertEqual(self.saf_TrackedVM.colors[0].value.r, 0.5)
+        self.assertEqual(self.saf_TrackedVM.colors[1].value.r, 0.2)
         
         self.assertFalse(self.saf_TrackedVM.colors.location_map["."].isValid())
         self.assertFalse(self.saf_TrackedVM.colors[0].location_map["."].isValid())

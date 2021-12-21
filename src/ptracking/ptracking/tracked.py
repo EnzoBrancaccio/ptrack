@@ -52,9 +52,11 @@ class Tracked(object):
         A Tracked object is returned, e. g. to access the value write Tracked.souce_node.value 
         """
         try:
-            attr_value = getattr(self.value, attr)
+            attr_value = ""
+            tracked_attr = ""
+            super().__setattr__(attr_value, getattr(self.value, attr))
             # returns a Tracked object instead of the value directly
-            tracked_attr = Tracked(attr_value, lm.locationSlice(self.location_map, attr))
+            super().__setattr__(tracked_attr, Tracked(attr_value, lm.locationSlice(self.location_map, attr)))
             return tracked_attr
         except:
             raise AttributeError(attr)
@@ -70,9 +72,10 @@ class Tracked(object):
         Implementing the SET_FIELD functionality
         If value is a Tracked object, self's location_map is updated 
         """
-        if(isinstance(value, Tracked)):
-            self.location_map = lm.addLocations(self.location_map, value.location_map, attr)
-        return super().__setattr__(attr, value)
+        if(hasattr(self, "location_map")):
+            if(isinstance(value, Tracked)):
+                super().__setattr__("self.location_map", lm.addLocations(self.location_map, value.location_map, attr))
+        super().__setattr__(attr, value)
     
     def __add__(self, other):
         """Override the + operator

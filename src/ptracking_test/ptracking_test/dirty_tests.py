@@ -589,3 +589,32 @@ print(i_marker_msg_inspec)
 for key, value in i_marker_msg_inspec:
     if(key == "_fields_and_field_types"):
         print(value)
+
+print("Testing after changes to Tracked")
+saf_TrackedVM = Tracked(Marker)
+saf_loc = Location("foo", 22)
+saf_col1 = ColorRGBA()
+saf_col2 = ColorRGBA()
+        
+saf_col1.r = 0.5
+saf_col2.r = 0.2
+        
+saf_trackedColors = Tracked(list())
+        
+saf_trackedColors.append(saf_col1)
+saf_trackedColors.append(saf_TrackedVM.make_tracked(saf_col2, saf_loc))
+        
+#self.assertEqual(self.saf_trackedColors[0].r.value, 0.5)
+#self.assertEqual(self.saf_trackedColors[1].r.value, 0.2)
+
+print(f"saf_col1.r: {saf_col1.r}")
+print(f"saf_col2.r: {saf_col2.r}")
+
+print(f"saf_trackedColors[0]: {saf_trackedColors[0]}")
+print(f"saf_trackedColors[1]: {saf_trackedColors[1]}")
+
+print(f"saf_trackedColors[0].r: {saf_trackedColors[0].r}")
+print(f"saf_trackedColors[1].r: {saf_trackedColors[1].r}")
+
+print(f"saf_trackedColors[0].value.r: {saf_trackedColors[0].value.r}")
+print(f"saf_trackedColors[1].value.r: {saf_trackedColors[1].value.r}")
