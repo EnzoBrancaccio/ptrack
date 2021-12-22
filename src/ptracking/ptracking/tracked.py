@@ -506,6 +506,8 @@ class Tracked(object):
         else, like in our example, Tracked.get_field("source_node") returns a Tracked object.
         """
         attr_value = getattr(self, attr)
+        if(not attr_value):
+            attr_value = getattr(self.value, attr)
         if(not isinstance(attr_value, Tracked)):
             return Tracked(attr_value, lm.locationSlice(self.location_map, attr))
         else:

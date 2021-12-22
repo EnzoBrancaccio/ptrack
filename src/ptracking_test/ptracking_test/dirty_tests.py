@@ -8,6 +8,8 @@ import math
 import copy
 import inspect
 
+from std_msgs.msg import Int32
+from src.rosslt_msgs.msg import Int32Tracked
 import src.ptracking.ptracking.locationMap as lm
 import src.ptracking.ptracking.trackingHelpers as th
 import src.ptracking.ptracking.expression as e
@@ -618,3 +620,50 @@ print(f"saf_trackedColors[1].r: {saf_trackedColors[1].r}")
 
 print(f"saf_trackedColors[0].value.r: {saf_trackedColors[0].value.r}")
 print(f"saf_trackedColors[1].value.r: {saf_trackedColors[1].value.r}")
+
+print("Testing: MinimalSubscriber - listener_callback")
+print("1st: Create lc_msg in MinimalPublisher")
+lc_msg = Int32Tracked
+lc_i = Tracked(5)
+lc_pre_msg = Tracked(Int32())
+lc_pre_msg.data = lc_i.value
+print(f"lc_pre_msg.data: {lc_pre_msg.data}")
+print(f"type(lc_pre_msg.data): {type(lc_pre_msg.data)}")
+print(f"lc_pre_msg.value: {lc_pre_msg.value}")
+print(f"type(lc_pre_msg.value): {type(lc_pre_msg.value)}")
+print(f"lc_pre_msg.value.data: {lc_pre_msg.value.data}")
+print(f"type(lc_pre_msg.value.data): {type(lc_pre_msg.value.data)}")
+lc_pre_msg.value.data = lc_i.value
+print(f"lc_pre_msg.data: {lc_pre_msg.data}")
+print(f"type(lc_pre_msg.data): {type(lc_pre_msg.data)}")
+print(f"lc_pre_msg.value: {lc_pre_msg.value}")
+print(f"type(lc_pre_msg.value): {type(lc_pre_msg.value)}")
+print(f"lc_pre_msg.value.data: {lc_pre_msg.value.data}")
+print(f"type(lc_pre_msg.value.data): {type(lc_pre_msg.value.data)}")
+lc_msg.data = lc_pre_msg.value
+print(f"lc_msg.data {lc_msg.data}")
+print("2nd: Use lc_msg in MinimalSubscriber")
+lc_counter_msg = Tracked(Int32())
+lc_counter_msg.value = lc_msg
+print(f"type(lc_msg) {type(lc_msg)}")
+print(f"lc_msg.data {lc_msg.data}")
+print(f"lc_msg.data.data {lc_msg.data.data}")
+print(f'lc_msg.location {lc_msg.location}')
+print(f"type(lc_counter_msg.value) {type(lc_counter_msg.value)}")
+print(f"lc_counter_msg.value {lc_counter_msg.value}")
+print(f"lc_counter_msg.value.data {lc_counter_msg.value.data}")
+print(f"lc_counter_msg.value.data.data {lc_counter_msg.value.data.data}")
+lc_counter = Tracked(lc_counter_msg.get_field("data"))
+print(f"lc_counter {lc_counter}")
+print(f"lc_counter.value {lc_counter.value}")
+print(f"lc_counter.value.value {lc_counter.value.value}")
+lc_gf_counter = lc_counter_msg.get_field("data")
+print(f"lc_gf_counter {lc_gf_counter}")
+print(f"lc_gf_counter.value {lc_gf_counter.value}")
+lc_attr_value = getattr(lc_counter_msg.value, "data")
+print(f"lc_attr_value {lc_attr_value}")
+lc_counter2 = lc_counter_msg.get_field("data")
+print(f"type(lc_counter2) {type(lc_counter2)}")
+print(f"lc_counter2 {lc_counter2}")
+print(f"lc_counter2.value {lc_counter2.value}")
+print(f"lc_counter2.value.data {lc_counter2.value.data}")
