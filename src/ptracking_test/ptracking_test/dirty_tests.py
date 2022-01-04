@@ -532,6 +532,7 @@ for i in vecit.value:
     print(i)
 '''
 
+'''
 i_loc = Location("foo", 22)
 i_members = inspect.getmembers(i_loc)
 i_membmet = inspect.getmembers(i_loc, inspect.ismethod)
@@ -667,3 +668,12 @@ print(f"type(lc_counter2) {type(lc_counter2)}")
 print(f"lc_counter2 {lc_counter2}")
 print(f"lc_counter2.value {lc_counter2.value}")
 print(f"lc_counter2.value.data {lc_counter2.value.data}")
+'''
+
+spf_TrackedVM = Tracked(Marker)
+spf_loc = Location("foo", 22)
+
+print(spf_TrackedVM.make_tracked(42, spf_loc))
+print(spf_TrackedVM.make_tracked(42, spf_loc).value)
+
+spf_TrackedVM.id = spf_TrackedVM.make_tracked(42, spf_loc)

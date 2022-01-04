@@ -10,7 +10,11 @@ import src.ptracking.ptracking.locationMap as lm
 
 from src.ptracking.ptracking.location import Location
 from src.rosslt_msgs.msg import LocationHeader
+from src.rosslt_msgs.msg import Int32Tracked
+from src.rosslt_msgs.msg import MarkerTracked
+from src.rosslt_msgs.msg import PoseTracked
 from numbers import Number
+from rosidl_runtime_py import utilities
 
 class Tracked(object):
     '''
@@ -74,6 +78,9 @@ class Tracked(object):
         """
         if(hasattr(self, "location_map")):
             if(isinstance(value, Tracked)):
+                if(utilities.is_message(self.value)):
+                    if(hasattr(self.value, attr)):
+                        setattr(self.value, attr, value.value)
                 super().__setattr__("self.location_map", lm.addLocations(self.location_map, value.location_map, attr))
         super().__setattr__(attr, value)
     
@@ -530,3 +537,23 @@ class Tracked(object):
                 return Tracked(value, Location())
             else:
                 return Tracked(value, location)
+
+    def toTrackedMsg(self, msgType):
+        """Type conversion to return a (tracked ROSSLT) message
+        
+        Keyword arguments:
+        msgType -- Type of tracked message to retrieve
+        
+        Receive a tracked ROSSLT message from a Tracked object.
+        Tracked ROSSLT messages are: Int32Tracked, Location, LocationHeader, MarkerTracked, PoseTracked, SourceChange.
+        The group Int32Tracked, MarkerTracked and PoseTracked consists of standard messages in the data field and a LocationHeader,
+        the rest are messages specific to ROSSLT and for them it's assumed that Tracked.value is the message and returned.
+        For the others, it's assumed that Tracked.value only contains a data field, so the LocationHeader field has to be filled.
+        """
+        trackedStdMsgs = (Int32Tracked, MarkerTracked, PoseTracked)
+        if(isinstance(msgType, trackedStdMsgs)):
+            tmsg = msgType
+            tmsg.data = self.value.data
+            return tmsg
+        else:
+            return self.value
