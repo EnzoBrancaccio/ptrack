@@ -549,11 +549,38 @@ class Tracked(object):
         The group Int32Tracked, MarkerTracked and PoseTracked consists of standard messages in the data field and a LocationHeader,
         the rest are messages specific to ROSSLT and for them it's assumed that Tracked.value is the message and returned.
         For the others, it's assumed that Tracked.value only contains a data field, so the LocationHeader field has to be filled.
+
+        Cannot be fully tested by Unit tests due to the ROSSLT messages and has to be done with demos.
         """
-        trackedStdMsgs = (Int32Tracked, MarkerTracked, PoseTracked)
+        trackedStdMsgs = (type(Int32Tracked()), type(MarkerTracked()), type(PoseTracked()))
         if(isinstance(msgType, trackedStdMsgs)):
             tmsg = msgType
-            tmsg.data = self.value.data
+            tmsg.data = self.value
+            tmsg.location = self.createLocationHeader()
             return tmsg
         else:
             return self.value
+
+    def createLocationHeader(self):
+        """Create LocationHeader message from info of a Tracked object
+        
+        Keyword arguments:
+        
+        Called on the Tracked object itself, creates a LocationHeader message from the Tracked object's info:
+        paths: list of location_map keys (strings)
+        locations: list of locations in location_map, converted to Location messages
+        Returns the so created LocationHeader
+        """
+        self.lh = LocationHeader()
+        self.paths = list()
+        self.locations = list()
+
+        for key, value in self.location_map.items():
+            self.paths.append(key)
+            self.loc_msg = value.makeRossltLocationMsg()
+            self.locations.append(self.loc_msg)
+
+        self.lh.paths = self.paths
+        self.lh.locations = self.locations
+
+        return self.lh     

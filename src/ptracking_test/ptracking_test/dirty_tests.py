@@ -10,6 +10,9 @@ import inspect
 
 from std_msgs.msg import Int32
 from src.rosslt_msgs.msg import Int32Tracked
+from src.rosslt_msgs.msg import MarkerTracked
+from src.rosslt_msgs.msg import PoseTracked
+from src.rosslt_msgs.msg import LocationHeader
 import src.ptracking.ptracking.locationMap as lm
 import src.ptracking.ptracking.trackingHelpers as th
 import src.ptracking.ptracking.expression as e
@@ -670,6 +673,7 @@ print(f"lc_counter2.value {lc_counter2.value}")
 print(f"lc_counter2.value.data {lc_counter2.value.data}")
 '''
 
+'''
 spf_TrackedVM = Tracked(Marker)
 spf_loc = Location("foo", 22)
 
@@ -677,3 +681,17 @@ print(spf_TrackedVM.make_tracked(42, spf_loc))
 print(spf_TrackedVM.make_tracked(42, spf_loc).value)
 
 spf_TrackedVM.id = spf_TrackedVM.make_tracked(42, spf_loc)
+'''
+
+ttmsg_int = Int32
+ttmsg_int.data = 7
+
+print(f"ttmsg_int.data {ttmsg_int.data}")
+
+ttmsg_int_to = Tracked(ttmsg_int)
+
+print(f"ttmsg_int_to {ttmsg_int_to}")
+print(f"ttmsg_int_to.value {ttmsg_int_to.value}")
+print(f"ttmsg_int_to.data {ttmsg_int_to.data}")
+print(f"ttmsg_int_to.value.data {ttmsg_int_to.value.data}")
+print(f"type(ttmsg_int_to.value) {type(ttmsg_int_to.value)}")
