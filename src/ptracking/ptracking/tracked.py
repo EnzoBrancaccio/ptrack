@@ -583,4 +583,32 @@ class Tracked(object):
         self.lh.paths = self.paths
         self.lh.locations = self.locations
 
-        return self.lh     
+        return self.lh
+
+    @classmethod
+    def turnMsgIntoTrackedObj(cls, tracked_msg):
+        isMessage = utilities.is_message(tracked_msg)
+        hasLocation = hasattr(tracked_msg, "location")
+        if(isMessage and hasLocation):
+            cls.value = tracked_msg.data
+            cls.location_map = cls.lh_to_lm(tracked_msg.location)
+
+    def lh_to_lm(self, locationHeader):
+        """Create location_map from LocationHeader message
+        
+        Keyword arguments:
+        locationHeader -- LocationHeader ROSSLT message
+        
+        Turns a LocationHeader message into a location_map (dictionary),
+        with the content from LocationHeader's paths becoming the keys,
+        and the content from LocationHeader's locations becoming the values
+        (after converting the Location messages into Locations).
+        Returns the location_map dictionary.
+        """
+        location_map = dict()
+        if(locationHeader):
+            for i in range(len(locationHeader.paths)):
+                new_location = Location(locationHeader.locations[i])
+                new_string = locationHeader.paths[i]
+                location_map[new_string] = new_location
+        return location_map

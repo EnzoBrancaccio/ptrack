@@ -9,6 +9,7 @@ import math
 import src.ptracking.ptracking.trackingHelpers as th
 import src.ptracking.ptracking.expression as e
 
+from src.rosslt_msgs.msg import SourceChange
 from src.rosslt_msgs.msg import Int32Tracked
 from src.rosslt_msgs.msg import MarkerTracked
 from src.rosslt_msgs.msg import PoseTracked
@@ -489,6 +490,84 @@ class Test(unittest.TestCase):
         self.assertFalse(self.saf_TrackedVM.colors[0].location_map["."].isValid())
         self.assertTrue(self.saf_TrackedVM.colors[1].location_map["."].isValid())
         self.assertEqual(self.saf_TrackedVM.colors[1].location_map["."].location_id, 22)
+
+    def testExtractFields(self):
+        self.test_sc = SourceChange
+        self.test_sc.location_id = 7
+        self.test_sc.source_node = "foo"
+
+        self.tracked = Tracked(self.test_sc)
+
+        self.fields = th.extract_fields(self.tracked.value, "_fields_and_field_types")
+
+        self.assertIn("location_id", self.fields)
+        self.assertIn("source_node", self.fields)
+
+    def testDocumentation(self):
+        self.a = Tracked(5.0)
+        self.b = self.a + 2.0
+
+        self.assertEqual(self.b.value, 7.0)
+
+        self.tmsg = Tracked(SourceChange)
+        self.tmsg.source_node = "foo"
+        self.name = self.tmsg.source_node
+
+        self.assertEqual(self.tmsg.source_node, "foo")
+        self.assertEqual(self.name, "foo")
+        self.assertIsInstance(self.tmsg, Tracked)
+
+        self.retracked = self.tmsg.get_field("source_node")
+
+        self.assertIsInstance(self.retracked, Tracked)
+        self.assertEqual(self.retracked.value, "foo")
+
+        # testing __setattr__ by adding Tracked to another Tracked
+        self.torigin = Tracked(5)
+        self.tadded = Tracked(7)
+
+        self.assertEqual(self.torigin.value, 5)
+        self.assertEqual(self.tadded.value, 7)
+
+        self.assertEqual(self.torigin.location_map["."].location_id, 0)
+        self.assertEqual(self.torigin.location_map["."].source_node, "")
+        self.assertEqual(len(self.torigin.location_map), 1)
+
+        self.torigin.value = self.tadded
+        
+        self.assertEqual(self.torigin.value.value, 7)
+        self.assertEqual(len(self.torigin.location_map), 2)
+
+        self.torigin.value = 9
+        self.assertEqual(self.torigin.value, 9)
+        self.assertEqual(len(self.torigin.location_map), 2)
+
+    def testTrackedGetsMsg(self):
+        # Preparations to test lh_to_lm method
+        self.dummyTracked = Tracked(0)
+        # does not work with actual LocationHeader so this class mimics one by containing the necessary attributes
+        class lh_dummy(object):
+            paths = list()
+            locations = list()
+        self.lh = lh_dummy()
+        # fill LocationHeader's paths variable with list of strings
+        self.path = ("one", "two")
+        self.lh.paths = self.path
+        # fill LocationHeader's locations variable with list of Location messages
+        self.loc1 = Location("foo", 3)
+        self.loc2 = Location("bar", 4)
+        self.locmsg1 = self.loc1.makeRossltLocationMsg()
+        self.locmsg2 = self.loc2.makeRossltLocationMsg()
+        self.loc = (self.locmsg1, self.locmsg2)
+        self.lh.locations = self.loc
+
+        self.lm = self.dummyTracked.lh_to_lm(self.lh)
+
+        self.assertIsInstance(self.lm, dict)
+        self.assertEqual(self.lm["one"].source_node, "foo")
+        self.assertEqual(self.lm["two"].location_id, 4)
+
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
