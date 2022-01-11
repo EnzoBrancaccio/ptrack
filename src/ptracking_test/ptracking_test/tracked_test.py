@@ -543,12 +543,17 @@ class Test(unittest.TestCase):
         self.assertEqual(len(self.torigin.location_map), 2)
 
     def testTrackedGetsMsg(self):
-        # Preparations to test lh_to_lm method
-        self.dummyTracked = Tracked(0)
         # does not work with actual LocationHeader so this class mimics one by containing the necessary attributes
         class lh_dummy(object):
             paths = list()
             locations = list()
+        
+        class Int32Tracked_dummy(object):
+            data = ""
+            location = ""
+
+        # Preparations to test lh_to_lm method
+        self.dummyTracked = Tracked(0)
         self.lh = lh_dummy()
         # fill LocationHeader's paths variable with list of strings
         self.path = ("one", "two")
@@ -567,7 +572,34 @@ class Test(unittest.TestCase):
         self.assertEqual(self.lm["one"].source_node, "foo")
         self.assertEqual(self.lm["two"].location_id, 4)
 
+        # Preparations to test turnMsgIntoTrackedObj
+        self.base_loc1 = Location("base", 6)
+        self.base_loc2 = Location("bass", 7)
+        self.base_lm = dict()
+        self.base_lm["one1"] = self.base_loc1
+        self.base_lm["two2"] = self.base_loc2
+        self.base_tracked = Tracked(77, self.base_lm)
 
+        self.assertEqual(self.base_tracked.value, 77)
+        self.assertFalse(hasattr(self.base_tracked.value, "data"))
+
+        self.int_msg = Int32()
+        self.int_msg.data = 99
+        self.tInt_msg = Int32Tracked_dummy()
+        self.tInt_msg.data = self.int_msg
+        self.tInt_msg.location = self.lh
+
+        self.assertIsInstance(self.int_msg, type(Int32()))
+        self.assertIsInstance(self.tInt_msg.data, type(Int32()))
+        self.assertEqual(self.tInt_msg.data.data, 99)
+        self.assertTrue(hasattr(self.tInt_msg.location, "locations"))
+        self.assertEqual(self.tInt_msg.location.locations[0].source_node, "foo")
+
+        self.base_tracked.incorporateTrackedMsg(self.tInt_msg)
+
+        # Note that self.base_tracked.value is the Int32 message
+        self.assertNotEqual(self.base_tracked.value, 77)
+        self.assertEqual(self.base_tracked.value.data, 99)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

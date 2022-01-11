@@ -585,13 +585,21 @@ class Tracked(object):
 
         return self.lh
 
-    @classmethod
-    def turnMsgIntoTrackedObj(cls, tracked_msg):
-        isMessage = utilities.is_message(tracked_msg)
-        hasLocation = hasattr(tracked_msg, "location")
-        if(isMessage and hasLocation):
-            cls.value = tracked_msg.data
-            cls.location_map = cls.lh_to_lm(tracked_msg.location)
+    def incorporateTrackedMsg(self, tracked_msg):
+        """Incorporate Tracked message into Tracked object
+        
+        Keyword arguments:
+        tracked_msg -- Tracked ROSSLT message version of standard ROS message
+        
+        Instead of keeping a Tracked version of the standard ROS messages,
+        like Int32Tracked of Int32, PoseTracked of Pose or MarkerTracked of Marker,
+        as the content of Tracked's value field, the contents of the tracked message 
+        form the new content of the Tracked object. E. g. in case of Int32Tracked:
+        - Tracked.value = Int32
+        - Tracked.location_map = Int32Tracked's converted LocationHeader
+        """
+        self.value = tracked_msg.data
+        self.location_map = self.lh_to_lm(tracked_msg.location)
 
     def lh_to_lm(self, locationHeader):
         """Create location_map from LocationHeader message
