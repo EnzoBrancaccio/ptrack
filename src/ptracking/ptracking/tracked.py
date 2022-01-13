@@ -35,7 +35,7 @@ class Tracked(object):
                 self.location = y
                 self.location_map = dict([(".", self.location)])
             if(isinstance(y, dict)):
-                self.locationMap = y
+                self.location_map = y
             if(isinstance(y, LocationHeader)):
                 for i in range(len(y.paths)):
                     self.location_map[y.paths[i]] = y.locations[i]

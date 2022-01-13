@@ -7,6 +7,15 @@ Created on 24.06.2021
 import inspect
 from rclpy.executors import Executor
 from numbers import Number
+from src.ptracking.ptracking.tracked import Tracked
+from src.ptracking.ptracking.location import Location
+from src.rosslt_msgs.msg import LocationHeader
+from src.rosslt_msgs.msg import Int32Tracked
+from src.rosslt_msgs.msg import MarkerTracked
+from src.rosslt_msgs.msg import PoseTracked
+from std_msgs.msg import Int32
+from visualization_msgs.msg import Marker
+from geometry_msgs.msg import Pose
 
 def inv_plus(lhs, rhs):
     isNumeric = ((isinstance(lhs, Number)) and (isinstance(rhs, Number)))
@@ -154,4 +163,83 @@ def create_source_location_str(frame, key):
     source_location = f"{sl_lineno} {sl_cc}"
     return source_location
         
+def createTrackedFromTrackedMsg(tracked_msg):
+    """Turn tracked version of standard message into Tracked object
         
+    Keyword arguments:
+    tracked_msg -- tracked version of standard message (Int32Tracked, PoseTracked, MarkerTracked)
+        
+    3 ROSSLT messages are tracked versions of standard messages, Int32Tracked, PoseTracked, MarkerTracked, 
+    and have the same attributes:
+    - data: untracked version of message (Int32, Pose or Marker)
+    - location: LocationHeader message
+    The tracked message is turned into a Tracked object such that
+    - Tracked.value = untracked version of message (Int32, Pose or Tracked)
+    - Tracked.location_map = LocationHeader message converted to a location_map
+    Returns the Tracked object.
+    This method is closely related to Tracked's incorporateTrackedMsg and lh_to_lm methods
+    and allows the creation of a new Tracked object from the message. 
+    """
+    temp_lm = dict()
+    for i in range(len(tracked_msg.location.paths)):
+        new_location = Location(tracked_msg.location.locations[i])
+        new_string = tracked_msg.location.paths[i]
+        temp_lm[new_string] = new_location
+
+    tracked = Tracked(tracked_msg.data, temp_lm)
+
+    return tracked      
+
+def createTrackedMsgFromTracked(tracked):
+    """Turn Tracked standard message into Tracked version of message
+        
+    Keyword arguments:
+    tracked -- Tracked object whose value is a standard message (Int32, Pose, Marker) with tracked message version
+        
+    Tracked object whose value is one of the standard messages (Int32, Pose, Tracked)
+    that has a tracked message version (Int32Tracked, PoseTracked, MarkerTracked)
+    can be turned into the respective tracked message:
+    - Tracked.value = Int32  -> Int32Tracked
+    - Tracked.value = Pose   -> PoseTracked
+    - Tracked.value = Marker -> MarkerTracked
+    Returns the Tracked version of the message.
+    This method is closely related to Tracked's toTrackedMsg and createLocationHeader methods
+    and allows the creation of a new tracked message from a Tracked object. 
+    """
+    standardMsgs = (type(Int32()), type(Marker()), type(Pose()))
+    if(isinstance(tracked.value, standardMsgs)):
+        lh = LocationHeader()
+        paths = list()
+        locations = list()
+
+        for key, value in tracked.location_map.items():
+            paths.append(key)
+            loc_msg = value.makeRossltLocationMsg()
+            locations.append(loc_msg)
+
+        lh.paths = paths
+        lh.locations = locations
+
+        if(type(tracked.value), type(Int32())):
+            newInt32Tracked = Int32Tracked()
+            newInt32Tracked.data = tracked.value
+            newInt32Tracked.location = lh
+
+            return newInt32Tracked
+
+        if(type(tracked.value), type(Marker())):
+            newMarkerTracked = MarkerTracked()
+            newMarkerTracked.data = tracked.value
+            newMarkerTracked.location = lh
+
+            return newMarkerTracked
+
+        if(type(tracked.value), type(Pose())):
+            newPoseTracked = PoseTracked()
+            newPoseTracked.data = tracked.value
+            newPoseTracked.location = lh
+
+            return newPoseTracked
+    else:
+        # assuming that Tracked.value is a message that needs no further processing
+        return tracked.value
