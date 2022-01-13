@@ -60,7 +60,7 @@ class TrackingNode(Node):
         self.location = Location(self.get_name(), self.id)
         return Tracked(data, self.location)
     
-    # unfinished and will possibly never be used
+    # unfinished also in C++
     def force_value(self, tracked_value, new_value):
         if(not tracked_value.location_map["."].isValid()):
             return

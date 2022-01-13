@@ -188,7 +188,7 @@ def createTrackedFromTrackedMsg(tracked_msg):
 
     tracked = Tracked(tracked_msg.data, temp_lm)
 
-    return tracked      
+    return tracked
 
 def createTrackedMsgFromTracked(tracked):
     """Turn Tracked standard message into Tracked version of message
