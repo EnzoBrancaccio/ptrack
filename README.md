@@ -33,6 +33,12 @@ The `__setattr__` method was also overridden to update the Tracked object's loca
 
 The brackets operator (`__getitem__`, `__setitem__`) deals with the case that the Tracked value is a list. Accessing a list element becomes easier by writing, for example, `Tracked[index]` instead of `Tracked.value[index]`. Further methods have been overridden, like `size` or `append`, or were added like `pop_back` (same name as a C++ method, removing the last element of a list), `clear` (empty the list), and `front` and `back` (returning the first or last element of a list respectively).
 
+### ROSSLT messages
+Two methods allow the easy conversion of Tracked objects to messages and tracked messages to Tracked objects, mostly for dealing with tracked versions (`Int32Tracked`, `PoseTracked` and `MarkerTracked`) of standard messages (`Int32`, `Pose` and `Marker`):
+- `toTrackedMsg` to convert Tracked objects whose `value` is a standard message into the tracked version of the message. The parameter it receives is the tracked message type.
+- `incorporateTrackedMsg` to convert the tracked version of a message into a Tracked object whose `value` is the equivalent standard message. This implementation was chosen because `Pose` and `Marker` messages have more and differing attributes than `Int32` (which has just a `data` field), so turning them all into a Tracked object whose `value` contains the `data` and that is still easy to use is not possible. For example, when `Int32Tracked` is turned into a Tracked object, the data field can be accessed by writing `Tracked.value.data`.
+In addition, `trackingHelpers.py` contains two methods, `createTrackedFromTrackedMsg` and `createTrackedMsgFromTracked`, that do the same without the need of having (or having to create) a Tracked object that provides the methods first.   
+
 ## Architecture
 
 The project has been split up into several modules, one for each class or related functions. Examles for the latter are a module `expression.py` with the `applyExpression` and `reverseExpression` functions, `locationMap.py` for the location map functions (since location map is just a dictionary here), and `trackingHelpers.py` with independent functions for the Tracked and TrackingNode classes. An example for the former is the class `LocationManager` having its own module and no longer being together with `TrackingNode`.
