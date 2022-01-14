@@ -7,6 +7,7 @@ This project is the Python implementation of the C++ [rosslt](https://gitlab.uni
 The wrapper is a Tracked object taking two parameters:
 - `value` (the wrapped object, e. g. a number or string etc.)
 - `location` (optional)
+
 It has additional attributes `location_map` (no own class, just a dictionary) and `rosslt_msg`.
 To make coding with a Tracked object easier and reduce the amount of extra code due to the wrapping, several operators were overridden:
 
@@ -37,6 +38,7 @@ The brackets operator (`__getitem__`, `__setitem__`) deals with the case that th
 Two methods allow the easy conversion of Tracked objects to messages and tracked messages to Tracked objects, mostly for dealing with tracked versions (`Int32Tracked`, `PoseTracked` and `MarkerTracked`) of standard messages (`Int32`, `Pose` and `Marker`):
 - `toTrackedMsg` to convert Tracked objects whose `value` is a standard message into the tracked version of the message. The parameter it receives is the tracked message type.
 - `incorporateTrackedMsg` to convert the tracked version of a message into a Tracked object whose `value` is the equivalent standard message. This implementation was chosen because `Pose` and `Marker` messages have more and differing attributes than `Int32` (which has just a `data` field), so turning them all into a Tracked object whose `value` contains the `data` and that is still easy to use is not possible. For example, when `Int32Tracked` is turned into a Tracked object, the data field can be accessed by writing `Tracked.value.data`.
+
 In addition, `trackingHelpers.py` contains two methods, `createTrackedFromTrackedMsg` and `createTrackedMsgFromTracked`, that do the same without the need of having (or having to create) a Tracked object that provides the methods first.   
 
 ## Architecture
