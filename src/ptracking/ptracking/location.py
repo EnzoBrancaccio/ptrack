@@ -61,4 +61,5 @@ class Location(object):
         locationMsg = rosLocationMsg()
         locationMsg.source_node = self.source_node
         locationMsg.location_id = self.location_id
+        locationMsg.expression = self.expression
         return locationMsg

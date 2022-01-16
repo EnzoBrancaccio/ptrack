@@ -61,5 +61,18 @@ The reevaluate and map_leaves methods of C++ are all in this class and have been
 - `reevaluate_submsg`: for recursive calls when a message contains a message etc.
 - `reevaluate_generic`: checks if a message contains a message and then calls `reevaluate_submsg` again
 - `reevaluate_value`: does the actual reevaluating and gets called when the object is not nested
+
 ![Connection between reevaluate methods](/reevaluate_diag.svg)
 The relationship between the methods is shown in the above diagram. With `reevaluate_msg` and `reevaluate_generic`, the methods go deeper into nested message structures.
+
+## Talker/Listener demo
+
+The demo's purpose is to test and demostrate how the ROSSLT components work (together). It's based on the ROS2 foxy [Publisher and Subscriber example for Python](https://docs.ros.org/en/foxy/Tutorials/Writing-A-Simple-Py-Publisher-And-Subscriber.html) and the C++ slt_talker/slt_listener demo. It consists of
+- Talker: A publisher node that sends out an Int32Tracked message
+- Listener: A subscriber node receiving the message and modifying the number's value
+
+The `LocationManager` is in the background, contains the number and when the listener modifies the value via the `force_value` method, this change is passed on to the talker node.
+
+The talker node is called `MinimalPublisher` and creates a new value i that is passed to the `loc` method of the `TrackingNode` with the value 5. This happens once when the node is created. Then the value becomes the new data of a Tracked `Int32` message, after `reevaluate` is called 2 times on it, to check if the `expression` functions work correctly and receive the updated value from the `LocationManager`. The Tracked object is then turned into a `Int32Tracked` message and sent out.
+
+The listener node is called `MinimalSubscriber` and receives the `Int32Tracked` message. It turns it into a Tracked object again, extracts the value into a new variable `counter` and then calls `force_value` on it and a new value `counter + 2`. This way, the underlying value in the `LoctionManager` is modified and the modified value passed to the `MinimalPublisher` when it calls `reevaluate`.
