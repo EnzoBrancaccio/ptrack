@@ -25,6 +25,7 @@ class Location(object):
             if(isinstance(x, rosLocationMsg)):
                 self.source_node = x.source_node
                 self.location_id = x.location_id
+                self.expression = x.expression
         
         if(not(y is None)):
             if(isinstance(y, int)):
