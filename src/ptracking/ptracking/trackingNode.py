@@ -46,7 +46,8 @@ class TrackingNode(Node):
             def _get(own, id):
                 return self.get_parameter("loc" + str(id)).value
             def _set(own, id, val):
-                self.set_parameters(Parameter("loc" + str(id), value = val))
+                parameter_list = [Parameter("loc" + str(id), value = val)]
+                self.set_parameters(parameter_list)
             # create new LocationFunc instance
             self.loc_fun = LocationFunc()
             # Override the get and set methods of this LocationFunc instance
@@ -115,11 +116,12 @@ class TrackingNode(Node):
     # either update Tracked.value directly
     # or via fieldname with setattr ("value" is default for ease of use)     
     def reevaluate_value(self, tracked_obj, fieldname = "value"):
+        self.original_tval = getattr(tracked_obj, fieldname)
         self.to_source_node = tracked_obj.location_map["."].source_node
         self.to_location_id = tracked_obj.location_map["."].location_id
         if(not tracked_obj.location_map["."].isValid()):
             return tracked_obj
-        if (self.to_source_node == self.get_name()):
+        if(self.to_source_node == self.get_name()):
             setattr(tracked_obj, fieldname, self.loc_mgr.current_value(self.to_location_id))
         else:
             self.client = self.create_client(GetValue, self.to_source_node + "/get_slt_value")
@@ -133,6 +135,9 @@ class TrackingNode(Node):
                 
             if(self.response is not None):
                 setattr(tracked_obj, fieldname, self.response.result)
-            
+
+        self.tracked_val = getattr(tracked_obj, fieldname)
+        if(th.is_numeric(self.original_tval)):
+            setattr(tracked_obj, fieldname, th.str_to_num(self.original_tval, self.tracked_val))
         setattr(tracked_obj, fieldname, e.applyExpression(tracked_obj.value, tracked_obj.location_map["."].expression))
         return tracked_obj

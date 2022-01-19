@@ -601,6 +601,31 @@ class Test(unittest.TestCase):
         self.assertNotEqual(self.base_tracked.value, 77)
         self.assertEqual(self.base_tracked.value.data, 99)
 
+    def testIsNumeric(self):
+        self.tin_a = 5
+        self.tin_b = 5.6
+        self.tin_c = "Hello"
+
+        self.assertTrue(th.is_numeric(self.tin_a))
+        self.assertTrue(th.is_numeric(self.tin_b))
+        self.assertFalse(th.is_numeric(self.tin_c))
+
+    def testStrToNum(self):
+        self.tstn_a = 7
+        self.tstn_b = 7.6
+        self.tstn_c = "Hi"
+
+        self.tstn_str_a = "7"
+        self.tstn_str_b = "7.6"
+
+        self.a = th.str_to_num(self.tstn_a, self.tstn_str_a)
+        self.b = th.str_to_num(self.tstn_b, self.tstn_str_b)
+        self.c = th.str_to_num(self.tstn_c, self.tstn_c)
+
+        self.assertEqual(self.a, 7)
+        self.assertEqual(self.b, 7.6)
+        self.assertEqual(self.c, "Hi")
+
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

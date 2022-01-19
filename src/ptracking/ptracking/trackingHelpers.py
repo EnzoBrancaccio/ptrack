@@ -220,21 +220,21 @@ def createTrackedMsgFromTracked(tracked):
         lh.paths = paths
         lh.locations = locations
 
-        if(type(tracked.value), type(Int32())):
+        if(isinstance(tracked.value, Int32)):
             newInt32Tracked = Int32Tracked()
             newInt32Tracked.data = tracked.value
             newInt32Tracked.location = lh
 
             return newInt32Tracked
 
-        if(type(tracked.value), type(Marker())):
+        if(isinstance(tracked.value, Marker)):
             newMarkerTracked = MarkerTracked()
             newMarkerTracked.data = tracked.value
             newMarkerTracked.location = lh
 
             return newMarkerTracked
 
-        if(type(tracked.value), type(Pose())):
+        if(isinstance(tracked.value, Pose)):
             newPoseTracked = PoseTracked()
             newPoseTracked.data = tracked.value
             newPoseTracked.location = lh
@@ -243,3 +243,46 @@ def createTrackedMsgFromTracked(tracked):
     else:
         # assuming that Tracked.value is a message that needs no further processing
         return tracked.value
+
+def is_numeric(value):
+    """Checks if value is of type Numeric
+        
+    Keyword arguments:
+    value -- The object to be checked
+        
+    Returns True if
+    - value is of type int
+    - value is of type float
+    - value is of type complex
+    Else it returns False.
+    (Note that "Booleans are a subtype of integers" (Python Documentation -> Built-in types -> Numeric Types)
+    but this case is not checked here since it's not relevant for the use case.) 
+    """
+    numericDatatypes = (type(int()), type(float()), type(complex()))
+    if(isinstance(value, numericDatatypes)):
+        return True
+    else:
+        return False
+
+def str_to_num(original_val, string):
+    """Converts a string into a numeric type
+        
+    Keyword arguments:
+    original_val -- Original value that was possibly of a numeric type
+    string -- Original value after conversion to string
+        
+    Checks if the original value is of type numeric and, if so, 
+    either turns it into an int, a float or complex number.
+    """
+    if(is_numeric(original_val)):
+        if(isinstance(original_val, int)):
+            # since direct transformation of string of float into int not possible
+            return int(float(string))
+
+        if(isinstance(original_val, float)):
+            return float(string)
+
+        if(isinstance(original_val, complex)):
+            return complex(string)
+    else:
+        return string
