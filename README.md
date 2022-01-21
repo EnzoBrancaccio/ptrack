@@ -77,5 +77,26 @@ The talker node is called `MinimalPublisher` and creates a new value `i` that is
 
 The listener node is called `MinimalSubscriber` and receives the `Int32Tracked` message. It turns it into a Tracked object again, extracts the value into a new variable `counter` and then calls `force_value` on it and a new value `counter + 2`. This way, the underlying value in the `LocationManager` is modified and the modified value passed to the `MinimalPublisher` when it calls `reevaluate`.
 
+Below diagram shows how communication flows between talker, listener and `LocationManager`:
 ![Communication between talker, listener and LocationManager](/talker_listener_comm.svg)
-Above diagram shows how communication flows between talker, listener and `LocationManager`. The talker first sends the value to the `LocationManager`. In the message loop, the talker's message is first reevaluated and then sent to the listener, who modifies the underlying value in the `LocationManager`. The modified value is passed to the talker when the message's value is reevaluated.
+The talker first sends the value to the `LocationManager`. In the message loop, the talker's message is first reevaluated and then sent to the listener, who modifies the underlying value in the `LocationManager`. The modified value is passed to the talker when the message's value is reevaluated.
+
+The classes directly involved in the demo can be seen in the following class diagram:
+![Class diagram for the demo](/demo_class_diag.svg)
+Not all parameters or initial values are included since there are sometimes too many of them. But important ones like `MinimalPublisher`'s `self.i = loc(5)` calling `TrackingNode`'s `loc` method interacting with the `LocationManager`. The loop of message sending is formed by `MinimalPublisher`'s `timer_callback` and `MinimalSubscriber`'s `listener_callback` methods:
+``` Python
+    def timer_callback(self):
+        message = Tracked(Int32())
+        message.data = 2*(self.reevaluate(self.i))
+        msg = message.toTrackedMsg(Int32Tracked())
+        self.publisher_.publish(msg)
+        self.get_logger().info('Publishing: "%s"' % msg.data)
+```
+``` Python
+    def listener_callback(self, msg):
+        counter_msg = th.createTrackedFromTrackedMsg(msg)
+        counter = counter_msg.get_field("data")
+        self.get_logger().info(f'source node: {counter.location_map["."].source_node} and location id {counter.location_map["."].location_id} and {counter.value}')
+        self.force_value(counter, counter + 2)
+```
+While `TrackingNode` extends ROS2's own node to handle Tracked values, `LocationManager` maintains the location information to make tracking possible and can send out `SourceChange` messages like in this demo, to communicate the change of a tracked value.
