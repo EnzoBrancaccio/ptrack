@@ -21,7 +21,7 @@ self.b = self.a + 2.0 # b is a new Tracked object
 As can be seen above, you can calculate with Tracked objects like with normal variables, but also note that to check the value, access the value attribute.
 
 ### Attribute access: . and []
-To avoid the large amount of extra code due to the `SET_FIELD` and `GET_FIELD` methods in C++, Tracked's dot operator (`__getattr__`) was overwritten to grant direct access the attributes of Tracked ROS message. An example:
+To avoid the large amount of extra code due to the `SET_FIELD` and `GET_FIELD` methods in C++, Tracked's dot operator (`__getattr__`) was overwritten to grant direct access the attributes of Tracked ROS messages. An example:
 ``` Python
 self.tmsg = Tracked(SourceChange) # Message type with fields source_node, location_id and new_value
 self.tmsg.source_node = "foo"     # Not necessary: self.tsmg.value.source_node = "foo"
@@ -43,13 +43,13 @@ In addition, `trackingHelpers.py` contains two methods, `createTrackedFromTracke
 
 ## Architecture
 
-The project has been split up into several modules, one for each class or related functions. Examles for the latter are a module `expression.py` with the `applyExpression` and `reverseExpression` functions, `locationMap.py` for the location map functions (since location map is just a dictionary here), and `trackingHelpers.py` with independent functions for the Tracked and TrackingNode classes. An example for the former is the class `LocationManager` having its own module and no longer being together with `TrackingNode`.
+The project has been split up into several modules, one for each class or related functions. Examples for the latter are a module `expression.py` with the `applyExpression` and `reverseExpression` functions, `locationMap.py` for the location map functions (since location map is just a dictionary here), and `trackingHelpers.py` with independent functions for the Tracked and TrackingNode classes. An example for the former is the class `LocationManager` having its own module and no longer being together with `TrackingNode`.
 
 ### Constructors
-In the C++ version, `Tracked` and `Location` have multiple constructors, e. g. a `Location` (in `location.h`) can be initialised with `location_id` and `source_node`, or with a ROS location message. To avoid extra code (e g. with `@classmethod` based solutions), the `Tracked` and `Location` classes have at least one unspecified parameter that defaults to `None` and is the value is checked in the body of the `__init__` method via if-statements. This is not more code than adding classmethods and allows the user to create new instances of those classes without extra code (e. g. something like `Location.rosLocationMsg(...)`).
+In the C++ version, `Tracked` and `Location` have multiple constructors, e. g. a `Location` (in `location.h`) can be initialised with `location_id` and `source_node`, or with a ROS location message. To avoid extra code (e g. with `@classmethod` based solutions), the `Tracked` and `Location` classes have at least one unspecified parameter that defaults to `None` and the value is checked in the body of the `__init__` method via if-statements. This is not more code than adding classmethods and allows the user to create new instances of those classes without extra code (e. g. something like `Location.rosLocationMsg(...)`).
 
 ### LocationFunc
-Has its own class (`struct` in `trackingNode.h`), takes no arguments but `self`, has two attributes, `self.location_id` and ``self.new_value` and a `get` and `set` method. In C++, it roughly works like an interface (see lines 142-152 in `trackingNode.h`). A similar behavior is achieved in `trackingNode.py`'s `loc`-method, by defining two nested methods `_get` and `_set` and then use them to override a `LocationFunc` instance's `get` and `set` method via the `types` library, using the `MethodType` function.
+Has its own class (`struct` in `trackingNode.h`), takes no arguments but `self`, has two attributes, `self.location_id` and `self.new_value` and a `get` and `set` method. In C++, it roughly works like an interface (see lines 142-152 in `trackingNode.h`). A similar behavior is achieved in `trackingNode.py`'s `loc`-method, by defining two nested methods `_get` and `_set` and then use them to override a `LocationFunc` instance's `get` and `set` methods via the `types` library, using the `MethodType` function.
 
 ### LocationManager
 The datatype of `self.source_locations` is a dictionary with key `source_location` (a string) and value `int`, while `self.locations` is a list of instances of `LocationFunc` objects. The dict `self.source_locations` is filled in method `create_location` in case the provided `source_location` is not yet in the dict.
@@ -73,9 +73,9 @@ The demo's purpose is to test and demostrate how the ROSSLT components work (tog
 
 The `LocationManager` is in the background, contains the number and when the listener modifies the value via the `force_value` method, this change is passed on to the talker node.
 
-The talker node is called `MinimalPublisher` and creates a new value i that is passed to the `loc` method of the `TrackingNode` with the value 5. This happens once when the node is created. Then the value becomes the new data of a Tracked `Int32` message, after `reevaluate` is called 2 times on it, to check if the `expression` functions work correctly and receive the updated value from the `LocationManager`. The Tracked object is then turned into a `Int32Tracked` message and sent out.
+The talker node is called `MinimalPublisher` and creates a new value `i` that is passed to the `loc` method of the `TrackingNode` with the value 5. This happens once when the node is created. Then the value becomes the new data of a Tracked `Int32` message, after `reevaluate` is called 2 times on it, to check if the `expression` functions work correctly and receive the updated value from the `LocationManager`. The Tracked object is then turned into a `Int32Tracked` message and sent out.
 
 The listener node is called `MinimalSubscriber` and receives the `Int32Tracked` message. It turns it into a Tracked object again, extracts the value into a new variable `counter` and then calls `force_value` on it and a new value `counter + 2`. This way, the underlying value in the `LocationManager` is modified and the modified value passed to the `MinimalPublisher` when it calls `reevaluate`.
 
 ![Communication between talker, listener and LocationManager](/talker_listener_comm.svg)
-Above diagram shows how communication flows between talker, listener and `LocationMaanager`. The talker first sends the value to the `LocationManager`. In the message loop, the talker's message is first reevaluated and then sent to the listener, who modifies the underlying value in the `LocationManager`. The modiefied value is passed to the talker when the message's value is reevaluated.
+Above diagram shows how communication flows between talker, listener and `LocationManager`. The talker first sends the value to the `LocationManager`. In the message loop, the talker's message is first reevaluated and then sent to the listener, who modifies the underlying value in the `LocationManager`. The modified value is passed to the talker when the message's value is reevaluated.
